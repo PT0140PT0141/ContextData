@@ -1,0 +1,46 @@
+/**
+ * @author  FSCOM 
+ * @desc    This module describes common types and values for Context Data tests
+ * @version $id$
+ * @see     Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data
+ *           - Annex A.1 for hierarchical Data structure illustration 
+ *           - Annex A.2  Data specifications
+ * @see     Electronic fee collection (EFC) — Evaluation of equipment for conformity to CEN ISO/TS 17575-3 — Part 1: Test suite structure and test purpose
+ */
+module ContextData_TypesAndValues {
+    /**
+     * @desc    Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data
+     * @see     A.2 Data specifications
+     */
+    import from EfcAutonomousCharging language "ASN.1:1997" all;
+    /**
+     * @desc    Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data
+     * @see     A.2 Data specifications
+     */
+    import from EfcAutonomousContextData language "ASN.1:1997" all;
+    import from Common_Parameterised_Asn1_Data all;
+
+    /**
+     * @desc    These 2 types describe the group of localVehicleClasses that overlap at least with one criterion
+     */
+    type set of LocalVehicleClass LocalVehicleClassGroupItem;
+    type set of LocalVehicleClassGroupItem LocalVehicleClassesGroups;
+
+    /**
+     * @desc    These 2 types describe the group of timeClasses that overlap at least with one criterion
+     */
+    type set of TimeClass TimeClassGroupItem;
+    type set of TimeClassGroupItem TimeClassesGroups;
+
+    /**
+     * @desc    These 2 types describe the group of userClasses that overlap at least with one criterion
+     */
+    type set of UserClass UserClassGroupItem;
+    type set of UserClassGroupItem UserClassesGroups;
+
+    /**
+     * @desc    Bit array used to indicate the presence/absence of an attribute ID
+     */
+     type bitstring AttributeIdPresence length(8);
+
+} // End of module ContextData_TypesAndValues

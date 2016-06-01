@@ -1,0 +1,68 @@
+/**
+ * @author	FSCOM 
+ * @desc 	This module describes the common parameters for TCs execution
+ * @version	$id$
+ */
+module ContextData_Pixits {
+
+    /**
+     * @desc    Road transport and traffic telematics — Electronic fee collection — Application interface definition for electronic fee collection (EFC) based on Global Navigation Satellite Systems and Cellular Network (GNSS/CN)
+     * @see     Annex A (normative) EFC data type specifications
+     */
+    import from AVIAEINumberingAndDataStructures language "ASN.1:1997" all;
+    /**
+     * @desc    Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 1: Charging
+     * @see     Annex A (normative) EFC data type specifications
+     */
+    import from EfcAutonomousCharging language "ASN.1:1997" all;
+    /**
+     * @desc    Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data
+     * @see     A.2 Data specifications
+     */
+    import from EfcAutonomousContextData language "ASN.1:1997" all; 
+    /**
+     * @desc    Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 4: Roaming
+     */
+//    import from EfcModule language "ASN.1:1997" all; 
+    import from Common_Parameterised_Asn1_Data all;
+    
+    /**
+     * @desc    Nomber of test body sequence to execute
+     */
+    modulepar float PX_TEST_BODY_DURATION := 30.0;
+    /**
+     * @desc    Describes a default On-board equipment
+     * @see     Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 1: Charging - Clause 4.12 OBE On-board equipment
+     */
+    modulepar ObeId PX_OBID := {
+        manufacturerId := 1234,
+        equipmentOBUId := '001AA0E8C10B'O // MAC address
+    };
+    /**
+     * @desc    Describe a default provider for contextId used in DataContext11
+     * @see     Annex C.1.1: General structure of Context Data - Table C1
+     * @see     Annex C.2.1: Context Data - Table 18: ContextData11
+     */
+    modulepar ContextId PX_CONTEXT_ID_11 := {
+        countryCode := '0011000011'B, // See EN ISO 3166-1 - Fehler! Kein Text mit angegebener Formatvorlage im Dokument./TC Fehler! Kein Text mit angegebener Formatvorlage im Dokument. - ClauseB.4.2.4 Initialisation response (VST)
+        providerIdentifier := 2 // See EN ISO 3166-1 - Fehler! Kein Text mit angegebener Formatvorlage im Dokument./TC Fehler! Kein Text mit angegebener Formatvorlage im Dokument. - ClauseB.4.2.4 Initialisation response (VST)
+    };
+    /**
+     * @desc    Describe a default provider for contextId used in DataContext12
+     * @see     Annex C.1.1: General structure of Context Data - Table C1
+     * @see     Annex C.2.1: Context Data - Table 18: ContextData11
+     */
+    modulepar ContextId PX_CONTEXT_ID_12 := {
+        countryCode := '0011000011'B, // See EN ISO 3166-1 - Fehler! Kein Text mit angegebener Formatvorlage im Dokument./TC Fehler! Kein Text mit angegebener Formatvorlage im Dokument. - ClauseB.4.2.4 Initialisation response (VST)
+        providerIdentifier := 2 // See EN ISO 3166-1 - Fehler! Kein Text mit angegebener Formatvorlage im Dokument./TC Fehler! Kein Text mit angegebener Formatvorlage im Dokument. - ClauseB.4.2.4 Initialisation response (VST)
+    };
+    /**
+     * @desc    Describe a default provider for contextId used in DataContext13
+     * @see     Annex C.1.1: General structure of Context Data - Table C1
+     * @see     Annex C.2.1: Context Data - Table 18: ContextData11
+     */
+    modulepar ContextId PX_CONTEXT_ID_13 := {
+        countryCode := '0011000011'B, // See EN ISO 3166-1 - Fehler! Kein Text mit angegebener Formatvorlage im Dokument./TC Fehler! Kein Text mit angegebener Formatvorlage im Dokument. - ClauseB.4.2.4 Initialisation response (VST)
+        providerIdentifier := 2 // See EN ISO 3166-1 - Fehler! Kein Text mit angegebener Formatvorlage im Dokument./TC Fehler! Kein Text mit angegebener Formatvorlage im Dokument. - ClauseB.4.2.4 Initialisation response (VST)
+    };
+} // End of module ContextData_Pixits

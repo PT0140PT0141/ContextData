@@ -1,0 +1,2107 @@
+/**
+ * @author  FSCOM 
+ * @desc    This module provides functions used by Context Data TCs
+ * @see     Electronic fee collection (EFC) — Conformity evaluation of Front End and Back End equipment to ISO 17575-3 — Part 1: Test suite structure and test purpose
+ * @see     Electronic fee collection (EFC) — Evaluation of equipment for conformity to CEN ISO/TS 17575-3 — Part 1: Test suite structure and test purpose
+ * @version $id$
+ */
+module ContextData_Functions {
+    /**
+     * @desc    Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data
+     * @see     A.2 Data specifications
+     */
+    import from EfcAutonomousContextData language "ASN.1:1997" all;
+    /**
+     * @desc    TTCN-3 does not support ASN.1 parameterization (ETSI ES 201 873-7 V4.5.1 Clause 10)
+     *          Common_Parameterised_Asn1_Data TTCN-3 module is a workaround
+     */
+    import from Common_Parameterised_Asn1_Data all;
+    import from Common_Interfaces all;
+    import from Common_Templates all;
+    import from Common_Functions all;
+    import from Common_LibUpperTester all;
+    import from Common_Defaults all;
+    import from Common_Pics all;
+
+    import from ContextData_TypesAndValues all;
+
+    /**
+     * @desc    Preambule functions:
+     * - Initialize communication stack
+     * - Map TTCN-3 ports
+     * - Activate needed defaults
+     */
+    group ContextData_Preamble {
+        /**
+         * @desc    Prepare preambule
+         * @verdict unchanged
+         */
+        function f_ContextData_Preambule() runs on EutComp {
+            // Initialize communication stack
+            f_InitializeCommunication();
+            
+            if (PICS_SECURED_MODE) {
+                fx_initialiseSecurity();
+            }
+            
+            // Map TTCN-3 ports to TestAdapter ports
+            map(self:pco, system:ta_pco);
+            map(self:eaPort, system:ta_eaPort);
+            
+            // Activate message filtering timeouts
+            // See  
+            activate(a_defaults());
+            // Activate UpperTester
+            activate(a_upperTester());
+        } // End of function f_ContextData_Preambule()
+    } // End of group ContextData_Preamble
+
+    /**
+     * @desc    Postambule functions
+     * - Deactivate all activated defaults
+     * - Unmap TTCN-3 ports
+     * - De-Initialize communication stack
+     */
+    group ContextData_Postamble {
+        /**
+         * @desc    Execute postambule
+         * @verdict unchanged
+         */
+        function f_ContextData_Postambule() runs on EutComp {
+            // Deactivate all message filtering
+            deactivate;
+            
+            // Unmap TTCN-3 ports to TestAdapter ports
+            unmap(self:pco, system:ta_pco);
+            unmap(self:eaPort, system:ta_eaPort);
+            
+            if (PICS_SECURED_MODE) {
+                fx_uninitialiseSecurity();
+            }
+            
+            // De-nitialize communication stack
+            f_DeInitializeCommunication();
+        } // End of function f_ContextData_Preambule()
+    } // End of group ContextData_Postamble
+
+    /**
+     * @desc    Validation functions group
+     */
+    group Validation {
+
+        /**
+         * @desc    This function checks that the type of Charge Unit is compliant to Toll Scheme Type
+         * @param   p_tollcontextoverview TollContextOverview value
+         * @param   p_tarifftable TariffTable value
+         * @return  true on success, false otherwise
+         */
+        function f_check_compliancy_ChargeUnit_TollSchemeType(
+                                                              in template (value) TollContextOverview p_tollcontextoverview,
+                                                              in template (value) TariffTable p_tarifftable
+        ) runs on EutComp return boolean {
+            // p_tarifftable shall not be omit
+
+            if (p_tollcontextoverview.tollSchemeType == TollSchemeType.roadSectionPricing) {
+                // Parse Tariffs list
+                for (var integer v_idx := 0; v_idx < sizeof(p_tarifftable.tariffs); v_idx := v_idx + 1) {
+                    if (ischosen(p_tarifftable.tariffs[v_idx].chargeUnit.time)) {
+                        return false; // Error
+                    } // else continue
+                } // End of 'for' statement
+            } else if ((p_tollcontextoverview.tollSchemeType == TollSchemeType.areaPricingDistance) or (p_tollcontextoverview.tollSchemeType == TollSchemeType.areaPricingTime)){
+                // Parse Tariffs list
+                for (var integer v_idx := 0; v_idx < sizeof(p_tarifftable.tariffs); v_idx := v_idx + 1) {
+                    if (ischosen(p_tarifftable.tariffs[v_idx].chargeUnit.event)) {
+                        return false; // Error
+                    } // else continue
+                } // End of 'for' statement
+            } else if (p_tollcontextoverview.tollSchemeType == TollSchemeType.cordonPricing) {
+                // Parse Tariffs list
+                for (var integer v_idx := 0; v_idx < sizeof(p_tarifftable.tariffs); v_idx := v_idx + 1) {
+                    if (not ischosen(p_tarifftable.tariffs[v_idx].chargeUnit.event)) {
+                        return false; // Error
+                    } // else continue
+                } // End of 'for' statement
+            }
+
+            return true;
+        } // End of function f_check_compliancy_ChargeUnit_TollSchemeType
+
+        /**
+         * @desc    This function verifies the uniqueness tariffClass of Tariff class list
+         * @param   p_tariffsList Tariff list
+         * @return  true on success, false otherwise
+         * @verdict unchanged
+         */
+        function f_check_uniqueness_TariffClassID(in TariffTable.tariffs p_tariffsList) runs on EutComp
+        return boolean {
+            // p_tariffTable shall not be omit
+
+            var charstring v_tariffClassIdFound := ";"; // Used to build the list of the tariffClassId already processed
+            var charstring v_tariffClassId; // tariffClassId currently processed
+            var template charstring m_found_pattern; // Used in regex to verify that 'tariffClassId' was not found before
+
+            // Parse Tariffs list
+            for (var integer v_idx := 0; v_idx < sizeof(p_tariffsList); v_idx := v_idx + 1) {
+                v_tariffClassId := int2str(p_tariffsList[v_idx].tariffClass);
+                m_found_pattern := pattern "*({v_tariffClassId})*";
+                if (regexp(v_tariffClassIdFound, m_found_pattern, 0) == v_tariffClassId) {
+                    return false; // tariffClassId exist at least 2 times, uniqueness is not verified
+                }
+                // tariffClassId non found, add current tariffClassId into the built list
+                v_tariffClassIdFound := v_tariffClassIdFound & v_tariffClassId & ";";
+            } // End of 'for' statement
+            
+            return true;
+        } // End of function f_check_uniqueness_TariffClassID
+
+        /**
+         * @desc    This function verifies whether each combination of time, vehicle, location and user class leads to exactly one Tariff Class in A22.tariffClasses[i]
+         * @param   p_tariffClasses Tariff class list
+         * @return  true on success, false otherwise
+         * @verdict unchanged
+         */
+        function f_check_uniqueness_TariffClasses(in TariffClassDefinition.tariffClasses p_tariffClasses) runs on EutComp
+        return boolean {
+            // p_tariffClasses shall not be omit
+
+            var charstring v_tariffClassSetFound := ";"; // Used to build the list of the tariff class {t, v, u, l} already processed
+            var charstring v_tariffClassSet; // tariff class {t, v, u, l} currently processed
+            var template charstring m_found_pattern; // Used in regex to verify that 'tariff class {t, v, u, l}' was not found before
+
+            // Step0: Verify the uniqueness of in each list
+            if (f_check_uniqueness_TariffClassID_1(p_tariffClasses) == false) {
+                return false; // Error: Fail to verify the uniqueness of tariffClassId in the list
+            }
+
+            // Parse TariffClass classes
+            for (var integer v_idx := 0; v_idx < sizeof(p_tariffClasses); v_idx := v_idx + 1) {
+                // Step1: Verify the uniqueness in each list
+                if (f_check_uniqueness_LocalVehicleClassId_1(p_tariffClasses[v_idx].localVehicleClasses) == false) {
+                    return false; // Error: Fail to verify the uniqueness of localVehicleClassId
+                }
+                if (f_check_uniqueness_TimeClassId_1(p_tariffClasses[v_idx].timeClasses) == false) {
+                    return false; // Error: Fail to verify the uniqueness of timeClassId
+                }
+                if (f_check_uniqueness_LocationClassId_1(p_tariffClasses[v_idx].locationClasses) == false) {
+                    return false; // Error: Fail to verify the uniqueness of locationClassId
+                }
+                if (f_check_uniqueness_UserClassId_1(p_tariffClasses[v_idx].userClasses) == false) {
+                    return false; // Error: Fail to verify the uniqueness of userClassId
+                }
+
+                v_tariffClassSet := "";
+                for (var integer v_localVehicleClasses_idx := 0; v_localVehicleClasses_idx < sizeof(p_tariffClasses[v_idx].localVehicleClasses); v_localVehicleClasses_idx := v_localVehicleClasses_idx + 1) {
+                    v_tariffClassSet := v_tariffClassSet & "v" & int2str(p_tariffClasses[v_idx].localVehicleClasses[v_localVehicleClasses_idx]);
+                } // End of 'for' statement
+                for (var integer v_timeClasses_idx := 0; v_timeClasses_idx < sizeof(p_tariffClasses[v_idx].timeClasses); v_timeClasses_idx := v_timeClasses_idx + 1) {
+                    v_tariffClassSet := v_tariffClassSet & "t" & int2str(p_tariffClasses[v_idx].timeClasses[v_timeClasses_idx]);
+                } // End of 'for' statement
+                for (var integer v_locationClasses_idx := 0; v_locationClasses_idx < sizeof(p_tariffClasses[v_idx].locationClasses); v_locationClasses_idx := v_locationClasses_idx + 1) {
+                    v_tariffClassSet := v_tariffClassSet & "l" & int2str(p_tariffClasses[v_idx].locationClasses[v_locationClasses_idx]);
+                } // End of 'for' statement
+                for (var integer v_userClasses_idx := 0; v_userClasses_idx < sizeof(p_tariffClasses[v_idx].userClasses); v_userClasses_idx := v_userClasses_idx + 1) {
+                    v_tariffClassSet := v_tariffClassSet & "u" & int2str(p_tariffClasses[v_idx].locationClasses[v_userClasses_idx]);
+                } // End of 'for' statement
+                m_found_pattern := pattern "*({v_tariffClassSet})*";
+                if (regexp(v_tariffClassSetFound, m_found_pattern, 0) == v_tariffClassSet) {
+                    return false; // 'tariff class {t, v, u, l}' exist at least 2 times, uniqueness is not verified
+                }
+                // 'tariff class {t, v, u, l}' non found, add current 'tariff class {t, v, u, l}' into the built list
+                v_tariffClassSetFound := v_tariffClassSetFound & v_tariffClassSet & ";";
+            } // End of 'for' statement
+
+            return true;
+        } // End of function f_check_uniqueness_TariffClasses
+
+        /**
+         * @desc    This function verifies the uniqueness of tariffclassid in TariffClass list
+         * @param   p_tariffClasses TariffClass list
+         * @return  true on success, false otherwise
+         * @verdict unchanged
+         */
+        function f_check_uniqueness_TariffClassID_1(in TariffClassDefinition.tariffClasses p_tariffClasses) runs on EutComp
+        return boolean {
+            // p_tariffClasses shall not be omit
+
+            var charstring v_tariffClassIdFound := ";"; // Used to build the list of the tariffClassId already processed
+            var charstring v_tariffClassId; // tariffClassId currently processed
+            var template charstring m_found_pattern; // Used in regex to verify that 'tariffClassId' was not found before
+
+            // Parse Tariffs list
+            for (var integer v_idx := 0; v_idx < sizeof(p_tariffClasses); v_idx := v_idx + 1) {
+                v_tariffClassId := int2str(p_tariffClasses[v_idx].tariffClassId);
+                m_found_pattern := pattern "*({v_tariffClassId})*";
+                if (regexp(v_tariffClassIdFound, m_found_pattern, 0) == v_tariffClassId) {
+                    return false; // tariffClassId exist at least 2 times, uniqueness is not verified
+                }
+                // tariffClassId non found, add current tariffClassId into the built list
+                v_tariffClassIdFound := v_tariffClassIdFound & v_tariffClassId & ";";
+            } // End of 'for' statement
+            
+            return true;
+        } // End of function f_check_uniqueness_TariffClassID_1
+
+        /**
+         * @desc    This function verifies the uniqueness of localVehivleClassId in LocalVehicleClass list
+         * @param   p_locvehclassList localVehivleClassId list
+         * @return  true on success, false otherwise
+         * @verdict unchanged
+         */
+        function f_check_uniqueness_LocalVehicleClassId(in LocalVehicleClassDefinition.localVehicleClasses p_locvehclassList) runs on EutComp
+        return boolean {
+            // p_locvehclassList shall not be omit
+
+            var charstring v_localVehicleClassIdFound := ";"; // Used to build the list of the localVehicleClassId already processed
+            var charstring v_localVehicleClassId; // localVehicleClassId currently processed
+            var template charstring m_found_pattern; // Used in regex to verify that 'localVehicleClassId' was not found before
+
+            // Parse LocalVehicleClasses list
+            for (var integer v_idx := 0; v_idx < sizeof(p_locvehclassList); v_idx := v_idx + 1) {
+                v_localVehicleClassId := int2str(p_locvehclassList[v_idx].localVehicleClassId);
+                m_found_pattern := pattern "*({v_localVehicleClassId})*";
+                if (regexp(v_localVehicleClassIdFound, m_found_pattern, 0) == v_localVehicleClassId) {
+                    return false; // localVehicleClassId exist at least 2 times, uniqueness is not verified
+                }
+                // localVehicleClassId non found, add current localVehicleClassId into the built list
+                v_localVehicleClassIdFound := v_localVehicleClassIdFound & v_localVehicleClassId & ";";
+            } // End of 'for' statement
+            
+            return true;
+        } // End of function f_check_uniqueness_LocalVehicleClassId
+
+        /**
+         * @desc    This function verifies the uniqueness of priorityValue in group of LocalVehicleClass items
+         * @param   p_locvehclassList localVehivleClassId list
+         * @return  true on success, false otherwise
+         * @verdict unchanged
+         */
+        function f_check_uniqueness_PriorityValue_by_group_LocalVehicleClass(in LocalVehicleClassDefinition.localVehicleClasses p_locvehclassList) runs on EutComp
+        return boolean {
+            // p_locvehclassList shall not be omit
+
+            var charstring v_priorityValueFound := ";"; // Used to build the list of the priorityValue already processed
+            var charstring v_priorityValue; // priorityValue currently processed
+            var template charstring m_found_pattern; // Used in regex to verify that 'priorityValue' was not found before
+
+            var LocalVehicleClassesGroups v_groups := f_Build_LocalVehicleClass_groups(p_locvehclassList);
+
+            // Parse v_groups list items
+            for (var integer v_idx_groups := 0; v_idx_groups < sizeof(v_groups); v_idx_groups := v_idx_groups + 1) {
+                v_priorityValueFound := ";"; // Reset found priorityValue list for the next processing
+                var LocalVehicleClassDefinition.localVehicleClasses v_localVehicleClassesList := v_groups[v_idx_groups];
+                // Parse all LocalVehicleClass items in the current group
+                for (var integer v_idx := 0; v_idx < sizeof(v_localVehicleClassesList); v_idx := v_idx + 1) {
+                    if (not ispresent(v_localVehicleClassesList[v_idx].priorityValue)) { // Step4: Verifies that 'priorityLevel' is present
+                        return false; // Error: 'priorityLevel' is not present
+                    }
+                    v_priorityValue := int2str(v_localVehicleClassesList[v_idx].priorityValue);
+                    m_found_pattern := pattern "*({v_priorityValue})*";
+                    if (regexp(v_priorityValueFound, m_found_pattern, 0) == v_priorityValue) { // Step4: Verify that each localVehicleClass gets different priorityLevel within each group
+                        return false; // priorityValue exist at least 2 times, uniqueness is not verified
+                    }
+                    // priorityValue non found, add current priorityValue into the built list
+                    v_priorityValueFound := v_priorityValueFound & v_priorityValue & ";";
+                } // End of 'for' statement
+            } // End of 'for' statement
+            
+            return true;
+        } // End of function f_check_uniqueness_PriorityValue_by_group_LocalVehicleClass
+
+        /**
+         * @desc    This function verifies the uniqueness of timeClassId in TimeClasses list
+         * @param   p_timeclassList timeClassId list
+         * @return  true on success, false otherwise
+         * @verdict unchanged
+         */
+        function f_check_uniqueness_TimeClassId(in TimeClassDefinition.timeClasses p_timeclassList) runs on EutComp
+        return boolean {
+            // p_timeclassList shall not be omit
+
+            var charstring v_timeClassIdFound := ";"; // Used to build the list of the timeClassId already processed
+            var charstring v_timeClassId; // timeClassId currently processed
+            var template charstring m_found_pattern; // Used in regex to verify that 'timeClassClassId' was not found before
+
+            // Parse TimeClass list
+            for (var integer v_idx := 0; v_idx < sizeof(p_timeclassList); v_idx := v_idx + 1) {
+                v_timeClassId := int2str(p_timeclassList[v_idx].timeClassId);
+                m_found_pattern := pattern "*({v_timeClassId})*";
+                if (regexp(v_timeClassIdFound, m_found_pattern, 0) == v_timeClassId) {
+                    return false; // timeClassId exist at least 2 times, uniqueness is not verified
+                }
+                // timeClassId non found, add current timeClassId into the built list
+                v_timeClassIdFound := v_timeClassIdFound & v_timeClassId & ";";
+            } // End of 'for' statement
+            
+            return true;
+        } // End of function f_check_uniqueness_TimeClassId
+
+        /**
+         * @desc    This function verifies the uniqueness of priorityValue in group of TimeClass items
+         * @param   p_timeclassList timerClassId list
+         * @return  true on success, false otherwise
+         * @verdict unchanged
+         */
+        function f_check_uniqueness_PriorityValue_by_group_TimeClass(in TimeClassDefinition.timeClasses p_timeclassList) runs on EutComp
+        return boolean {
+            // p_timeclassList shall not be omit
+
+            var charstring v_priorityValueFound := ";"; // Used to build the list of the priorityValue already processed
+            var charstring v_priorityValue; // priorityValue currently processed
+            var template charstring m_found_pattern; // Used in regex to verify that 'priorityValue' was not found before
+
+            var TimeClassesGroups v_groups := f_Build_TimeClass_groups(p_timeclassList);
+
+            // Parse v_groups list items
+            for (var integer v_idx_groups := 0; v_idx_groups < sizeof(v_groups); v_idx_groups := v_idx_groups + 1) {
+                v_priorityValueFound := ";"; // Reset found priorityValue list for the next processing
+                var TimeClassDefinition.timeClasses v_timeClassesList := v_groups[v_idx_groups];
+                // Parse all TimeClass items in the current group
+                for (var integer v_idx := 0; v_idx < sizeof(v_timeClassesList); v_idx := v_idx + 1) {
+                    v_priorityValue := int2str(v_timeClassesList[v_idx].priorityValue);
+                    m_found_pattern := pattern "*({v_priorityValue})*";
+                    if (regexp(v_priorityValueFound, m_found_pattern, 0) == v_priorityValue) { // Step4: Verify that each timeClass gets different priorityLevel within each group
+                        return false; // priorityValue exist at least 2 times, uniqueness is not verified
+                    }
+                    // priorityValue non found, add current priorityValue into the built list
+                    v_priorityValueFound := v_priorityValueFound & v_priorityValue & ";";
+                } // End of 'for' statement
+            } // End of 'for' statement
+            
+            return true;
+        } // End of function f_check_uniqueness_PriorityValue_by_group_TimeClass
+
+        /**
+         * @desc    This function verifies the uniqueness of userClassId in userClasses list
+         * @param   p_userclassList userClassId list
+         * @return  true on success, false otherwise
+         * @verdict unchanged
+         */
+        function f_check_uniqueness_UserClassId(in UserClassDefinition.userClasses p_userclassList) runs on EutComp
+        return boolean {
+            // p_userclassList shall not be omit
+
+            var charstring v_userClassIdFound := ";"; // Used to build the list of the userClassId already processed
+            var charstring v_userClassId; // userClassId currently processed
+            var template charstring m_found_pattern; // Used in regex to verify that 'userClassId' was not found before
+
+            // Parse TimeClass list
+            for (var integer v_idx := 0; v_idx < sizeof(p_userclassList); v_idx := v_idx + 1) {
+                v_userClassId := int2str(p_userclassList[v_idx].userClassId);
+                m_found_pattern := pattern "*({v_userClassId})*";
+                if (regexp(v_userClassIdFound, m_found_pattern, 0) == v_userClassId) {
+                    return false; // userClassId exist at least 2 times, uniqueness is not verified
+                }
+                // userClassId non found, add current userClassId into the built list
+                v_userClassIdFound := v_userClassIdFound & v_userClassId & ";";
+            } // End of 'for' statement
+            
+            return false; // Error
+        } // End of function f_check_uniqueness_UserClassId
+
+        /**
+         * @desc    This function verifies the uniqueness of priorityValue in group of UserClass items
+         * @param   p_usertclassList userClassId list
+         * @return  true on success, false otherwise
+         * @verdict unchanged
+         */
+        function f_check_uniqueness_PriorityValue_by_group_UserClass(in UserClassDefinition.userClasses p_usertclassList) runs on EutComp
+        return boolean {
+            // p_usertclassList shall not be omit
+
+            var UserClassesGroups v_groups := f_Build_UserClass_groups(p_usertclassList);
+            // Parse v_groups list items
+            for (var integer v_idx_groups := 0; v_idx_groups < sizeof(v_groups); v_idx_groups := v_idx_groups + 1) {
+                if (sizeof(v_groups[v_idx_groups]) != 1) { // Step4: Verify that each group consists of exactly one user class
+                    return false; // Error
+                }
+            } // End of 'for' statement
+            
+            return true;
+        } // End of function f_check_uniqueness_PriorityValue_by_group_UserClass
+
+        /**
+         * @desc    This function checks that the Layout Description is compliant to Toll Scheme Type
+         * @param   p_tollcontextoverview TollContextOverview value
+         * @param   p_tollContextPartitionLayout TollContextLayout value
+         * @return  true on success, false otherwise
+         * @verdict fail if unreachable code is executed, unchanged otherwise
+         */
+        function f_check_compliancy_TollContextLayout_TollSchemeType(
+                                                                     in template (value) TollContextOverview p_tollcontextoverview, 
+                                                                     in template (value) TollContextPartitionLayout p_tollContextPartitionLayout
+        ) runs on EutComp return boolean {
+            // p_tollContextPartitionLayout shall not be omit
+
+            if (p_tollcontextoverview.tollSchemeType == TollSchemeType.roadSectionPricing) {
+                if (ischosen(p_tollContextPartitionLayout.layoutDescription.sectionPricingLayout)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+            if ((p_tollcontextoverview.tollSchemeType == TollSchemeType.areaPricingDistance) or (p_tollcontextoverview.tollSchemeType == TollSchemeType.areaPricingTime)){
+                if (ischosen(p_tollContextPartitionLayout.layoutDescription.areaPricingLayout)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+            if (p_tollcontextoverview.tollSchemeType == TollSchemeType.cordonPricing) {
+                if (ischosen(p_tollContextPartitionLayout.layoutDescription.cordonPricingLayout)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+            setverdict(fail); // This code shall not be reachable
+            return false; // Error
+        } // End of function f_check_compliancy_TollContextLayout_TollSchemeType
+
+        /**
+         * @desc    Functions for TCs related to Section Pricing Layout
+         * @see     ISO/DTS 17575-3 - 8.3.4.1 Data element sectionLayout / Data type SectionLayout
+         * @see     prCEN/TS 00000-1:2010 (E) - B.11.1.1. Toll Context Layout test purposes for Section pricing scheme
+         */
+        group Section_Pricing_Layout {
+            /**
+             * @desc    This function verifies the uniqueness of Charge Object ID in SectionPricingLayout
+             * @param   p_sectionLayoutList SectionLayout list
+             * @return  true on success, false otherwise
+             * @verdict unchanged
+             */
+            function f_check_uniqueness_TollContextLayout_SectionPricingLayout_chargeObjectId(in Layout.sectionPricingLayout p_sectionLayoutList) runs on EutComp
+            return boolean {
+                // p_sectionLayoutList shall not be omit
+    
+                var charstring v_chargeObjectIdFound := ";"; // Used to build the list of the chargeObjectId already processed
+                var charstring v_chargeObjectId; // chargeObjectId currently processed
+                var template charstring m_found_pattern; // Used in regex to verify that 'chargeObjectId' was not found before
+    
+                // Parse SectionLayout list
+                for (var integer v_idx := 0; v_idx < sizeof(p_sectionLayoutList); v_idx := v_idx + 1) {
+                    v_chargeObjectId := int2str(p_sectionLayoutList[v_idx].chargeObjectId);
+                    m_found_pattern := pattern "*({v_chargeObjectId})*";
+                    if (regexp(v_chargeObjectIdFound, m_found_pattern, 0) == v_chargeObjectId) {
+                        return false; // chargeObjectId exist at least 2 times, uniqueness is not verified
+                    }
+                    // chargeObjectId non found, add current chargeObjectId into the built list
+                    v_chargeObjectIdFound := v_chargeObjectIdFound & v_chargeObjectId & ";";
+                } // End of 'for' statement
+                
+                return true;
+            } // End of function f_check_uniqueness_TollContextLayout_SectionPricingLayout_chargeObjectId
+    
+            /**
+             * @desc    This function verifies the uniqueness of Point ID in SectionPricingLayout
+             * @param   p_sectionLayoutList SectionLayout list
+             * @return  true on success, false otherwise
+             * @verdict unchanged
+             */
+            function f_check_uniqueness_TollContextLayout_SectionPricingLayout_pointId(in Layout.sectionPricingLayout p_sectionLayoutList) runs on EutComp
+            return boolean {
+                // p_sectionLayoutList shall not be omit
+    
+                var charstring v_pointIdFound := ";"; // Used to build the list of the pointId already processed
+                var charstring v_pointId; // pointId currently processed
+                var template charstring m_found_pattern; // Used in regex to verify that 'pointId' was not found before
+    
+                // Parse SectionLayout list
+                for (var integer v_idx := 0; v_idx < sizeof(p_sectionLayoutList); v_idx := v_idx + 1) {
+                    if (ispresent(p_sectionLayoutList[v_idx].networkPoints)) {
+                        var SectionLayout.networkPoints v_networkPoints := p_sectionLayoutList[v_idx].networkPoints;
+                        v_pointIdFound := ";"; // Reset found pattern
+                        for (var integer v_jdx := 0; v_jdx < sizeof(v_networkPoints); v_jdx := v_jdx + 1) {
+                            v_pointId := int2str(v_networkPoints[v_jdx].pointId);
+                            m_found_pattern := pattern "*({v_pointId})*";
+                            if (regexp(v_pointIdFound, m_found_pattern, 0) == v_pointId) {
+                                return false; // pointId exist at least 2 times, uniqueness is not verified
+                            }
+                            // pointId non found, add current pointId into the built list
+                            v_pointIdFound := v_pointIdFound & v_pointId & ";";
+                        } // End of 'for' statement
+                    }
+                } // End of 'for' statement
+    
+                return true;
+            } // End of function f_check_uniqueness_TollContextLayout_SectionPricingLayout_pointId
+    
+            /**
+             * @desc    This function verifies the uniqueness of link ID in SectionPricingLayout
+             * @param   p_sectionLayoutList SectionLayout list
+             * @return  true on success, false otherwise
+             * @verdict unchanged
+             */
+            function f_check_uniqueness_TollContextLayout_SectionPricingLayout_linkId(in Layout.sectionPricingLayout p_sectionLayoutList) runs on EutComp
+            return boolean {
+                // p_sectionLayoutList shall not be omit
+    
+                var charstring v_linkIdFound := ";"; // Used to build the list of the linkId already processed
+                var charstring v_linkId; // linkId currently processed
+                var template charstring m_found_pattern; // Used in regex to verify that 'linkId' was not found before
+    
+                // Parse SectionLayout list
+                for (var integer v_idx := 0; v_idx < sizeof(p_sectionLayoutList); v_idx := v_idx + 1) {
+                    v_linkId := int2str(p_sectionLayoutList[v_idx].tollPath.linkId);
+                    m_found_pattern := pattern "*({v_linkId})*";
+                    if (regexp(v_linkIdFound, m_found_pattern, 0) == v_linkId) {
+                        return false; // linkId exist at least 2 times, uniqueness is not verified
+                    }
+                    // linkId non found, add current linkId into the built list
+                    v_linkIdFound := v_linkIdFound & v_linkId & ";";
+                } // End of 'for' statement
+                
+                return true;
+            } // End of function f_check_uniqueness_TollContextLayout_SectionPricingLayout_linkId
+    
+            /**
+             * @desc    This function verifies that each point (i.e. startPoint, endPoint, listOfIntermediatePoints) defined in each Link of TollContextLayout has defined pointIdentifier EX-OR pointCoordinates 
+             * @param   p_sectionLayoutList SectionLayout list
+             * @return  true on success, false otherwise
+             * @verdict unchanged
+             */
+            function f_check_uniqueness_TollContextLayout_SectionPricingLayout_pointDescription_Link(in Layout.sectionPricingLayout p_sectionLayoutList) runs on EutComp
+            return boolean {
+                // p_sectionLayoutList shall not be omit
+    
+                // Parse SectionLayout list
+                for (var integer v_idx := 0; v_idx < sizeof(p_sectionLayoutList); v_idx := v_idx + 1) {
+                    var Link v_link := p_sectionLayoutList[v_idx].tollPath;
+    
+                    if (f_check_Point(v_link.startPoint) == false) {
+                        return false; // Both field of Point data structure are defined ==> conflict
+                    }
+                    if (f_check_Point(v_link.endPoint) == false) {
+                        return false; // Both field of Point data structure are defined ==> conflict
+                    }
+                    if (ispresent(v_link.intermediatePoints)) {
+                        // Parse intermediatePoints
+                        for (var integer v_jdx := 0; v_jdx < sizeof(v_link.intermediatePoints); v_jdx := v_jdx + 1) {
+                            if (f_check_Point(v_link.intermediatePoints[v_jdx]) == false) {
+                                return false; // Both field of Point data structure are defined ==> conflict
+                            }
+                        } // End of 'for' statement
+                    } // else ignore it
+                } // End of 'for' statement
+    
+                return true;
+            } // End of function f_check_uniqueness_TollContextLayout_SectionPricingLayout_pointDescription_Link
+    
+            /**
+             * @desc    This function verifies that Point identified by Point ID in Link has been defined in Used Points
+             * @param   p_sectionLayoutList SectionLayout list
+             * @return  true on success, false otherwise
+             * @verdict unchanged
+             */
+            function f_check_uniqueness_TollContextLayout_SectionPricingLayout_Link_pointID_networkPoints(in Layout.sectionPricingLayout p_sectionLayoutList) runs on EutComp
+            return boolean {
+                // p_sectionLayoutList shall not be omit
+    
+                // Parse SectionLayout list
+                for (var integer v_idx := 0; v_idx < sizeof(p_sectionLayoutList); v_idx := v_idx + 1) {
+                    var Link v_link := p_sectionLayoutList[v_idx].tollPath;
+                    
+                    if (not ispresent(p_sectionLayoutList[v_idx].networkPoints)) { // No pointID defined
+                        if (ischosen(v_link.startPoint.pointIdentifier)) {
+                            return false; // PointID is defined with an empty list of PointIDs
+                        }
+                        if (ischosen(v_link.endPoint.pointIdentifier)) {
+                            return false; // PointID is defined with an empty list of PointIDs
+                        }
+                        if (ispresent(v_link.intermediatePoints)) {
+                            // Parse intermediatePoints
+                            for (var integer v_jdx := 0; v_jdx < sizeof(v_link.intermediatePoints); v_jdx := v_jdx + 1) {
+                                if (ischosen(v_link.intermediatePoints[v_jdx].pointIdentifier)) {
+                                    return false; // PointID is defined with an empty list of PointIDs
+                                }
+                            } // End of 'for' statement
+                        } // else ignore it
+                    } else { // A list of pointID is defined
+                        var charstring v_pointIdFound := f_build_PointId_NetworkPoints(p_sectionLayoutList[v_idx].networkPoints); // Build the list of the pointId declared in networkPoints
+                        var charstring v_pointId := "";
+                        var template charstring m_found_pattern; // Used in regex to verify that 'pointId' was not found before
+                        
+                        if (ischosen(v_link.startPoint.pointIdentifier)) {
+                            v_pointId := int2str(v_link.startPoint.pointIdentifier);
+                            m_found_pattern := pattern "*({v_pointId})*";
+                            if (regexp(v_pointIdFound, m_found_pattern, 0) != v_pointId) {
+                                return false; // pointId does not exist
+                            }
+                        }
+                        if (ischosen(v_link.endPoint.pointIdentifier)) {
+                            v_pointId := int2str(v_link.endPoint.pointIdentifier);
+                            m_found_pattern := pattern "*({v_pointId})*";
+                            if (regexp(v_pointIdFound, m_found_pattern, 0) != v_pointId) {
+                                return false; // pointId does not exist
+                            }
+                        }
+                        if (ispresent(v_link.intermediatePoints)) {
+                            // Parse intermediatePoints
+                            for (var integer v_jdx := 0; v_jdx < sizeof(v_link.intermediatePoints); v_jdx := v_jdx + 1) {
+                                if (ischosen(v_link.intermediatePoints[v_jdx].pointIdentifier)) {
+                                    v_pointId := int2str(v_link.intermediatePoints[v_jdx].pointIdentifier);
+                                    m_found_pattern := pattern "*({v_pointId})*";
+                                    if (regexp(v_pointIdFound, m_found_pattern, 0) != v_pointId) {
+                                        return false; // pointId does not exist
+                                    }
+                                }
+                            } // End of 'for' statement
+                        } // else ignore it
+                    }
+                } // End of 'for' statement
+    
+                return true;
+            } // End of function f_check_uniqueness_TollContextLayout_SectionPricingLayout_Link_pointID_networkPoints
+    
+            /**
+             * @desc    This function verifies that each point (i.e. startPoint, endPoint, intermediatePoints) defined in each LiabilityRules of TollContextLayout has defined pointIdentifier EX-OR pointCoordinates 
+             * @param   p_sectionLayoutList SectionLayout list
+             * @return  true on success, false otherwise
+             * @verdict unchanged
+             */
+            function f_check_uniqueness_TollContextLayout_SectionPricingLayout_pointDescription_LiabilityRules(in Layout.sectionPricingLayout p_sectionLayoutList) runs on EutComp
+            return boolean {
+                // p_sectionLayoutList shall not be omit
+    
+                // Parse SectionLayout list
+                for (var integer v_idx := 0; v_idx < sizeof(p_sectionLayoutList); v_idx := v_idx + 1) {
+                    var LiabilityRules v_liabilityRules := p_sectionLayoutList[v_idx].liabilityRules;
+    
+                    if (f_check_Point(v_liabilityRules.tollPoints[0]) == false) {
+                        return false; // Both field of Point data structure are defined ==> conflict
+                    }
+                    if (f_check_Point(v_liabilityRules.tollPoints[1]) == false) {
+                        return false; // Both field of Point data structure are defined ==> conflict
+                    }
+                } // End of 'for' statement
+    
+                return true;
+            } // End of function f_check_uniqueness_TollContextLayout_SectionPricingLayout_pointDescription_LiabilityRules
+    
+            /**
+             * @desc    This function verifies that Point identified by Point ID in Liability Rules has been defined in Network Points
+             * @param   p_sectionLayoutList SectionLayout list
+             * @return  true on success, false otherwise
+             * @verdict unchanged
+             */
+            function f_check_uniqueness_TollContextLayout_SectionPricingLayout_LiabilityRules_pointID_networkPoints(in Layout.sectionPricingLayout p_sectionLayoutList) runs on EutComp
+            return boolean {
+                // p_sectionLayoutList shall not be omit
+    
+                // Parse SectionLayout list
+                for (var integer v_idx := 0; v_idx < sizeof(p_sectionLayoutList); v_idx := v_idx + 1) {
+                    var LiabilityRules v_liabilityRules := p_sectionLayoutList[v_idx].liabilityRules;
+                    
+                    if (not ispresent(p_sectionLayoutList[v_idx].networkPoints)) { // No pointID defined
+                        if (ischosen(v_liabilityRules.tollPoints[0].pointIdentifier)) {
+                            return false; // PointID is defined with an empty list of PointIDs
+                        }
+                        if (ischosen(v_liabilityRules.tollPoints[1].pointIdentifier)) {
+                            return false; // PointID is defined with an empty list of PointIDs
+                        }
+                    } else { // A list of pointID is defined
+                        var charstring v_pointIdFound := f_build_PointId_NetworkPoints(p_sectionLayoutList[v_idx].networkPoints); // Build the list of the pointId declared in networkPoints
+                        var charstring v_pointId := "";
+                        var template charstring m_found_pattern; // Used in regex to verify that 'pointId' was not found before
+                        
+                        if (ischosen(v_liabilityRules.tollPoints[0].pointIdentifier)) {
+                            v_pointId := int2str(v_liabilityRules.tollPoints[0].pointIdentifier);
+                            m_found_pattern := pattern "*({v_pointId})*";
+                            if (regexp(v_pointIdFound, m_found_pattern, 0) != v_pointId) {
+                                return false; // pointId does not exist
+                            }
+                        }
+                        if (ischosen(v_liabilityRules.tollPoints[1].pointIdentifier)) {
+                            v_pointId := int2str(v_liabilityRules.tollPoints[1].pointIdentifier);
+                            m_found_pattern := pattern "*({v_pointId})*";
+                            if (regexp(v_pointIdFound, m_found_pattern, 0) != v_pointId) {
+                                return false; // pointId does not exist
+                            }
+                        }
+                    }
+                } // End of 'for' statement
+    
+                return true;
+            } // End of function f_check_uniqueness_TollContextLayout_SectionPricingLayout_LiabilityRules_pointID_networkPoints
+    
+            /**
+             * @desc    This function verifies that each point (i.e. startPoint, endPoint, intermediatePoints) defined in each SupportingPoint of TollContextLayout has defined pointIdentifier EX-OR pointCoordinates
+             * @param   p_sectionLayoutList SectionLayout list
+             * @return  true on success, false otherwise
+             * @verdict unchanged
+             */
+            function f_check_uniqueness_TollContextLayout_SectionPricingLayout_pointDescription_SupportingPoint(in Layout.sectionPricingLayout p_sectionLayoutList) runs on EutComp
+            return boolean {
+                // p_sectionLayoutList shall not be omit
+    
+                // Parse SectionLayout list
+                for (var integer v_idx := 0; v_idx < sizeof(p_sectionLayoutList); v_idx := v_idx + 1) {
+                    if (ispresent(p_sectionLayoutList[v_idx].supportingInformation)) {
+                        for (var integer v_jdx := 0; v_jdx < sizeof(p_sectionLayoutList[v_idx].supportingInformation); v_jdx := v_jdx + 1) {
+                            var SupportingPoint v_supportingPoint := p_sectionLayoutList[v_idx].supportingInformation[v_jdx];
+                            if (ispresent(v_supportingPoint.supportPoint)) {
+                                if (f_check_Point(v_supportingPoint.supportPoint) == false) {
+                                    return false; // Both field of Point data structure are defined ==> conflict
+                                }
+                            }
+                        } // End of 'for' statement
+                    } // else continue
+                } // End of 'for' statement
+    
+                return true;
+            } // End of function f_check_uniqueness_TollContextLayout_SectionPricingLayout_pointDescription_SupportingPoint
+    
+            /**
+             * @desc    This function verifies that Point identified by Point ID in SupportingPoint has been defined in Network Points
+             * @param   p_sectionLayoutList SectionLayout list
+             * @return  true on success, false otherwise
+             * @verdict unchanged
+             */
+            function f_check_uniqueness_TollContextLayout_SectionPricingLayout_SupportingPoint_pointID_networkPoints(in Layout.sectionPricingLayout p_sectionLayoutList) runs on EutComp
+            return boolean {
+                // p_sectionLayoutList shall not be omit
+    
+                // Parse SectionLayout list
+                for (var integer v_idx := 0; v_idx < sizeof(p_sectionLayoutList); v_idx := v_idx + 1) {
+                    if (ispresent(p_sectionLayoutList[v_idx].supportingInformation)) {
+                        for (var integer v_jdx := 0; v_jdx < sizeof(p_sectionLayoutList[v_idx].supportingInformation); v_jdx := v_jdx + 1) {
+                            var SupportingPoint v_supportingPoint := p_sectionLayoutList[v_idx].supportingInformation[v_jdx];
+                            if (ispresent(v_supportingPoint.supportPoint)) {
+                                if (not ispresent(p_sectionLayoutList[v_idx].networkPoints)) { // No pointID defined
+                                    if (ischosen(v_supportingPoint.supportPoint.pointIdentifier)) {
+                                        return false; // PointID is defined with an empty list of PointIDs
+                                    }
+                                } else { // A list of pointID is defined
+                                    var charstring v_pointIdFound := f_build_PointId_NetworkPoints(p_sectionLayoutList[v_idx].networkPoints); // Build the list of the pointId declared in networkPoints
+                                    var charstring v_pointId := "";
+                                    var template charstring m_found_pattern; // Used in regex to verify that 'pointId' was not found before
+                                    
+                                    if (ischosen(v_supportingPoint.supportPoint.pointIdentifier)) {
+                                        v_pointId := int2str(v_supportingPoint.supportPoint.pointIdentifier);
+                                        m_found_pattern := pattern "*({v_pointId})*";
+                                        if (regexp(v_pointIdFound, m_found_pattern, 0) != v_pointId) {
+                                            return false; // pointId does not exist
+                                        }
+                                    }
+                                }
+                            } // ispresent(v_supportingPoint.supportPoint)
+                        } // End of 'for' statement
+                    } // else continue
+                } // End of 'for' statement
+    
+                return true;
+            } // End of function f_check_uniqueness_TollContextLayout_SectionPricingLayout_SupportingPoint_pointID_networkPoints
+
+            /**
+             * @desc    This function verifies the uniqueness of time class ID in SectionPricingLayout
+             * @param   p_sectionLayoutList SectionLayout list
+             * @return  true on success, false otherwise
+             * @verdict unchanged
+             */
+            function f_check_uniqueness_TollContextLayout_SectionPricingLayout_timeClassId(in Layout.sectionPricingLayout p_sectionLayoutList) runs on EutComp
+            return boolean {
+                // p_sectionLayoutList shall not be omit
+    
+                var charstring v_timeClassIdFound := ";"; // Used to build the list of the timeClassId already processed
+                var charstring v_timeClassId; // timeClassId currently processed
+                var template charstring m_found_pattern; // Used in regex to verify that 'timeClassId' was not found before
+        
+                // Parse SectionLayout list
+                for (var integer v_idx := 0; v_idx < sizeof(p_sectionLayoutList); v_idx := v_idx + 1) {
+                    if (ispresent(p_sectionLayoutList[v_idx].applicableTimeClasses)) {
+                        v_timeClassIdFound := ";";
+                        for (var integer v_jdx := 0; v_jdx < sizeof(p_sectionLayoutList[v_idx].applicableTimeClasses); v_jdx := v_jdx + 1) {
+                            v_timeClassId := int2str(p_sectionLayoutList[v_idx].applicableTimeClasses[v_jdx]);
+                            m_found_pattern := pattern "*({v_timeClassId})*";
+                            if (regexp(v_timeClassIdFound, m_found_pattern, 0) == v_timeClassId) {
+                                return false; // timeClassId exist at least 2 times, uniqueness is not verified
+                            }
+                            // timeClassId non found, add current timeClassId into the built list
+                            v_timeClassIdFound := v_timeClassIdFound & v_timeClassId & ";";
+                        } // End of 'for' statement
+                    } // ispresent(p_sectionLayoutList[v_idx].applicableTimeClasses)
+                } // End of 'for' statement
+
+                return true;
+            } // End of function f_check_uniqueness_TollContextLayout_SectionPricingLayout_timeClassId
+
+        } // End of group Section_Pricing_Layout
+
+        /**
+         * @desc    Functions for TCs related to Area Pricing Layout
+         * @see     ISO/DTS 17575-3 - 8.3.4.2. Data element areaLayout
+         * @see     prCEN/TS 00000-1:2010 (E) - B.11.1.3. Toll Context Layout test purposes for Area pricing scheme
+         */
+        group Area_Pricing_Layout {
+            /**
+             * @desc    This function verifies the uniqueness of area ID in AreaLayout
+             * @param   p_areaLayoutList AreaLayout list
+             * @return  true on success, false otherwise
+             * @verdict unchanged
+             */
+            function f_check_uniqueness_TollContextLayout_AreaPricingLayout_areaId(in Layout.areaPricingLayout p_areaLayoutList) runs on EutComp
+            return boolean {
+                // p_areaLayoutList shall not be omit
+
+                var charstring v_areaIdFound := ";"; // Used to build the list of the areaId already processed
+                var charstring v_areaId; // areaId currently processed
+                var template charstring m_found_pattern; // Used in regex to verify that 'areaId' was not found before
+    
+                // Parse AreaLayout list
+                for (var integer v_idx := 0; v_idx < sizeof(p_areaLayoutList); v_idx := v_idx + 1) {
+                    v_areaId := int2str(p_areaLayoutList[v_idx].areaId);
+                    m_found_pattern := pattern "*({v_areaId})*";
+                    if (regexp(v_areaIdFound, m_found_pattern, 0) == v_areaId) {
+                        return false; // areaId exist at least 2 times, uniqueness is not verified
+                    }
+                    // areaId non found, add current areaId into the built list
+                    v_areaIdFound := v_areaIdFound & v_areaId & ";";
+                } // End of 'for' statement
+
+                return true;
+            } // End of function f_check_uniqueness_TollContextLayout_AreaPricingLayout_areaId
+
+            /**
+             * @desc    This function verifies the uniqueness of Charge Object ID in AreaPricingLayout
+             * @param   p_areaLayoutList AreaLayout list
+             * @return  true on success, false otherwise
+             * @verdict unchanged
+             */
+            function f_check_uniqueness_TollContextLayout_AreaPricingLayout_chargeObjectId(in Layout.areaPricingLayout p_areaLayoutList) runs on EutComp
+            return boolean {
+                // p_areaLayoutList shall not be omit
+    
+                var charstring v_chargeObjectIdFound := ";"; // Used to build the list of the chargeObjectId already processed
+                var charstring v_chargeObjectId; // chargeObjectId currently processed
+                var template charstring m_found_pattern; // Used in regex to verify that 'chargeObjectId' was not found before
+    
+                // Parse AreaLayout list
+                for (var integer v_idx := 0; v_idx < sizeof(p_areaLayoutList); v_idx := v_idx + 1) {
+                    // Parse RoadNetwork list
+                    for (var integer v_jdx := 0; v_jdx < sizeof(p_areaLayoutList[v_idx].roadNetworks); v_jdx := v_jdx + 1) {
+                        v_chargeObjectIdFound := ";"; // Reset found list
+                        // Parse RoadNetworkObjects list
+                        for (var integer v_kdx := 0; v_kdx < sizeof(p_areaLayoutList[v_idx].roadNetworks[v_jdx].roadNetworkObjects); v_kdx := v_kdx + 1) {
+                            v_chargeObjectId := int2str(p_areaLayoutList[v_idx].roadNetworks[v_jdx].roadNetworkObjects[v_kdx].chargeObjectId);
+                            m_found_pattern := pattern "*({v_chargeObjectId})*";
+                            if (regexp(v_chargeObjectIdFound, m_found_pattern, 0) == v_chargeObjectId) {
+                                return false; // chargeObjectId exist at least 2 times, uniqueness is not verified
+                            }
+                            // chargeObjectId non found, add current chargeObjectId into the built list
+                            v_chargeObjectIdFound := v_chargeObjectIdFound & v_chargeObjectId & ";";
+                        } // End of 'for' statement
+                    } // End of 'for' statement
+                } // End of 'for' statement
+
+                return true;
+            } // End of function f_check_uniqueness_TollContextLayout_AreaPricingLayout_chargeObjectId
+
+            /**
+             * @desc    This function verifies the uniqueness of Point ID in AreaPricingLayout
+             * @param   p_areaLayoutList AreaLayout list
+             * @return  true on success, false otherwise
+             * @verdict unchanged
+             */
+            function f_check_uniqueness_TollContextLayout_AreaPricingLayout_pointId(in Layout.areaPricingLayout p_areaLayoutList) runs on EutComp
+            return boolean {
+                // p_areaLayoutList shall not be omit
+    
+                var charstring v_pointIdFound := ";"; // Used to build the list of the pointId already processed
+                var charstring v_pointId; // pointId currently processed
+                var template charstring m_found_pattern; // Used in regex to verify that 'pointId' was not found before
+    
+                // Parse AreaLayout list
+                for (var integer v_idx := 0; v_idx < sizeof(p_areaLayoutList); v_idx := v_idx + 1) {
+                    // Parse RoadNetwork list
+                    for (var integer v_jdx := 0; v_jdx < sizeof(p_areaLayoutList[v_idx].roadNetworks); v_jdx := v_jdx + 1) {
+                        // Parse RoadNetworkObjects list
+                        v_pointIdFound := ";"; // Reset the found list
+                        for (var integer v_kdx := 0; v_kdx < sizeof(p_areaLayoutList[v_idx].roadNetworks[v_jdx].roadNetworkObjects); v_kdx := v_kdx + 1) {
+                            if (ispresent(p_areaLayoutList[v_idx].roadNetworks[v_jdx].roadNetworkObjects[v_kdx].usedPoints)) {
+                                var RoadNetworkObject.usedPoints v_networkPoints := p_areaLayoutList[v_idx].roadNetworks[v_jdx].roadNetworkObjects[v_kdx].usedPoints;
+                                v_pointIdFound := ";"; // Reset found list
+                                for (var integer v_ldx := 0; v_ldx < sizeof(v_networkPoints); v_ldx := v_ldx + 1) {
+                                    if (ischosen(v_networkPoints[v_ldx].pointIdentifier)) {
+                                        v_pointId := int2str(v_networkPoints[v_ldx].pointIdentifier);
+                                        m_found_pattern := pattern "*({v_pointId})*";
+                                        if (regexp(v_pointIdFound, m_found_pattern, 0) == v_pointId) {
+                                            return false; // pointId exist at least 2 times, uniqueness is not verified
+                                        }
+                                        // pointId non found, add current pointId into the built list
+                                        v_pointIdFound := v_pointIdFound & v_pointId & ";";
+                                    }
+                                } // End of 'for' statement
+                            } // ispresent
+                        } // End of 'for' statement
+                    } // End of 'for' statement
+                } // End of 'for' statement
+
+                return true;
+            } // End of function f_check_uniqueness_TollContextLayout_AreaPricingLayout_pointId
+
+            /**
+             * @desc    This function verifies the uniqueness of link ID in AreaPricingLayout
+             * @param   p_areaLayoutList AreaLayout list
+             * @return  true on success, false otherwise
+             * @verdict unchanged
+             */
+            function f_check_uniqueness_TollContextLayout_AreaPricingLayout_linkId(in Layout.areaPricingLayout p_areaLayoutList) runs on EutComp
+            return boolean {
+                // p_areaLayoutList shall not be omit
+    
+                var charstring v_linkIdFound := ";"; // Used to build the list of the linkId already processed
+                var charstring v_linkId; // linkId currently processed
+                var template charstring m_found_pattern; // Used in regex to verify that 'linkId' was not found before
+    
+                // Parse AreaLayout list
+                for (var integer v_idx := 0; v_idx < sizeof(p_areaLayoutList); v_idx := v_idx + 1) {
+                    v_linkIdFound := ";"; // Reset found list
+                    // Parse RoadNetwork list
+                    for (var integer v_jdx := 0; v_jdx < sizeof(p_areaLayoutList[v_idx].roadNetworks); v_jdx := v_jdx + 1) {
+                        // Parse RoadNetworkObjects list
+                        for (var integer v_kdx := 0; v_kdx < sizeof(p_areaLayoutList[v_idx].roadNetworks[v_jdx].roadNetworkObjects); v_kdx := v_kdx + 1) {
+                            v_linkId := int2str(p_areaLayoutList[v_idx].roadNetworks[v_jdx].roadNetworkObjects[v_kdx].tollPath.linkId);
+                            m_found_pattern := pattern "*({v_linkId})*";
+                            if (regexp(v_linkIdFound, m_found_pattern, 0) == v_linkId) {
+                                return false; // linkId exist at least 2 times, uniqueness is not verified
+                            }
+                            // linkId non found, add current linkId into the built list
+                            v_linkIdFound := v_linkIdFound & v_linkId & ";";
+                        } // End of 'for' statement
+                    } // End of 'for' statement
+                } // End of 'for' statement
+
+                return true;
+            } // End of function f_check_uniqueness_TollContextLayout_AreaPricingLayout_linkId
+
+            /**
+             * @desc    This function verifies that each point (i.e. startPoint, endPoint, intermediatePoints) defined in each Link of TollContextLayout has defined pointIdentifier EX-OR pointCoordinates 
+             * @param   p_areaLayoutList AreaLayout list
+             * @return  true on success, false otherwise
+             * @verdict unchanged
+             */
+            function f_check_uniqueness_TollContextLayout_AreaPricingLayout_pointDescription_Link(in Layout.areaPricingLayout p_areaLayoutList) runs on EutComp
+            return boolean {
+                // p_areaLayoutList shall not be omit
+    
+                // Parse AreaLayout list
+                for (var integer v_idx := 0; v_idx < sizeof(p_areaLayoutList); v_idx := v_idx + 1) {
+                    // Parse RoadNetwork list
+                    for (var integer v_jdx := 0; v_jdx < sizeof(p_areaLayoutList[v_idx].roadNetworks); v_jdx := v_jdx + 1) {
+                        // Parse RoadNetworkObjects list
+                        for (var integer v_kdx := 0; v_kdx < sizeof(p_areaLayoutList[v_idx].roadNetworks[v_jdx].roadNetworkObjects); v_kdx := v_kdx + 1) {
+                            var Link v_link := p_areaLayoutList[v_idx].roadNetworks[v_jdx].roadNetworkObjects[v_kdx].tollPath;
+
+                            if (f_check_Point(v_link.startPoint) == false) {
+                                return false; // Both field of Point data structure are defined ==> conflict
+                            }
+                            if (f_check_Point(v_link.endPoint) == false) {
+                                return false; // Both field of Point data structure are defined ==> conflict
+                            }
+                            if (ispresent(v_link.intermediatePoints)) {
+                                // Parse intermediatePoints
+                                for (var integer v_ldx := 0; v_ldx < sizeof(v_link.intermediatePoints); v_ldx := v_ldx + 1) {
+                                    if (f_check_Point(v_link.intermediatePoints[v_ldx]) == false) {
+                                        return false; // Both field of Point data structure are defined ==> conflict
+                                    }
+                                } // End of 'for' statement
+                            } // else ignore it
+                        } // End of 'for' statement
+                     } // End of 'for' statement
+                 } // End of 'for' statement
+
+                return true;
+            } // End of function f_check_uniqueness_TollContextLayout_AreaPricingLayout_pointDescription_Link
+
+            /**
+             * @desc    This function verifies that Point identified by Point ID in Link has been defined in Network Points
+             * @param   p_areaLayoutList AreaLayout list
+             * @return  true on success, false otherwise
+             * @verdict unchanged
+             */
+            function f_check_uniqueness_TollContextLayout_AreaPricingLayout_Link_pointID_usedPoints(in Layout.areaPricingLayout p_areaLayoutList) runs on EutComp
+            return boolean {
+                // p_areaLayoutList shall not be omit
+
+                // Parse AreaLayout list
+                for (var integer v_idx := 0; v_idx < sizeof(p_areaLayoutList); v_idx := v_idx + 1) {
+                    // Parse RoadNetwork list
+                    for (var integer v_jdx := 0; v_jdx < sizeof(p_areaLayoutList[v_idx].roadNetworks); v_jdx := v_jdx + 1) {
+                        // Parse RoadNetworkObjects list
+                        for (var integer v_kdx := 0; v_kdx < sizeof(p_areaLayoutList[v_idx].roadNetworks[v_jdx].roadNetworkObjects); v_kdx := v_kdx + 1) {
+                            var Link v_link := p_areaLayoutList[v_idx].roadNetworks[v_jdx].roadNetworkObjects[v_kdx].tollPath;
+
+                            if (not ispresent(p_areaLayoutList[v_idx].roadNetworks[v_jdx].roadNetworkObjects[v_kdx].usedPoints)) {
+                                if (ischosen(v_link.startPoint.pointIdentifier)) {
+                                    return false; // PointID is defined with an empty list of PointIDs
+                                }
+                                if (ischosen(v_link.endPoint.pointIdentifier)) {
+                                    return false; // PointID is defined with an empty list of PointIDs
+                                }
+                                if (ispresent(v_link.intermediatePoints)) {
+                                    // Parse intermediatePoints
+                                    for (var integer v_ldx := 0; v_ldx < sizeof(v_link.intermediatePoints); v_ldx := v_ldx + 1) {
+                                        if (ischosen(v_link.intermediatePoints[v_ldx].pointIdentifier)) {
+                                            return false; // PointID is defined with an empty list of PointIDs
+                                        }
+                                    } // End of 'for' statement
+                                } // else ignore it
+                            } else { // A list of pointID is defined
+                                var charstring v_pointIdFound := f_build_PointId_UsedPoints(p_areaLayoutList[v_idx].roadNetworks[v_jdx].roadNetworkObjects[v_kdx].usedPoints); // Build the list of the pointId declared in networkPoints
+                                var charstring v_pointId := "";
+                                var template charstring m_found_pattern; // Used in regex to verify that 'pointId' was not found before
+                                
+                                if (ischosen(v_link.startPoint.pointIdentifier)) {
+                                    v_pointId := int2str(v_link.startPoint.pointIdentifier);
+                                    m_found_pattern := pattern "*({v_pointId})*";
+                                    if (regexp(v_pointIdFound, m_found_pattern, 0) != v_pointId) {
+                                        return false; // pointId does not exist
+                                    }
+                                }
+                                if (ischosen(v_link.endPoint.pointIdentifier)) {
+                                    v_pointId := int2str(v_link.endPoint.pointIdentifier);
+                                    m_found_pattern := pattern "*({v_pointId})*";
+                                    if (regexp(v_pointIdFound, m_found_pattern, 0) != v_pointId) {
+                                        return false; // pointId does not exist
+                                    }
+                                }
+                                if (ispresent(v_link.intermediatePoints)) {
+                                    // Parse intermediatePoints
+                                    for (var integer v_ldx := 0; v_ldx < sizeof(v_link.intermediatePoints); v_ldx := v_ldx + 1) {
+                                        if (ischosen(v_link.intermediatePoints[v_jdx].pointIdentifier)) {
+                                            v_pointId := int2str(v_link.intermediatePoints[v_ldx].pointIdentifier);
+                                            m_found_pattern := pattern "*({v_pointId})*";
+                                            if (regexp(v_pointIdFound, m_found_pattern, 0) != v_pointId) {
+                                                return false; // pointId does not exist
+                                            }
+                                        }
+                                    } // End of 'for' statement
+                                } // else ignore it
+                            }
+                        } // End of 'for' statement
+                    } // End of 'for' statement
+                } // End of 'for' statement
+
+                return true;
+            } // End of function f_check_uniqueness_TollContextLayout_AreaPricingLayout_Link_pointID_networkPoints
+
+            /**
+             * @desc    This function verifies that each point (i.e. startPoint, endPoint, intermediatePoints) defined in each SupportingPoint of TollContextLayout has defined pointIdentifier EX-OR pointCoordinates
+             * @param   p_areaLayoutList AreaLayout list
+             * @return  true on success, false otherwise
+             * @verdict unchanged
+             */
+            function f_check_uniqueness_TollContextLayout_AreaPricingLayout_pointDescription_SupportingPoint(in Layout.areaPricingLayout p_areaLayoutList) runs on EutComp
+            return boolean {
+                // p_areaLayoutList shall not be omit
+    
+                // Parse AreaLayout list
+                for (var integer v_idx := 0; v_idx < sizeof(p_areaLayoutList); v_idx := v_idx + 1) {
+                    // Parse RoadNetwork list
+                    for (var integer v_jdx := 0; v_jdx < sizeof(p_areaLayoutList[v_idx].roadNetworks); v_jdx := v_jdx + 1) {
+                        // Parse RoadNetworkObjects list
+                        for (var integer v_kdx := 0; v_kdx < sizeof(p_areaLayoutList[v_idx].roadNetworks[v_jdx].roadNetworkObjects); v_kdx := v_kdx + 1) {
+                            if (ispresent(p_areaLayoutList[v_idx].roadNetworks[v_jdx].roadNetworkObjects[v_kdx].supportingInformation)) {
+                                for (var integer v_ldx := 0; v_ldx < sizeof(p_areaLayoutList[v_idx].roadNetworks[v_jdx].roadNetworkObjects[v_kdx].supportingInformation); v_ldx := v_ldx + 1) {
+                                    var SupportingPoint v_supportingPoint := p_areaLayoutList[v_idx].roadNetworks[v_jdx].roadNetworkObjects[v_kdx].supportingInformation[v_ldx];
+                                    if (ispresent(v_supportingPoint.supportPoint)) {
+                                        if (f_check_Point(v_supportingPoint.supportPoint) == false) {
+                                            return false; // Both field of Point data structure are defined ==> conflict
+                                        }
+                                    }
+                                } // End of 'for' statement
+                            } // else continue
+                        } // End of 'for' statement
+                    } // End of 'for' statement
+                } // End of 'for' statement
+
+                return true;
+            } // End of function f_check_uniqueness_TollContextLayout_AreaPricingLayout_pointDescription_SupportingPoint
+
+            /**
+             * @desc    This function verifies that Point identified by Point ID in SupportingPoint has been defined in Network Points
+             * @param   p_areaLayoutList AreaLayout list
+             * @return  true on success, false otherwise
+             * @verdict unchanged
+             */
+            function f_check_uniqueness_TollContextLayout_AreaPricingLayout_SupportingPoint_pointID_networkPoints(in Layout.areaPricingLayout p_areaLayoutList) runs on EutComp
+            return boolean {
+                // p_areaLayoutList shall not be omit
+    
+                // Parse AreaLayout list
+                for (var integer v_idx := 0; v_idx < sizeof(p_areaLayoutList); v_idx := v_idx + 1) {
+                    // Parse RoadNetwork list
+                    for (var integer v_jdx := 0; v_jdx < sizeof(p_areaLayoutList[v_idx].roadNetworks); v_jdx := v_jdx + 1) {
+                        // Parse RoadNetworkObjects list
+                        for (var integer v_kdx := 0; v_kdx < sizeof(p_areaLayoutList[v_idx].roadNetworks[v_jdx].roadNetworkObjects); v_kdx := v_kdx + 1) {
+                            // Parse SupportingInformation list
+                            for (var integer v_ldx := 0; v_ldx < sizeof(p_areaLayoutList[v_idx].roadNetworks[v_jdx].roadNetworkObjects[v_kdx].supportingInformation); v_ldx := v_ldx + 1) {
+                                var SupportingPoint v_supportingPoint := p_areaLayoutList[v_idx].roadNetworks[v_jdx].roadNetworkObjects[v_kdx].supportingInformation[v_ldx];
+                                if (ispresent(v_supportingPoint.supportPoint)) {
+                                    if (not ispresent(p_areaLayoutList[v_idx].roadNetworks[v_jdx].roadNetworkObjects[v_kdx].usedPoints)) { // No pointID defined
+                                        if (ischosen(v_supportingPoint.supportPoint.pointIdentifier)) {
+                                            return false; // PointID is defined with an empty list of PointIDs
+                                        }
+                                    } else { // A list of pointID is defined
+                                        var charstring v_pointIdFound := f_build_PointId_UsedPoints(p_areaLayoutList[v_idx].roadNetworks[v_jdx].roadNetworkObjects[v_kdx].usedPoints); // Build the list of the pointId declared in networkPoints
+                                        var charstring v_pointId := "";
+                                        var template charstring m_found_pattern; // Used in regex to verify that 'pointId' was not found before
+                                        
+                                        if (ischosen(v_supportingPoint.supportPoint.pointIdentifier)) {
+                                            v_pointId := int2str(v_supportingPoint.supportPoint.pointIdentifier);
+                                            m_found_pattern := pattern "*({v_pointId})*";
+                                            if (regexp(v_pointIdFound, m_found_pattern, 0) != v_pointId) {
+                                                return false; // pointId does not exist
+                                            }
+                                        }
+                                    }
+                                } // ispresent(v_supportingPoint.supportPoint)
+                            } // End of 'for' statement
+                        } // else continue
+                    } // End of 'for' statement
+                } // End of 'for' statement
+
+                return true;
+            } // End of function f_check_uniqueness_TollContextLayout_AreaPricingLayout_SupportingPoint_pointID_networkPoints
+
+        } // End of group Area_Pricing_Layout
+
+        /**
+         * @desc    Functions for TCs related to Cordon Pricing Layout
+         * @see     ISO/DTS 17575-3 - 8.3.4.3. Data element cordonLayout
+         * @see     prCEN/TS 00000-1:2010 (E) - B.11.1.4. Toll Context Layout test purposes for Cordon pricing scheme
+         */
+        group Cordon_Pricing_Layout {
+            /**
+             * @desc    This function verifies the uniqueness of cordon ID in CordonLayout
+             * @param   p_cordonLayoutList CordonLayout list
+             * @return  true on success, false otherwise
+             * @verdict unchanged
+             */
+            function f_check_uniqueness_TollContextLayout_CordonPricingLayout_cordonId(in Layout.cordonPricingLayout p_cordonLayoutList) runs on EutComp
+            return boolean {
+                // p_cordonLayoutList shall not be omit
+
+                var charstring v_cordonIdFound := ";"; // Used to build the list of the cordonId already processed
+                var charstring v_cordonId; // cordonId currently processed
+                var template charstring m_found_pattern; // Used in regex to verify that 'cordonId' was not found before
+    
+                // Parse CordonLayout list
+                for (var integer v_idx := 0; v_idx < sizeof(p_cordonLayoutList); v_idx := v_idx + 1) {
+                    v_cordonId := int2str(p_cordonLayoutList[v_idx].cordonId);
+                    m_found_pattern := pattern "*({v_cordonId})*";
+                    if (regexp(v_cordonIdFound, m_found_pattern, 0) == v_cordonId) {
+                        return false; // cordonId exist at least 2 times, uniqueness is not verified
+                    }
+                    // cordonId non found, add current cordonId into the built list
+                    v_cordonIdFound := v_cordonIdFound & v_cordonId & ";";
+                } // End of 'for' statement
+
+                return true;
+            } // End of function f_check_uniqueness_TollContextLayout_CordonPricingLayout_cordonId
+
+            /**
+             * @desc    This function verifies that Applicable Time Classes for Cordon Layout are present in Time Class Definition (Cordon Entry Locations)
+             * @param   p_cordonLayoutList CordonLayout list
+             * @param   p_timeclasses TimeClasslist, it could be null
+             * @return  true on success, false otherwise
+             * @remark  If applicableTimeClasses = ø, result  of the verification for particular cordonEntryLocations is OK
+             * @verdict unchanged
+             */
+            function f_check_uniqueness_TollContextLayout_CordonPricingLayout_CordonEntryLocation_applicableTimeClasses(in Layout.cordonPricingLayout p_cordonLayoutList, in TimeClassDefinition.timeClasses p_timeclasses) runs on EutComp
+            return boolean {
+                // p_cordonLayoutList shall not be omit but p_timeclassdef could be omit
+
+                    if (p_timeclasses == null) {
+                        // applicableTimeClasses shall be omit
+
+                        // Parse CordonLayout list
+                        for (var integer v_idx := 0; v_idx < sizeof(p_cordonLayoutList); v_idx := v_idx + 1) {
+                            // Parse CordonBorderSegment list
+                            for (var integer v_jdx := 0; v_jdx < sizeof(p_cordonLayoutList[v_idx].cordonBorderPolygon); v_jdx := v_jdx + 1) {
+                                if (ispresent(p_cordonLayoutList[v_idx].cordonBorderPolygon[v_jdx].cordonEntryLocation)) {
+                                    return false; // Error
+                                }
+                            } // End of 'for' statement
+                        } // End of 'for' statement
+                    } else {
+                        var charstring v_timeClassId; // timeClassId currently processed
+                        var template charstring m_found_pattern; // Used in regex to verify that 'timeClassId' is in the built list
+                        // Build the list of Time Class Identifiers
+                        var charstring v_timeClassIds := f_build_TimeId_TimeClasses(p_timeclasses);
+
+                        // Parse CordonLayout list
+                        for (var integer v_idx := 0; v_idx < sizeof(p_cordonLayoutList); v_idx := v_idx + 1) {
+                            // Parse CordonBorderSegment list
+                            for (var integer v_jdx := 0; v_jdx < sizeof(p_cordonLayoutList[v_idx].cordonBorderPolygon); v_jdx := v_jdx + 1) {
+                                if (ispresent(p_cordonLayoutList[v_idx].cordonBorderPolygon[v_jdx].cordonEntryLocation)) {
+                                    if (ispresent(p_cordonLayoutList[v_idx].cordonBorderPolygon[v_jdx].cordonEntryLocation.applicableTimeClasses)) {
+                                        // Parse TimeClassId list
+                                        for (var integer v_kdx := 0; v_kdx < sizeof(p_cordonLayoutList[v_idx].cordonBorderPolygon[v_jdx].cordonEntryLocation.applicableTimeClasses); v_kdx := v_kdx + 1) {
+                                            // Verify that timeClassId is specified in current applicableTimeClasses is defined in p_timeclasses
+                                            v_timeClassId := int2str(p_cordonLayoutList[v_idx].cordonBorderPolygon[v_jdx].cordonEntryLocation.applicableTimeClasses[v_kdx]);
+                                            m_found_pattern := pattern "*({v_timeClassId})*";
+                                            if (regexp(v_timeClassIds, m_found_pattern, 0) != v_timeClassId) {
+                                                return false; // timeClassId is not specified in current applicableTimeClasses is defined in p_timeclasses
+                                            }
+                                        } // End of 'for' statement
+                                    } // ispresent
+                                    // else continue - Note: If applicableTimeClasses = ø, result  of the verification for particular cordonEntryLocation is OK
+                                } // End of 'for' statement
+                            } // ispresent
+                        } // End of 'for' statement
+                    }
+
+                return true;
+            } // End of function f_check_uniqueness_TollContextLayout_CordonPricingLayout_CordonEntryLocation_applicableTimeClasses
+
+            /**
+             * @desc    This function verifies that Applicable Time Classes for Cordon Layout are present in Time Class Definition (Cordon Exit Locations)
+             * @param   p_cordonLayoutList CordonLayout list
+             * @param   p_timeclasses TimeClasslist, it could be null
+             * @return  true on success, false otherwise
+             * @remark  If applicableTimeClasses = ø, result  of the verification for particular cordonExitLocations is OK
+             * @verdict unchanged
+             */
+            function f_check_uniqueness_TollContextLayout_CordonPricingLayout_CordonExitLocation_applicableTimeClasses(in Layout.cordonPricingLayout p_cordonLayoutList, in TimeClassDefinition.timeClasses p_timeclasses) runs on EutComp
+            return boolean {
+                // p_cordonLayoutList shall not be omit but p_timeclassdef could be omit
+
+                    if (p_timeclasses == null) {
+                        // applicableTimeClasses shall be omit
+
+                        // Parse CordonLayout list
+                        for (var integer v_idx := 0; v_idx < sizeof(p_cordonLayoutList); v_idx := v_idx + 1) {
+                            // Parse CordonBorderSegment list
+                            for (var integer v_jdx := 0; v_jdx < sizeof(p_cordonLayoutList[v_idx].cordonBorderPolygon); v_jdx := v_jdx + 1) {
+                                if (ispresent(p_cordonLayoutList[v_idx].cordonBorderPolygon[v_jdx].cordonExitLocation)) {
+                                    return false; // Error
+                                }
+                            } // End of 'for' statement
+                        } // End of 'for' statement
+                    } else {
+                        var charstring v_timeClassId; // timeClassId currently processed
+                        var template charstring m_found_pattern; // Used in regex to verify that 'timeClassId' is in the built list
+                        // Build the list of Time Class Identifiers
+                        var charstring v_timeClassIds := f_build_TimeId_TimeClasses(p_timeclasses);
+
+                        // Parse CordonLayout list
+                        for (var integer v_idx := 0; v_idx < sizeof(p_cordonLayoutList); v_idx := v_idx + 1) {
+                            // Parse CordonBorderSegment list
+                            for (var integer v_jdx := 0; v_jdx < sizeof(p_cordonLayoutList[v_idx].cordonBorderPolygon); v_jdx := v_jdx + 1) {
+                                if (ispresent(p_cordonLayoutList[v_idx].cordonBorderPolygon[v_jdx].cordonExitLocation)) {
+                                    if (ispresent(p_cordonLayoutList[v_idx].cordonBorderPolygon[v_jdx].cordonExitLocation.applicableTimeClasses)) {
+                                        // Parse TimeClassId list
+                                        // Parse TimeClassId list
+                                        for (var integer v_kdx := 0; v_kdx < sizeof(p_cordonLayoutList[v_idx].cordonBorderPolygon[v_jdx].cordonExitLocation.applicableTimeClasses); v_kdx := v_kdx + 1) {
+                                            // Verify that timeClassId is specified in current applicableTimeClasses is defined in p_timeclasses
+                                            v_timeClassId := int2str(p_cordonLayoutList[v_idx].cordonBorderPolygon[v_jdx].cordonExitLocation.applicableTimeClasses[v_kdx]);
+                                            m_found_pattern := pattern "*({v_timeClassId})*";
+                                            if (regexp(v_timeClassIds, m_found_pattern, 0) != v_timeClassId) {
+                                                return false; // timeClassId is not specified in current applicableTimeClasses is defined in p_timeclasses
+                                            }
+                                        } // End of 'for' statement
+                                    } // ispresent
+                                    // else continue - Note: If applicableTimeClasses = ø, result  of the verification for particular cordonExitLocation is OK
+                                } // End of 'for' statement
+                            } // ispresent
+                        } // End of 'for' statement
+                    }
+
+                return true;
+            } // End of function f_check_uniqueness_TollContextLayout_CordonPricingLayout_CordonExitLocation_applicableTimeClasses
+
+            /**
+             * @desc    This function verifies the uniqueness of cordon segment ID in CordonLayout.cordonBorderPolygon
+             * @param   p_cordonLayoutList CordonLayout list
+             * @return  true on success, false otherwise
+             * @verdict unchanged
+             */
+            function f_check_uniqueness_TollContextLayout_CordonPricingLayout_cordonSegmentId(in Layout.cordonPricingLayout p_cordonLayoutList) runs on EutComp
+            return boolean {
+                // p_cordonLayoutList shall not be omit
+
+                var charstring v_cordonSegmentIdFound := ";"; // Used to build the list of the cordonSegmentId already processed
+                var charstring v_cordonSegmentId; // cordonSegmentId currently processed
+                var template charstring m_found_pattern; // Used in regex to verify that 'cordonSegmentId' was not found before
+    
+                // Parse CordonLayout list
+                for (var integer v_idx := 0; v_idx < sizeof(p_cordonLayoutList); v_idx := v_idx + 1) {
+                    // Parse CordonBorderSegment list
+                    for (var integer v_jdx := 0; v_jdx < sizeof(p_cordonLayoutList[v_idx].cordonBorderPolygon); v_jdx := v_jdx + 1) {
+                        v_cordonSegmentId := int2str(p_cordonLayoutList[v_idx].cordonBorderPolygon[v_jdx].cordonSegmentId);
+                        m_found_pattern := pattern "*({v_cordonSegmentId})*";
+                        if (regexp(v_cordonSegmentIdFound, m_found_pattern, 0) == v_cordonSegmentId) {
+                            return false; // cordonSegmentId exist at least 2 times, uniqueness is not verified
+                        }
+                        // cordonSegmentId non found, add current cordonSegmentId into the built list
+                        v_cordonSegmentIdFound := v_cordonSegmentIdFound & v_cordonSegmentId & ";";
+                    } // End of 'for' statement
+                } // End of 'for' statement
+
+                return true;
+            } // End of function f_check_uniqueness_TollContextLayout_CordonPricingLayout_cordonSegmentId
+
+        } // End of group Cordon_Pricing_Layout
+
+    } // End of group Validation
+
+    /**
+     * @desc    Comparition functions group
+     */
+    group Comparition {
+
+        /**
+         * @desc    This function compares all the data elements in the both provided lists, checking versionning when data element value differs
+         * @param   body1 ADU.Body message containing the list to compare
+         * @param   body2 ADU.Body message containing the list to compare
+         * @return  ture on success, false if versionning mismatch is found
+         * @verdict unchanged
+         */
+        function f_compareDataElements(Iso17575_3AduBody body1, Iso17575_3AduBody body2) runs on EutComp
+        return boolean {
+
+            // Parse data elements
+            if(ispresent(body1.tollContextOverview) and ispresent(body2.tollContextOverview)) {
+                // Check if data element are identicals
+                if (match(body2.tollContextOverview, valueof(body1.tollContextOverview)) == false) {
+                    // Check version
+                    if (f_compareVersion(body1.tollContextOverview.tollContextOverviewVersion, body2.tollContextOverview.tollContextOverviewVersion) != 1) { // v2 > v1?
+                        return false;
+                    }
+                }
+            } // End of 'if' statement
+
+            if(ispresent(body1.tariffTable) and ispresent(body2.tariffTable)) {
+                // Check if data element are identicals
+                if (match(body2.tariffTable, valueof(body1.tariffTable)) == false) {
+                    // Check version
+                    if (f_compareVersion(body1.tariffTable.tariffTableVersion, body2.tariffTable.tariffTableVersion) != 1) { // v2 > v1?
+                        return false;
+                    }
+                }
+            } // End of 'if' statement
+
+            if(ispresent(body1.tariffClassDefinition) and ispresent(body2.tariffClassDefinition)) {
+                // Check if data element are identicals
+                if (match(body2.tariffClassDefinition, valueof(body1.tariffClassDefinition)) == false) {
+                    // Check version
+                    if (f_compareVersion(body1.tariffClassDefinition.tariffClassDefinitionVersion, body2.tariffClassDefinition.tariffClassDefinitionVersion) != 1) { // v2 > v1?
+                        return false;
+                    }
+                }
+            } // End of 'if' statement
+
+            if(ispresent(body1.localVehicleClassDefinition) and ispresent(body2.localVehicleClassDefinition)) {
+                // Check if data element are identicals
+                if (match(body2.localVehicleClassDefinition, valueof(body1.localVehicleClassDefinition)) == false) {
+                    // Check version
+                    if (f_compareVersion(body1.localVehicleClassDefinition.localVehicleClassVersion, body2.localVehicleClassDefinition.localVehicleClassVersion) != 1) { // v2 > v1?
+                        return false;
+                    }
+                }
+            } // End of 'if' statement
+
+            if(ispresent(body1.timeClassDefinition) and ispresent(body2.timeClassDefinition)) {
+                // Check if data element are identicals
+                if (match(body2.timeClassDefinition, valueof(body1.timeClassDefinition)) == false) {
+                    // Check version
+                    if (f_compareVersion(body1.timeClassDefinition.timeClassDefinitionVersion, body2.timeClassDefinition.timeClassDefinitionVersion) != 1) { // v2 > v1?
+                        return false;
+                    }
+                }
+            } // End of 'if' statement
+
+            if(ispresent(body1.userClassDefinition) and ispresent(body2.userClassDefinition)) {
+                // Check if data element are identicals
+                if (match(body2.userClassDefinition, valueof(body1.userClassDefinition)) == false) {
+                    // Check version
+                    if (f_compareVersion(body1.userClassDefinition.userClassDefinitionVersion, body2.userClassDefinition.userClassDefinitionVersion) != 1) { // v2 > v1?
+                        return false;
+                    }
+                }
+            } // End of 'if' statement
+
+            if(ispresent(body1.tollContextLayout) and ispresent(body2.tollContextLayout)) {
+                // Check if data element are identicals
+                if (match(body2.tollContextLayout, valueof(body1.tollContextLayout)) == false) {
+                    // Check version
+                    if (f_compareVersion(body1.tollContextLayout.tollContextVersion, body2.tollContextLayout.tollContextVersion) != 1) { // v2 > v1?
+                        return false;
+                    }
+                }
+            } // End of 'if' statement
+
+            if(ispresent(body1.chargeReportingEvents) and ispresent(body2.chargeReportingEvents)) {
+                // Check if data element are identicals
+                if (match(body2.chargeReportingEvents, valueof(body1.chargeReportingEvents)) == false) {
+                    // Check version
+                    if (f_compareVersion(body1.chargeReportingEvents.chargeReportingEventsVersion, body2.chargeReportingEvents.chargeReportingEventsVersion) != 1) { // v2 > v1?
+                        return false;
+                    }
+                }
+            } // End of 'if' statement
+
+            if(ispresent(body1.chargeReportConfiguration) and ispresent(body2.chargeReportConfiguration)) {
+                // Check if data element are identicals
+                if (match(body2.chargeReportConfiguration, valueof(body1.chargeReportConfiguration)) == false) {
+                    // Check version
+                    if (f_compareVersion(body1.chargeReportConfiguration.chargeReportConfigurationVersion, body2.chargeReportConfiguration.chargeReportConfigurationVersion) != 1) { // v2 > v1?
+                        return false;
+                    }
+                }
+            } // End of 'if' statement
+
+            return true;
+        } // End of function f_compareDataElements
+
+        /**
+         * @desc    This function compares 2 Time values
+         * @param   p_beginOfTime First value to compare
+         * @param   p_endOfTime Second value to compare
+         * @return  -1 if p_beginOfTime < p_endOfTime, 0 if p_beginOfTime == p_endOfTime and +1 if p_beginOfTime > p_endOfTime
+         * @verdict unchanged on success, fail on priocessing error
+         */
+        function f_compareTime(in Time p_beginOfTime, in Time p_endOfTime) runs on EutComp
+        return integer {
+            if (p_beginOfTime.hours < p_endOfTime.hours) {
+                return -1;
+            } else if (p_beginOfTime.hours > p_endOfTime.hours) {
+                return 1;
+            } else if (p_beginOfTime.mins < p_endOfTime.mins) {
+                return -1;
+            } else if (p_beginOfTime.mins > p_endOfTime.mins) {
+                return 1;
+            }
+
+            return 0;
+        } // End of function f_compareTime
+    } // End of group Comparition
+
+    group Internal_functions {
+        /**
+         * @desc    This function builds the overlapped groups based on at least one criterion
+         * @param   p_locvehclassList The list of the LocalVehicleClass values
+         * @return  The built group
+         * @verdict unchanged
+         */
+        function f_Build_LocalVehicleClass_groups(in LocalVehicleClassDefinition.localVehicleClasses p_locvehclassList) runs on EutComp
+        return LocalVehicleClassesGroups {
+            var LocalVehicleClassesGroups v_groups := { }; // Group localVehicleClasses that overlap at least with one criterion
+            var boolean v_createNewGroup; // Used to indicate if a new group shall be created
+
+            // Parse all LocalVehicleClass items in the list p_locvehclassList
+            for (var integer v_idx := 0; v_idx < sizeof(p_locvehclassList); v_idx := v_idx + 1) {
+                v_createNewGroup := true; // Default value
+                // Parse each group
+                for (var integer v_igroup := 0; v_igroup < sizeof(v_groups); v_igroup := v_igroup + 1) {
+                    if (f_isItemInLocalVehicleClasseGroups(p_locvehclassList[v_idx], v_groups[v_igroup])) {
+                        // An ovelapp was found, add current LocalVehicleClass item into the current group...
+                        v_groups[v_igroup][sizeof(v_groups[v_igroup])] := p_locvehclassList[v_idx];
+                        v_createNewGroup := false; // Creation is not required
+                        break; // ...and exit from the loop
+                    }
+                } // End of 'for' statement
+                if (v_createNewGroup == true) {
+                    // Create a new group with the current LocalVehicleClass item
+                    v_groups[sizeof(v_groups)] := { p_locvehclassList[v_idx] };
+                }
+            } // End of 'for' statement
+
+            return v_groups; // Error
+        } // End of function f_Build_LocalVehicleClass_groups
+
+        /**
+         * @desc    This function searches for overlap based on one criterion
+         * @param   p_locvehclass The LocalVehicleClass item to process
+         * @param   p_classInGroup The list of group localVehicleClasses that overlap at least with one criterion
+         * @return  true if p_locvehclass value overlaps one of the LocalVehicleClass item in a group, false otherwise
+         * @verdict unchanged
+         */
+        function f_isItemInLocalVehicleClasseGroups(in LocalVehicleClass p_locvehclass, in LocalVehicleClassGroupItem p_classInGroup) runs on EutComp
+        return boolean {
+
+            for (var integer v_idxLocalVehicleClass := 0; v_idxLocalVehicleClass < sizeof(p_classInGroup); v_idxLocalVehicleClass := v_idxLocalVehicleClass + 1) {
+                var LocalVehicleClass v_groupItem := p_classInGroup[v_idxLocalVehicleClass];
+                // Check nominalElements
+
+                // Check ordinalElements
+                if (ispresent(p_locvehclass.ordinalElements) and ispresent(v_groupItem.ordinalElements)) {
+                    // 1. vehicleLengthOverall
+                    if (ispresent(p_locvehclass.ordinalElements.vehicleLengthOverall) and ispresent(v_groupItem.ordinalElements.vehicleLengthOverall)) {
+                        for (var integer v_idx := 0; v_idx < sizeof(p_locvehclass.ordinalElements.vehicleLengthOverall); v_idx := v_idx + 1) {
+                            for (var integer v_jdx := 0; v_jdx < sizeof(v_groupItem.ordinalElements.vehicleLengthOverall); v_jdx := v_jdx + 1) {
+                                if (not ((v_groupItem.ordinalElements.vehicleLengthOverall[v_jdx].lowerRange < p_locvehclass.ordinalElements.vehicleLengthOverall[v_idx].lowerRange) or (v_groupItem.ordinalElements.vehicleLengthOverall[v_jdx].upperRange > p_locvehclass.ordinalElements.vehicleLengthOverall[v_idx].upperRange))) {
+                                    // There is an overlapp
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                    // 2. vehicleLengthOverall
+                    if (ispresent(p_locvehclass.ordinalElements.vehicleLengthOverall) and ispresent(v_groupItem.ordinalElements.vehicleLengthOverall)) {
+                        for (var integer v_idx := 0; v_idx < sizeof(p_locvehclass.ordinalElements.vehicleLengthOverall); v_idx := v_idx + 1) {
+                            for (var integer v_jdx := 0; v_jdx < sizeof(v_groupItem.ordinalElements.vehicleLengthOverall); v_jdx := v_jdx + 1) {
+                                if (not ((v_groupItem.ordinalElements.vehicleLengthOverall[v_jdx].lowerRange < p_locvehclass.ordinalElements.vehicleLengthOverall[v_idx].lowerRange) or (v_groupItem.ordinalElements.vehicleLengthOverall[v_jdx].upperRange > p_locvehclass.ordinalElements.vehicleLengthOverall[v_idx].upperRange))) {
+                                    // There is an overlapp
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                    // 3. vehicleWidthOverall
+                    if (ispresent(p_locvehclass.ordinalElements.vehicleWidthOverall) and ispresent(v_groupItem.ordinalElements.vehicleWidthOverall)) {
+                        for (var integer v_idx := 0; v_idx < sizeof(p_locvehclass.ordinalElements.vehicleWidthOverall); v_idx := v_idx + 1) {
+                            for (var integer v_jdx := 0; v_jdx < sizeof(v_groupItem.ordinalElements.vehicleWidthOverall); v_jdx := v_jdx + 1) {
+                                if (not ((v_groupItem.ordinalElements.vehicleWidthOverall[v_jdx].lowerRange < p_locvehclass.ordinalElements.vehicleWidthOverall[v_idx].lowerRange) or (v_groupItem.ordinalElements.vehicleWidthOverall[v_jdx].upperRange > p_locvehclass.ordinalElements.vehicleWidthOverall[v_idx].upperRange))) {
+                                    // There is an overlapp
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                    // 4. vehicleFirstAxleHeight
+                    if (ispresent(p_locvehclass.ordinalElements.vehicleFirstAxleHeight) and ispresent(v_groupItem.ordinalElements.vehicleFirstAxleHeight)) {
+                        for (var integer v_idx := 0; v_idx < sizeof(p_locvehclass.ordinalElements.vehicleFirstAxleHeight); v_idx := v_idx + 1) {
+                            for (var integer v_jdx := 0; v_jdx < sizeof(v_groupItem.ordinalElements.vehicleFirstAxleHeight); v_jdx := v_jdx + 1) {
+                                if (not ((v_groupItem.ordinalElements.vehicleFirstAxleHeight[v_jdx].lowerRange < p_locvehclass.ordinalElements.vehicleFirstAxleHeight[v_idx].lowerRange) or (v_groupItem.ordinalElements.vehicleFirstAxleHeight[v_jdx].upperRange > p_locvehclass.ordinalElements.vehicleFirstAxleHeight[v_idx].upperRange))) {
+                                    // There is an overlapp
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                    // 5. vehicleAxlesNumber
+                    if (ispresent(p_locvehclass.ordinalElements.vehicleAxlesNumber) and ispresent(v_groupItem.ordinalElements.vehicleAxlesNumber)) {
+                        for (var integer v_idx := 0; v_idx < sizeof(p_locvehclass.ordinalElements.vehicleAxlesNumber); v_idx := v_idx + 1) {
+                            for (var integer v_jdx := 0; v_jdx < sizeof(v_groupItem.ordinalElements.vehicleAxlesNumber); v_jdx := v_jdx + 1) {
+                                if (not ((v_groupItem.ordinalElements.vehicleAxlesNumber[v_jdx].lowerRange < p_locvehclass.ordinalElements.vehicleAxlesNumber[v_idx].lowerRange) or (v_groupItem.ordinalElements.vehicleAxlesNumber[v_jdx].upperRange > p_locvehclass.ordinalElements.vehicleAxlesNumber[v_idx].upperRange))) {
+                                    // There is an overlapp
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                    // 6. vehicleMaxLadenWeight
+                    if (ispresent(p_locvehclass.ordinalElements.vehicleMaxLadenWeight) and ispresent(v_groupItem.ordinalElements.vehicleMaxLadenWeight)) {
+                        for (var integer v_idx := 0; v_idx < sizeof(p_locvehclass.ordinalElements.vehicleMaxLadenWeight); v_idx := v_idx + 1) {
+                            for (var integer v_jdx := 0; v_jdx < sizeof(v_groupItem.ordinalElements.vehicleMaxLadenWeight); v_jdx := v_jdx + 1) {
+                                if (not ((v_groupItem.ordinalElements.vehicleMaxLadenWeight[v_jdx].lowerRange < p_locvehclass.ordinalElements.vehicleMaxLadenWeight[v_idx].lowerRange) or (v_groupItem.ordinalElements.vehicleMaxLadenWeight[v_jdx].upperRange > p_locvehclass.ordinalElements.vehicleMaxLadenWeight[v_idx].upperRange))) {
+                                    // There is an overlapp
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                    // 7. vehicleTrainMaximumWeight
+                    if (ispresent(p_locvehclass.ordinalElements.vehicleTrainMaximumWeight) and ispresent(v_groupItem.ordinalElements.vehicleTrainMaximumWeight)) {
+                        for (var integer v_idx := 0; v_idx < sizeof(p_locvehclass.ordinalElements.vehicleTrainMaximumWeight); v_idx := v_idx + 1) {
+                            for (var integer v_jdx := 0; v_jdx < sizeof(v_groupItem.ordinalElements.vehicleTrainMaximumWeight); v_jdx := v_jdx + 1) {
+                                if (not ((v_groupItem.ordinalElements.vehicleTrainMaximumWeight[v_jdx].lowerRange < p_locvehclass.ordinalElements.vehicleTrainMaximumWeight[v_idx].lowerRange) or (v_groupItem.ordinalElements.vehicleTrainMaximumWeight[v_jdx].upperRange > p_locvehclass.ordinalElements.vehicleTrainMaximumWeight[v_idx].upperRange))) {
+                                    // There is an overlapp
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                    // 8. vehicleWeightUnladen
+                    if (ispresent(p_locvehclass.ordinalElements.vehicleWeightUnladen) and ispresent(v_groupItem.ordinalElements.vehicleWeightUnladen)) {
+                        for (var integer v_idx := 0; v_idx < sizeof(p_locvehclass.ordinalElements.vehicleWeightUnladen); v_idx := v_idx + 1) {
+                            for (var integer v_jdx := 0; v_jdx < sizeof(v_groupItem.ordinalElements.vehicleWeightUnladen); v_jdx := v_jdx + 1) {
+                                if (not ((v_groupItem.ordinalElements.vehicleWeightUnladen[v_jdx].lowerRange < p_locvehclass.ordinalElements.vehicleWeightUnladen[v_idx].lowerRange) or (v_groupItem.ordinalElements.vehicleWeightUnladen[v_jdx].upperRange > p_locvehclass.ordinalElements.vehicleWeightUnladen[v_idx].upperRange))) {
+                                    // There is an overlapp
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                    // 9. vehicleWeightLaden
+                    if (ispresent(p_locvehclass.ordinalElements.vehicleWeightLaden) and ispresent(v_groupItem.ordinalElements.vehicleWeightLaden)) {
+                        for (var integer v_idx := 0; v_idx < sizeof(p_locvehclass.ordinalElements.vehicleWeightLaden); v_idx := v_idx + 1) {
+                            for (var integer v_jdx := 0; v_jdx < sizeof(v_groupItem.ordinalElements.vehicleWeightLaden); v_jdx := v_jdx + 1) {
+                                if (not ((v_groupItem.ordinalElements.vehicleWeightLaden[v_jdx].lowerRange < p_locvehclass.ordinalElements.vehicleWeightLaden[v_idx].lowerRange) or (v_groupItem.ordinalElements.vehicleWeightLaden[v_jdx].upperRange > p_locvehclass.ordinalElements.vehicleWeightLaden[v_idx].upperRange))) {
+                                    // There is an overlapp
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                    // 10. euroValue
+                    if (ispresent(p_locvehclass.ordinalElements.euroValue) and ispresent(v_groupItem.ordinalElements.euroValue)) {
+                        for (var integer v_idx := 0; v_idx < sizeof(p_locvehclass.ordinalElements.euroValue); v_idx := v_idx + 1) {
+                            for (var integer v_jdx := 0; v_jdx < sizeof(v_groupItem.ordinalElements.euroValue); v_jdx := v_jdx + 1) {
+                                if (not ((v_groupItem.ordinalElements.euroValue[v_jdx].lowerRange < p_locvehclass.ordinalElements.euroValue[v_idx].lowerRange) or (v_groupItem.ordinalElements.euroValue[v_jdx].upperRange > p_locvehclass.ordinalElements.euroValue[v_idx].upperRange))) {
+                                    // There is an overlapp
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                    // 11. copValue
+                    if (ispresent(p_locvehclass.ordinalElements.copValue) and ispresent(v_groupItem.ordinalElements.copValue)) {
+                        for (var integer v_idx := 0; v_idx < sizeof(p_locvehclass.ordinalElements.copValue); v_idx := v_idx + 1) {
+                            for (var integer v_jdx := 0; v_jdx < sizeof(v_groupItem.ordinalElements.copValue); v_jdx := v_jdx + 1) {
+                                if (not ((v_groupItem.ordinalElements.copValue[v_jdx].lowerRange < p_locvehclass.ordinalElements.copValue[v_idx].lowerRange) or (v_groupItem.ordinalElements.copValue[v_jdx].upperRange > p_locvehclass.ordinalElements.copValue[v_idx].upperRange))) {
+                                    // There is an overlapp
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                    // 12. vehicleClass
+                    if (ispresent(p_locvehclass.ordinalElements.vehicleClass) and ispresent(v_groupItem.ordinalElements.vehicleClass)) {
+                        for (var integer v_idx := 0; v_idx < sizeof(p_locvehclass.ordinalElements.vehicleClass); v_idx := v_idx + 1) {
+                            for (var integer v_jdx := 0; v_jdx < sizeof(v_groupItem.ordinalElements.vehicleClass); v_jdx := v_jdx + 1) {
+                                if (not ((v_groupItem.ordinalElements.vehicleClass[v_jdx].lowerRange < p_locvehclass.ordinalElements.vehicleClass[v_idx].lowerRange) or (v_groupItem.ordinalElements.vehicleClass[v_jdx].upperRange > p_locvehclass.ordinalElements.vehicleClass[v_idx].upperRange))) {
+                                    // There is an overlapp
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return false;
+        } // End of function f_isItemInLocalVehicleClasseGroups
+
+        /**
+         * @desc    This function builds the overlapped groups based on at least one criterion
+         * @param   p_timeclassList The list of the TimeClass values
+         * @return  The built group
+         * @verdict unchanged
+         */
+        function f_Build_TimeClass_groups(in TimeClassDefinition.timeClasses p_timeclassList) runs on EutComp
+        return TimeClassesGroups {
+            var TimeClassesGroups v_groups := { }; // Group timeClasses that overlap at least with one criterion
+            var boolean v_createNewGroup; // Used to indicate if a new group shall be created
+
+            // Parse all TimeClass items in the list p_timeclassList
+            for (var integer v_idx := 0; v_idx < sizeof(p_timeclassList); v_idx := v_idx + 1) {
+                v_createNewGroup := true; // Default value
+                // Parse each group
+                for (var integer v_igroup := 0; v_igroup < sizeof(v_groups); v_igroup := v_igroup + 1) {
+                    if (f_isItemInTimeClasseGroups(p_timeclassList[v_idx], v_groups[v_igroup])) {
+                        // An ovelapp was found, add current TimeClass item into the current group...
+                        v_groups[v_igroup][sizeof(v_groups[v_igroup])] := p_timeclassList[v_idx];
+                        v_createNewGroup := false; // Creation is not required
+                        break; // ...and exit from the loop
+                    }
+                } // End of 'for' statement
+                if (v_createNewGroup == true) {
+                    // Create a new group with the current TimeClass item
+                    v_groups[sizeof(v_groups)] := { p_timeclassList[v_idx] };
+                }
+            } // End of 'for' statement
+
+            return v_groups; // Error
+        } // End of function f_Build_TimeClass_groups
+
+        /**
+         * @desc    This function searches for overlap based on one criterion
+         * @param   p_timeclass The TimeClass item to process
+         * @param   p_classInGroup The list of group timeClasses that overlap at least with one criterion
+         * @return  true if p_timeclass value overlaps one of the TimeClass item in a group, false otherwise
+         * @verdict unchanged
+         */
+        function f_isItemInTimeClasseGroups(in TimeClass p_timeclass, in TimeClassGroupItem p_classInGroup) runs on EutComp
+        return boolean {
+
+            for (var integer v_idxTimeClass := 0; v_idxTimeClass < sizeof(p_classInGroup); v_idxTimeClass := v_idxTimeClass + 1) {
+                var TimeClass v_groupItem := p_classInGroup[v_idxTimeClass];
+                // Check nominalElements
+
+                // Check ordinalElements
+                if (ispresent(p_timeclass.ordinalElements) and ispresent(v_groupItem.ordinalElements)) {
+                    // 1. weekdays
+                    if (ispresent(p_timeclass.ordinalElements.weekdays) and ispresent(v_groupItem.ordinalElements.weekdays)) {
+                        for (var integer v_idx := 0; v_idx < sizeof(p_timeclass.ordinalElements.weekdays); v_idx := v_idx + 1) {
+                            for (var integer v_jdx := 0; v_jdx < sizeof(v_groupItem.ordinalElements.weekdays); v_jdx := v_jdx + 1) {
+                                if (not ((v_groupItem.ordinalElements.weekdays[v_jdx].startDay < p_timeclass.ordinalElements.weekdays[v_idx].startDay) or (v_groupItem.ordinalElements.weekdays[v_jdx].endDay > p_timeclass.ordinalElements.weekdays[v_idx].endDay))) {
+                                    // There is an overlapp
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                    // 2. absoluteTimeOfDay
+                    if (ispresent(p_timeclass.ordinalElements.absoluteTimeOfDay) and ispresent(v_groupItem.ordinalElements.absoluteTimeOfDay)) {
+                        for (var integer v_idx := 0; v_idx < sizeof(p_timeclass.ordinalElements.absoluteTimeOfDay); v_idx := v_idx + 1) {
+                            for (var integer v_jdx := 0; v_jdx < sizeof(v_groupItem.ordinalElements.absoluteTimeOfDay); v_jdx := v_jdx + 1) {
+                                if (not (
+                                (f_compareTime(v_groupItem.ordinalElements.absoluteTimeOfDay[v_jdx].startTime, p_timeclass.ordinalElements.absoluteTimeOfDay[v_idx].startTime) == -1) or 
+                                (f_compareTime(v_groupItem.ordinalElements.absoluteTimeOfDay[v_jdx].endTime, p_timeclass.ordinalElements.absoluteTimeOfDay[v_idx].endTime) == 1))) {
+                                    // There is an overlapp
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                    // 3. relativeTimePeriods
+                    if (ispresent(p_timeclass.ordinalElements.relativeTimePeriods) and ispresent(v_groupItem.ordinalElements.relativeTimePeriods)) {
+                        for (var integer v_idx := 0; v_idx < sizeof(p_timeclass.ordinalElements.relativeTimePeriods); v_idx := v_idx + 1) {
+                            for (var integer v_jdx := 0; v_jdx < sizeof(v_groupItem.ordinalElements.relativeTimePeriods); v_jdx := v_jdx + 1) {
+                                if (not ((v_groupItem.ordinalElements.relativeTimePeriods[v_jdx].minPeriod < p_timeclass.ordinalElements.relativeTimePeriods[v_idx].minPeriod) or (v_groupItem.ordinalElements.relativeTimePeriods[v_jdx].maxPeriod > p_timeclass.ordinalElements.relativeTimePeriods[v_idx].maxPeriod))) {
+                                    // There is an overlapp
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                    // 4. periodsInYear
+                    if (ispresent(p_timeclass.ordinalElements.periodsInYear) and ispresent(v_groupItem.ordinalElements.periodsInYear)) {
+                        for (var integer v_idx := 0; v_idx < sizeof(p_timeclass.ordinalElements.periodsInYear); v_idx := v_idx + 1) {
+                            for (var integer v_jdx := 0; v_jdx < sizeof(v_groupItem.ordinalElements.periodsInYear); v_jdx := v_jdx + 1) {
+                                if (not (f_compareDateCompact(v_groupItem.ordinalElements.periodsInYear[v_jdx].startDay, p_timeclass.ordinalElements.periodsInYear[v_idx].startDay) == -1) or (f_compareDateCompact(v_groupItem.ordinalElements.periodsInYear[v_jdx].endDay, p_timeclass.ordinalElements.periodsInYear[v_idx].endDay) == 1)) {
+                                    // There is an overlapp
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return false;
+        } // End of function f_isItemInTimeClasseGroups
+
+        /**
+         * @desc    This function builds the overlapped groups based on at least one criterion
+         * @param   p_userclassList The list of the UserClass values
+         * @return  The built group
+         * @verdict unchanged
+         */
+        function f_Build_UserClass_groups(in UserClassDefinition.userClasses p_userclassList) runs on EutComp
+        return UserClassesGroups {
+            var UserClassesGroups v_groups := { }; // Group userlasses that overlap at least with one criterion
+            var boolean v_createNewGroup; // Used to indicate if a new group shall be created
+
+            // Parse all UserClass items in the list p_userclassList
+            for (var integer v_idx := 0; v_idx < sizeof(p_userclassList); v_idx := v_idx + 1) {
+                v_createNewGroup := true; // Default value
+                // Parse each group
+                for (var integer v_igroup := 0; v_igroup < sizeof(v_groups); v_igroup := v_igroup + 1) {
+                    if (f_isItemInUserClasseGroups(p_userclassList[v_idx], v_groups[v_igroup])) {
+                        // An ovelapp was found, add current TimeClass item into the current group...
+                        v_groups[v_igroup][sizeof(v_groups[v_igroup])] := p_userclassList[v_idx];
+                        v_createNewGroup := false; // Creation is not required
+                        break; // ...and exit from the loop
+                    }
+                } // End of 'for' statement
+                if (v_createNewGroup == true) {
+                    // Create a new group with the current TimeClass item
+                    v_groups[sizeof(v_groups)] := { p_userclassList[v_idx] };
+                }
+            } // End of 'for' statement
+
+            return v_groups; // Error
+        } // End of function f_Build_UserClass_groups
+
+        /**
+         * @desc    This function searches for user classes that have exactly the same values of following data elements: contractTypes and numberOfPassangers
+         * @param   p_userclass The UserClass item to process
+         * @param   p_classInGroup The list of group timeClasses that overlap at least with one criterion
+         * @return  true if p_userclass value have exactly the same values than one of the UserClass item in a group, false otherwise
+         * @verdict unchanged
+         */
+        function f_isItemInUserClasseGroups(in UserClass p_userclass, in UserClassGroupItem p_classInGroup) runs on EutComp
+        return boolean {
+
+            template UserClass m_select (in ContractTypes p_contractTypes, in ActualNumberOfPassengers p_actualNumberOfPassengers) := {
+                userClassId := ?, // Ignored
+                contractTypes := p_contractTypes, // Value to compare
+                actualNumberOfPassengers := p_actualNumberOfPassengers // Value to compare
+            } // This template is used to check if p_userclass value matches one of group items
+
+            for (var integer v_idxUserClass := 0; v_idxUserClass < sizeof(p_classInGroup); v_idxUserClass := v_idxUserClass + 1) {
+                var UserClass v_groupItem := p_classInGroup[v_idxUserClass];
+                // Check if data element are identicals
+                if (match(valueof(v_groupItem), m_select(p_userclass.contractTypes, p_userclass.actualNumberOfPassengers))) {
+                    return true;
+                }
+            } // End of 'for' statement
+
+            return false;
+        } // End of function f_isItemInUserClasseGroups
+
+        /**
+         * @desc    Verify that the provided point is pointIdentifier EX-OR pointCoordinates 
+         * @return  true on success, false otherwise
+         * @verdict unchanged
+         */
+        function f_check_Point(in Point p_point) runs on EutComp
+        return boolean {
+            return ischosen(p_point.pointIdentifier);
+        }
+
+        /**
+         * @desc    This function builds the list of the pointId declared in p_pointIDList
+         * @param   p_networkPoints The NetworkPoint items to process
+         * @return  true if p_userclass value have exactly the same values than one of the UserClass item in a group, false otherwise
+         * @verdict unchanged
+         */
+        function f_build_PointId_NetworkPoints(in SectionLayout.networkPoints p_networkPoints) runs on EutComp
+        return charstring {
+            var charstring v_pointIdFound := ";";
+
+            for (var integer v_idx := 0; v_idx < sizeof(p_networkPoints); v_idx := v_idx + 1) {
+                v_pointIdFound := v_pointIdFound & int2str(p_networkPoints[v_idx].pointId) & ";";
+            } // End of 'for' statement
+            
+            return v_pointIdFound;
+        } // End of function f_build_PointId_NetworkPoints
+
+        /**
+         * @desc    This function builds the list of the pointId declared in p_pointIDList
+         * @param   p_usedPoints The Point items to process
+         * @return  true if p_userclass value have exactly the same values than one of the UserClass item in a group, false otherwise
+         * @verdict unchanged
+         */
+        function f_build_PointId_UsedPoints(in RoadNetworkObject.usedPoints p_usedPoints) runs on EutComp
+        return charstring {
+            var charstring v_pointIdFound := ";";
+
+            for (var integer v_idx := 0; v_idx < sizeof(p_usedPoints); v_idx := v_idx + 1) {
+                if (ischosen(p_usedPoints[v_idx].pointIdentifier)) {
+                    v_pointIdFound := v_pointIdFound & int2str(p_usedPoints[v_idx].pointIdentifier) & ";";
+                }
+            } // End of 'for' statement
+            
+            return v_pointIdFound;
+        } // End of function f_build_PointId_UsedPoints
+
+        /**
+         * @desc    This function builds the list of the timeId declared in p_timeclasses
+         * @param   p_timeclasses The TimeClasses to process
+         * @return  The Time Classe Id list
+         * @verdict unchanged
+         */
+        function f_build_TimeId_TimeClasses(in TimeClassDefinition.timeClasses p_timeclasses) runs on EutComp
+        return charstring {
+            var charstring v_timeClassIdFound := ";";
+
+            for (var integer v_idx := 0; v_idx < sizeof(p_timeclasses); v_idx := v_idx + 1) {
+                v_timeClassIdFound := v_timeClassIdFound & int2str(p_timeclasses[v_idx].timeClassId) & ";";
+            } // End of 'for' statement
+            
+            return v_timeClassIdFound;
+        } // End of function f_build_TimeId_TimeClasses
+
+        /**
+         * @desc    This function verifies the uniqueness of localVehivleClassId in LocalVehicleClassIds list
+         * @param   p_locvehclassList localVehivleClassId list
+         * @return  true on success, false otherwise
+         * @verdict unchanged
+         */
+        function f_check_uniqueness_LocalVehicleClassId_1(in TariffClass.localVehicleClasses p_localVehicleClassIds) runs on EutComp
+        return boolean {
+            // p_localVehicleClassIds shall not be omit
+
+            var charstring v_localVehicleClassIdFound := ";"; // Used to build the list of the localVehicleClassId already processed
+            var charstring v_localVehicleClassId; // localVehicleClassId currently processed
+            var template charstring m_found_pattern; // Used in regex to verify that 'localVehicleClassId' was not found before
+
+            // Parse LocalVehicleClasses list
+            for (var integer v_idx := 0; v_idx < sizeof(p_localVehicleClassIds); v_idx := v_idx + 1) {
+                v_localVehicleClassId := int2str(p_localVehicleClassIds[v_idx]);
+                m_found_pattern := pattern "*({v_localVehicleClassId})*";
+                if (regexp(v_localVehicleClassIdFound, m_found_pattern, 0) == v_localVehicleClassId) {
+                    return false; // localVehicleClassId exist at least 2 times, uniqueness is not verified
+                }
+                // localVehicleClassId non found, add current localVehicleClassId into the built list
+                v_localVehicleClassIdFound := v_localVehicleClassIdFound & v_localVehicleClassId & ";";
+            } // End of 'for' statement
+            
+            return true;
+        } // End of function f_check_uniqueness_LocalVehicleClassId_1
+
+        /**
+         * @desc    This function verifies the uniqueness of timeClassId in TimeClassIds list
+         * @param   p_timeclassList timeClassId list
+         * @return  true on success, false otherwise
+         * @verdict unchanged
+         */
+        function f_check_uniqueness_TimeClassId_1(in TariffClass.timeClasses p_timeClassIds) runs on EutComp
+        return boolean {
+            // p_timeClassIds shall not be omit
+
+            var charstring v_timeClassIdFound := ";"; // Used to build the list of the timeClassId already processed
+            var charstring v_timeClassId; // timeClassId currently processed
+            var template charstring m_found_pattern; // Used in regex to verify that 'timeClassId' was not found before
+
+            // Parse TimeClass list
+            for (var integer v_idx := 0; v_idx < sizeof(p_timeClassIds); v_idx := v_idx + 1) {
+                v_timeClassId := int2str(p_timeClassIds[v_idx]);
+                m_found_pattern := pattern "*({v_timeClassId})*";
+                if (regexp(v_timeClassIdFound, m_found_pattern, 0) == v_timeClassId) {
+                    return false; // timeClassId exist at least 2 times, uniqueness is not verified
+                }
+                // timeClassId non found, add current timeClassId into the built list
+                v_timeClassIdFound := v_timeClassIdFound & v_timeClassId & ";";
+            } // End of 'for' statement
+            
+            return true;
+        } // End of function f_check_uniqueness_TimeClassId_1
+
+        /**
+         * @desc    This function verifies the uniqueness of userClassId in UserClassIds list
+         * @param   p_userclassList userClassId list
+         * @return  true on success, false otherwise
+         * @verdict unchanged
+         */
+        function f_check_uniqueness_UserClassId_1(in TariffClass.userClasses p_userClassIds) runs on EutComp
+        return boolean {
+            // p_userClassIds shall not be omit
+
+            var charstring v_userClassIdFound := ";"; // Used to build the list of the userClassId already processed
+            var charstring v_userClassId; // userClassId currently processed
+            var template charstring m_found_pattern; // Used in regex to verify that 'userClassId' was not found before
+
+            // Parse TimeClass list
+            for (var integer v_idx := 0; v_idx < sizeof(p_userClassIds); v_idx := v_idx + 1) {
+                v_userClassId := int2str(p_userClassIds[v_idx]);
+                m_found_pattern := pattern "*({v_userClassId})*";
+                if (regexp(v_userClassIdFound, m_found_pattern, 0) == v_userClassId) {
+                    return false; // userClassId exist at least 2 times, uniqueness is not verified
+                }
+                // userClassId non found, add current userClassId into the built list
+                v_userClassIdFound := v_userClassIdFound & v_userClassId & ";";
+            } // End of 'for' statement
+            
+            return false; // Error
+        } // End of function f_check_uniqueness_UserClassId
+
+        /**
+         * @desc    This function verifies the uniqueness of locationClassId in LocationClassId list
+         * @param   p_locationClasses locationClassId list
+         * @return  true on success, false otherwise
+         * @verdict unchanged
+         */
+        function f_check_uniqueness_LocationClassId_1(in TariffClass.locationClasses p_locationClassIds) runs on EutComp
+        return boolean {
+            // p_locationClassIds shall not be omit
+
+            var charstring v_locationClassIdFound := ";"; // Used to build the list of the locationClassId already processed
+            var charstring v_locationClassId; // locationClassId currently processed
+            var template charstring m_found_pattern; // Used in regex to verify that 'locationClassId' was not found before
+
+            // Parse LocationClasses list
+            for (var integer v_idx := 0; v_idx < sizeof(p_locationClassIds); v_idx := v_idx + 1) {
+                v_locationClassId := int2str(p_locationClassIds[v_idx]);
+                m_found_pattern := pattern "*({v_locationClassId})*";
+                if (regexp(v_locationClassIdFound, m_found_pattern, 0) == v_locationClassId) {
+                    return false; // locationClassId exist at least 2 times, uniqueness is not verified
+                }
+                // locationClassId non found, add current locationClassId into the built list
+                v_locationClassIdFound := v_locationClassIdFound & v_locationClassId & ";";
+            } // End of 'for' statement
+            
+            return true;
+        } // End of function f_check_uniqueness_LocationClassId_1
+        
+        /**
+         * @desc    This function sends Iso17575_3Adu message according to the security mode
+         * @param   p_Iso17575_3Adu Iso17575_3Adu message to be sent
+         * @verdict unchanged
+         */
+        function f_pco_send_Iso17575_3Adu(
+                                          in template (value) Iso17575_3Adu p_Iso17575_3Adu
+        ) runs on EutComp {
+            if (not (PICS_SECURED_MODE)) {
+                pco.send(m_Iso17575_3InformationContent_unsecured(p_Iso17575_3Adu));
+            } else {
+                var template (value) AuthenticatedIso17575_3Adu v_secured_packet;
+                f_secured_packet(p_Iso17575_3Adu, v_secured_packet);
+                pco.send(m_Iso17575_3InformationContent_secured(v_secured_packet));
+            }
+        } // End of function f_pco_send_Iso17575_3Adu
+        
+        altstep a_pco_recv_Iso17575_3Adu(
+                                         template ChargeReport p_chargeReportValueExpected,
+                                         out template (value) ChargeReport p_chargeReportValue,
+                                         out template (value) boolean p_result
+        ) runs on EutComp {
+            var AuthenticatedChargeReport v_authenticatedChargeReport;
+            
+            p_result := false;
+            [PICS_SECURED_MODE == false] pco.receive(p_chargeReportValueExpected) -> value p_chargeReportValue {
+                p_chargeReportValue := v_Iso17575_3InformationContent.notAuthenticatedIso17575_3Adu;
+                p_result := true;
+            }
+            [PICS_SECURED_MODE == true] pco.receive(AuthenticatedChargeReport:?) -> value v_authenticatedChargeReport {
+                if (f_security_extract_ChargeReport(v_authenticatedChargeReport, p_chargeReportValue) == true) {
+                    p_result := match(p_chargeReportValueExpected, p_chargeReportValue);
+                }
+            }
+        } // End of function a_pco_recv_Iso17575_3Adu
+        
+    } // End of group Internal_functions
+
+    /**
+     * @desc    UpperTester group
+     */
+    group DUT_Actions {
+        /**
+         * @desc    Defines UpperTester commands
+         */
+        group Arguments {
+            /**
+             * @desc    Event defined in ContextData1 occurred
+             */
+            const ParameterList raiseContext1Event := {
+                "raiseEvent", "Context1",
+                "", ""
+            };
+            /**
+             * @desc    At least one UsageStatement can be reported by Front End and Event defined in ContextData9 occurred
+             */
+            const ParameterList raiseContext9Event := {
+                "raiseEvent", "Context9",
+                "", ""
+            };
+            /**
+             * @desc    At least one UsageStatement for ContextData11 can be reported by Front End and Event defined in ContextData11 occurred
+             */
+            const ParameterList raiseContext11Event := {
+                "raiseEvent", "Context11",
+                "", ""
+            };
+            /**
+             * @desc    Event defined in ContextData12 occurred
+             */
+            const ParameterList raiseContext12Event := {
+                "raiseEvent", "Context12",
+                "", ""
+            };
+            /**
+             * @desc    Event defined in '41'D – ChargeReportingEvents occurred
+             */
+            const ParameterList raiseChargeReportingEvents := {
+                "raiseChargeReportingEvents", "",
+                "", ""
+            };
+            /**
+             * @desc    Request the DUT to send an Iso1117575Adu message
+             */
+            const ParameterList raiseADU := {
+                "raiseADU", "",
+                "", ""
+            };
+            /**
+             * @desc    Request the DUT to send several Iso1117575Adu messages
+             */
+            const ParameterList raiseADUs := {
+                "raiseADUs", "",
+                "", ""
+            };
+            /**
+             * @desc    Request the DUT to send an Iso1117575Adu message
+             */
+            const ParameterList incTollRegime := {
+                "TollContextOverview.tollRegime", "+10",
+                "", ""
+            };
+        } // End of group Arguments
+    } // End of group DUT_Actions
+} // End of module ContextData_Functions

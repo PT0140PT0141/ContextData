@@ -1,0 +1,456 @@
+/**
+ * @author  FSCOM 
+ * @desc    This module describes the PICS proforma for the attributes
+ * @version $id$
+ */
+ module ContextData_PICS_BE {
+     /**
+     * @desc
+     * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.6 PICS proforma for the Back End
+     */
+     group PICS_Back_End {
+         /**
+          * @desc
+          * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.6.1.1. Identification of PICS
+          */
+         group PICS_Implementation_Id_FrontEnd {
+             /**
+              * @desc    Does the EUT support Date of statement (DD/MM/YY)?
+              */
+              modulepar boolean PIC_dateOfStatement := true;
+             /**
+              * @desc    Does the EUT support PICS Serial Number?
+              */
+              modulepar boolean PIC__0serialNumber := true;
+             /**
+              * @desc    Does the EUT support System Conformance Statement Cross Reference?
+              */
+              modulepar boolean PIC_systemConformanceStatementCrossReference := true;
+         } // End of PICS_Implementation_Id_FrontEnd
+         /**
+          * @desc
+          * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.6.1.2. Identification of the implementation and/or system
+          */
+         group PICS_Identification_of_implementation_system {
+             /**
+              * @desc    Does the EUT support Service provider or EFC context name?
+              */
+             modulepar boolean PIC_serviceProviderOrEFCContextName := true;
+             /**
+              * @desc    Does the EUT support Service provider and EFC context identifier?
+              */
+             modulepar boolean PIC_serviceProviderAndEFCContextIdentifier := true;
+             /**
+              * @desc    Does the EUT support Version number?
+              */
+             modulepar boolean PIC_versionNumber := true;
+             /**
+              * @desc    Does the EUT support Other information?
+              */
+             modulepar boolean PIC__0otherInformation := true;
+         } // End of PICS_Identification_of_implementation_system
+         /**
+          * @desc
+          * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.6.1.3. Identification of the Front End supplier
+          */
+         group PICS_Identification_of_FE_supplier {
+             /**
+              * @desc    Does the EUT support Organisation name?
+              */
+             modulepar boolean PIC_organisationName := true;
+             /**
+              * @desc    Does the EUT support Contact name(s)?
+              */
+             modulepar boolean PIC_contactName := true;
+             /**
+              * @desc    Does the EUT support Address?
+              */
+             modulepar boolean PIC_address := true;
+             /**
+              * @desc    Does the EUT support Phone number(s)?
+              */
+             modulepar boolean PIC_phoneNumber := true;
+             /**
+              * @desc    Does the EUT support e-mail address?
+              */
+             modulepar boolean PIC_emailAddress := true;
+             /**
+              * @desc    Does the EUT support Other information?
+              */
+             modulepar boolean PIC__1otherInformation := true;
+         } // End of PICS_Identification_of_FE_supplier
+         /**
+          * @desc
+          * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.6.1.4. Identification of the Front End
+          */
+         group PICS_Identification_of_FE {
+             /**
+              * @desc    Does the EUT support Brand name?
+              */
+             modulepar boolean PIC_brandName := true;
+             /**
+              * @desc    Does the EUT support Type, version?
+              */
+             modulepar boolean PIC_typeAndVersion := true;
+             /**
+              * @desc    Does the EUT support Manufacturer ID?
+              */
+             modulepar boolean PIC_manufacturerID := true;
+             /**
+              * @desc    Does the EUT support Equipment class?
+              */
+             modulepar boolean PIC_equipmentClass := true;
+             /**
+              * @desc    Does the EUT support Serial number(s)?
+              */
+             modulepar boolean PIC__1serialNumber := true;
+             /**
+              * @desc    Does the EUT support Organisation name?
+              */
+             modulepar boolean PIC__2otherInformation := true;
+         } // End of PICS_Identification_of_FE
+         /**
+          * @desc
+          * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.6.4.1. ADU Header and body
+          */
+         group PICS_ADU_Header_and_body {
+             /**
+              * @desc    Does the EUT support Iso17575-3Adu?
+              */
+             modulepar boolean PIC_iso17575_3Adu := true;
+             /**
+              * @desc    Does the EUT support AduAuthenticator?
+              */
+             modulepar boolean PIC_aduAuthenticator := true;
+             /**
+              * @desc    Does the EUT support AttributeList?
+              */
+             modulepar boolean PIC_attributeList := true;
+             /**
+              * @desc    Does the EUT support SectionList?
+              */
+             modulepar boolean PIC_sectionList := true;
+         } // End of PICS_Identification_of_standard
+         /**
+          * @desc
+          * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.6.4.2. Communication services support
+          */
+         group PICS_Communication_services_support {
+             /**
+              * @desc    Does the EUT support Iso17575-2 Communication services supported?
+              */
+             modulepar boolean PIC_iso175752CommunicationServicesSupported := true;
+         } // End of PICS_Communication_services_support
+         /**
+          * @desc
+          * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.6.4.3. EFC Attributes
+          */
+         group PICS_EFC_Attributes {
+             /**
+              * @desc    Does the EUT support TollContextOverview?
+              */
+             modulepar boolean PIC_tollContextOverview := true;
+             /**
+              * @desc    Does the EUT support TariffTable?
+              */
+             modulepar boolean PIC_tariffTable := true;
+             /**
+              * @desc    Does the EUT support TariffClassDefinition?
+              */
+             modulepar boolean PIC_tariffClassDefinition := true;
+             /**
+              * @desc    Does the EUT support LocalVehicleClassDefinition?
+              */
+             modulepar boolean PIC_localVehicleClassDefinition := true;
+             /**
+              * @desc    Does the EUT support TimeClassDefinition?
+              */
+             modulepar boolean PIC_timeClassDefinition := true;
+             /**
+              * @desc    Does the EUT support TollContextOverview?
+              */
+             modulepar boolean PIC_userClassDefinition := true;
+             /**
+              * @desc    Does the EUT support TollContextLayout?
+              */
+             modulepar boolean PIC_tollContextLayout := true;
+             /**
+              * @desc    Does the EUT support ChargeReportingEvents?
+              */
+             modulepar boolean PIC_chargeReportingEvents := true;
+             /**
+              * @desc    Does the EUT support ChargeReportConfiguration?
+              */
+             modulepar boolean PIC_chargeReportConfiguration := true;
+         } // End of PICS_EFC_Attributes
+         /**
+          * @desc
+          * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.6.4.4. Regime overview
+          */
+         group PICS_Regime_Overview {
+             /**
+              * @desc    Does the EUT support tollSchemeName?
+              */
+             modulepar boolean PIC_tollSchemeName := true;
+             /**
+              * @desc    Does the EUT support tollContextBoundingBoxes?
+              */
+             modulepar boolean PIC_tollContextBoundingBoxes := true;
+             /**
+              * @desc    Does the EUT support tollContextOverviewAuthenticator?
+              */
+             modulepar boolean PIC_tollContextOverviewAuthenticator := true;
+         } // End of PICS_Regime_Overview
+         /**
+          * @desc
+          * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.6.4.5. Toll Scheme types
+          */
+         group PICS_Toll_Scheme_types {
+             /**
+              * @desc    Does the EUT support roadSectionPricing?
+              */
+             modulepar boolean PIC_roadSectionPricing := true;
+             /**
+              * @desc    Does the EUT support areaPricingDistance?
+              */
+             modulepar boolean PIC_areaPricingDistance := true;
+             /**
+              * @desc    Does the EUT support areaPricingTime?
+              */
+             modulepar boolean PIC_areaPricingTime := true;
+             /**
+              * @desc    Does the EUT support cordonPricing?
+              */
+             modulepar boolean PIC_cordonPricing := true;
+         } // End of PICS_Toll_Scheme_types
+         /**
+          * @desc
+          * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.6.4.6. Operational status
+          */
+         group PICS_Operational_status {
+             /**
+              * @desc    Does the EUT support stopsOperationAt?
+              */
+             modulepar boolean PIC_stopsOperationAt := true;
+         } // End of PICS_Operational_status
+         /**
+          * @desc
+          * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.6.4.7. Tariff table and tariffs
+          */
+         group PICS_Tariff_table_and_tariffs {
+             /**
+              * @desc    Does the EUT support vat?
+              */
+             modulepar boolean PIC_vat := true;
+             /**
+              * @desc    Does the EUT support intervalScaleParameters?
+              */
+             modulepar boolean PIC_intervalScaleParameters := true;
+             /**
+              * @desc    Does the EUT support feeOffset?
+              */
+             modulepar boolean PIC_feeOffset := true;
+             /**
+              * @desc    Does the EUT support minFee?
+              */
+             modulepar boolean PIC_minFee := true;
+             /**
+              * @desc    Does the EUT support thresholdFee?
+              */
+             modulepar boolean PIC_thresholdFee := true;
+             /**
+              * @desc    Does the EUT support maxFee?
+              */
+             modulepar boolean PIC_maxFee := true;
+             /**
+              * @desc    Does the EUT support roundingRule?
+              */
+             modulepar boolean PIC_roundingRule := true;
+             /**
+              * @desc    Does the EUT support tariffTableAuthenticator?
+              */
+             modulepar boolean PIC_tariffTableAuthenticator := true;
+         } // End of PICS_Tariff_table_and_tariffs
+
+         /**
+          * @desc
+          * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.6.4.8 Tariff class definitions and tariff classes
+          */
+         group PICS_Tariff_class_definitions_and_tariff_classes {
+             modulepar boolean PIC_localVehicleClasses := true;
+             modulepar boolean PIC_timeClasses := true;
+             modulepar boolean PIC_locationClasses := true;
+             modulepar boolean PIC_userClasses := true;
+             modulepar boolean PIC_tariffClassDefinitionAuthenticator := true;
+         } // End of PICS_Tariff_class_definitions_and_tariff_classes
+         /**
+          * @desc
+          * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.6.4.9 Local vehicle class definitions and local vehicle classes
+          */
+         group PICS_Local_vehicle_class_definitions_and_local_vehicle_classes {
+             modulepar boolean PIC__0ordinalElements := true;
+             modulepar boolean PIC_localVehicleClassDefinitionAuthenticator := true;
+         } // End of PICS_Local_vehicle_class_definitions_and_local_vehicle_classes
+         /**
+          * @desc
+          * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.6.4.10. Nominal vehicle parameters
+          */
+         group PICS_Nominal_vehicle_parameters {
+             modulepar boolean PIC_vehicleClasses := true;
+             modulepar boolean PIC__0vehicleAxlesNumber := true;
+             modulepar boolean PIC__0euroValue := true;
+         } // End of PICS_Nominal_vehicle_parameters
+         /**
+          * @desc
+          * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.6.4.11. Ordinal vehicle parameters
+          */
+         group PICS_Ordinal_vehicle_parameters {
+             modulepar boolean PIC_vehicleLengthOverall := true;
+             modulepar boolean PIC_vehicleHeightOverall := true;
+             modulepar boolean PIC_vehicleWidthOverall := true;
+             modulepar boolean PIC_vehicleFirstAxlesHeight := true;
+             modulepar boolean PIC__1vehicleAxlesNumber := true;
+             modulepar boolean PIC_vehicleMaxLadenWeight := true;
+             modulepar boolean PIC_vehicleTrainMaximumWeight := true;
+             modulepar boolean PIC_vehicleWeightUnladen := true;
+             modulepar boolean PIC_vehicleWeightLaden := true;
+             modulepar boolean PIC__1euroValue := true;
+             modulepar boolean PIC_copValue := true;
+             modulepar boolean PIC_vehicleClass := true;
+         } // End of PICS_Ordinal_vehicle_parameters
+         /**
+          * @desc
+          * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.6.4.12 Time class definitions and time classes
+          */
+         group PICS_Time_class_definitions_and_time_classes {
+             modulepar boolean PIC_priorityValue := true;
+             modulepar boolean PIC_nominalElements := true;
+             modulepar boolean PIC__1ordinalElements := true;
+             modulepar boolean PIC_timeClassDefinitionAuthenticator := true;
+         } // End of PICS_Time_class_definitions_and_time_classes
+         /**
+          * @desc
+          * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.6.4.13. Nominal time class parameters
+          */
+         group PICS_Nominal_time_class_parameters {
+             modulepar boolean PIC__0weekdays := true;
+             modulepar boolean PIC_dates := true;
+             modulepar boolean PIC_listOfExternalSetClasses := true;
+         } // End of PICS_Nominal_time_class_parameters
+         /**
+          * @desc
+          * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.6.4.14. Ordinal time class parameters
+          */
+         group PICS_Ordinal_time_class_parameters {
+             modulepar boolean PIC__1weekdays := true;
+             modulepar boolean PIC_absoluteTimeOfDay := true;
+             modulepar boolean PIC_relativeTimeOfDay := true;
+             modulepar boolean PIC_periodsInYear := true;
+         } // End of PICS_Ordinal_time_class_parameters
+         /**
+          * @desc
+          * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.6.4.15. User class definitions and user classes
+          */
+         group PICS_User_class_definitions_and_user_classes {
+             modulepar boolean PIC_contractTypes := true;
+             modulepar boolean PIC_actualNumberOfPassengers := true;
+             modulepar boolean PIC_userClassDefinitionAuthenticator := true;
+         } // End of PICS_User_class_definitions_and_user_classes
+         /**
+          * @desc
+          * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.6.4.16. Toll context layout
+          */
+         group PICS_Toll_context_layout {
+             modulepar boolean PIC_geoRefPoint := true;
+             modulepar boolean PIC_tollContextAuthenticator := true;
+         } // End of PICS_Toll_context_layout
+         /**
+          * @desc
+          * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.6.4.17. Supported layout description types
+          */
+         group PICS_Supported_layout_description_types {
+             modulepar boolean PIC_sectionPricingLayout := true;
+             modulepar boolean PIC_areaPricingLayout := true;
+             modulepar boolean PIC_cordonPricingLayout := true;
+         } // End of PICS_Supported_layout_description_types
+         /**
+          * @desc
+          * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.6.4.18. Section pricing layout description
+          */
+         group PICS_Section_pricing_layout_description {
+             modulepar boolean PIC__0chargeObjectName := true;
+             modulepar boolean PIC__0chargeObjectRefPoint := true;
+             modulepar boolean PIC__0networkPoints := true;
+             modulepar boolean PIC_pathStructureTowards := true;
+             modulepar boolean PIC_pathStructureOnwards := true;
+             modulepar boolean PIC__0supportingInformation := true;
+             modulepar boolean PIC_realDistance := true;
+             modulepar boolean PIC__0applicableTimeClasses := true;
+         } // End of PICS_Section_pricing_layout_description
+         /**
+          * @desc
+          * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.6.4.19. Area pricing layout description
+          */
+         group PICS_Area_pricing_layout_description {
+             modulepar boolean PIC_roadNetwork := true;
+         } // End of PICS_Area_pricing_layout_description
+         /**
+          * @desc
+          * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.6.4.20. Road network objects in area pricing layout descriptions
+          */
+         group PICS_Road_network_objects_in_area_pricing_layout_descriptions {
+             modulepar boolean PIC__1chargeObjectName := true;
+             modulepar boolean PIC__1chargeObjectRefPoint := true;
+             modulepar boolean PIC__1networkPoints := true;
+             modulepar boolean PIC__1supportingInformation := true;
+             modulepar boolean PIC__1applicableTimeClasses := true;
+         } // End of PICS_Road_network_objects_in_area_pricing_layout_descriptions
+         /**
+          * @desc
+          * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.6.4.21. Cordon pricing layout description
+          */
+         group PICS_Cordon_pricing_layout_description {
+             modulepar boolean PIC_cordonEntryLocations := true;
+             modulepar boolean PIC_cordonExitLocations := true;
+         } // End of PICS_Cordon_pricing_layout_description
+         /**
+          * @desc
+          * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.6.4.22. Cordon entry location description
+          */
+         group PICS_Cordon_entry_location_description {
+             modulepar boolean PIC__2applicableTimeClasses := true;
+         } // End of PICS_Cordon_entry_location_description
+         /**
+          * @desc
+          * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.6.4.23. Cordon exit location description
+          */
+         group PICS_Cordon_exit_location_description {
+             modulepar boolean PIC_entryLocation := true;
+             modulepar boolean PIC__3applicableTimeClasses := true;
+         } // End of PICS_Cordon_exit_location_description
+         /**
+          * @desc
+          * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.6.4.24. Charge reporting events
+          */
+         group PICS_Charge_reporting_events {
+             modulepar boolean PIC_absoluteTimeEvents := true;
+             modulepar boolean PIC_relativeTimeEvents := true;
+             modulepar boolean PIC_traveledDistanceEvents := true;
+             modulepar boolean PIC_locationEvents := true;
+             modulepar boolean PIC_feeLimitEvents := true;
+             modulepar boolean PIC_chargeReportingEventsAuthenticator  := true;
+         } // End of PICS_Charge_reporting_events
+         /**
+          * @desc
+          * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.6.4.25. Charge report configuration
+          */
+         group PICS_Charge_report_configuration {
+             modulepar boolean PIC_cccAttributesContent := true;
+             modulepar boolean PIC_aggregatedSingleTariffClassSessionContent := true;
+             modulepar boolean PIC_detectedChargeObjectContent := true;
+             modulepar boolean PIC_listOfRawUsageDataContent := true;
+             modulepar boolean PIC_vehicleDescriptionContent := true;
+             modulepar boolean PIC_chargeReportConfigurationAuthenticator := true;
+         } // End of PICS_Charge_report_configuration
+     } // End of group PICS_Back_End
+} // End of module ContextData_PICS_BE
