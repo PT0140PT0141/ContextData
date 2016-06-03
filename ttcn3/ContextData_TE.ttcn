@@ -43,7 +43,7 @@ module ContextData_TE {
              * @desc    TC_CH_FE_BV_07: Verify that DUT updates its Context Data
              * @remark  [TS 17575-3], Clause 8.1 Rules with respect to support of context data
              */
-            execute(TC_CH_FE_BV_07(), PX_GUARD);
+            execute(TC_CH_FE_BV_01(), PX_GUARD);
 //            /**
 //             * @desc    TC_CH_FE_BV_08: Verify that DUT updates its Context Data
 //             * @remark  [TS 17575-3], Clause 8.1 Rules with respect to support of context data

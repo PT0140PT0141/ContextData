@@ -76,8 +76,19 @@ module ContextData_Templates {
              */
             template (value) Iso17575_3AduBody m_ContextData2(in ContextId p_contextId, in Provider p_tollCharger)
             modifies m_ContextData_default := {
-                tollContextOverview := m_tollContextOverview_tollCharger_default(p_contextId, p_tollCharger)
+                tollContextOverview := m_tollContextOverview_ContextData2(p_contextId, p_tollCharger)
             } // End of template m_ContextData2
+            /**
+             * @desc    Main template for ContextData2
+             * @param   p_contextId ADU header context ID
+             * @see     Annex C.2.1: Context Data - Table C.8: ContextData1 - row 1
+             * @remark  All other TollContextOverview template shall modify this one
+             * @see     D.4.2 Coding the TariffTable
+             */
+            template (value) TollContextOverview m_tollContextOverview_ContextData2(in ContextId p_contextId, in Provider p_tollCharger)
+            modifies m_tollContextOverview_default := {
+                tollCharger :=p_tollCharger
+            } // End of template m_tollContextOverview_ContextData2
         } // End of group ContextData2
     
         /**
@@ -173,7 +184,7 @@ module ContextData_Templates {
              */
             template (value) Iso17575_3AduBody m_ContextData8(in ContextId p_contextId)
             modifies m_ContextData1 := {
-                tollContextLayout := m_tollContextLayout_default
+                tollContextLayout := m_tollContextPartitionLayout_default
             } // End of template m_ContextData8
         } // End of group ContextData8
     
@@ -207,43 +218,6 @@ module ContextData_Templates {
             modifies m_ContextData1 := {
                 chargeReportConfiguration := m_chargeReportConfiguration_default
             } // End of template m_ContextData10
-    
-            /**
-             * @desc    Verify that DUT reports data elements requested by Context Data (sent in many ADUs)
-             * @remark  This template does not check for regimeID, we have to use a function to validate it
-             */
-            template ChargeReport mw_chargeReport_ContextData10_usageStatementID
-            modifies mw_chargeReport_default := {
-                vehicleLPNr := omit,
-                paymentMeans := omit,
-                timeOfReport := omit,
-                versionInfo := omit,
-                usageStatementList := complement 
-                ( 
-                    superset 
-                    ( // match if usageStatementID is present in all elements of usageStatementList
-                        {
-                            omit, // usageStatementID
-                            *, // regimeID
-                            *, // aggregatedFee
-                            *, // vat
-                            *, // aggregatedSingleTariffClassSession
-                            *, // listOfChargeObjects
-                            *, // listOfDSRCUsageData
-                            *, // listOfRawUsageData
-                            *, // noUsage
-                            *, // additionalUsageInformation
-                            * // usageAuthenticator
-                        } ifpresent
-                    ) // superset
-                ), // complement,
-                vatForThisSession := omit,
-                accountStatus := omit,
-                transactionCounter := omit,
-                mileage := omit,
-                listOfCCCAttributes := omit,
-                authenticator := omit
-            } // End of template mw_chargeReport_ContextData10_usageStatementID
         } // End of group ContextData10
     
         /**
@@ -425,7 +399,7 @@ module ContextData_Templates {
              * @desc    ChargeReport template for Context Data #13
              * @see     Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Clause 8.3.5.2.1 Data type ChargeReport
              */
-            template (value) ChargeReport m_chargeReportContent_ContextData13
+            template (value) ChargeReportContent m_chargeReportContent_ContextData13
             modifies m_chargeReportContent_default := {
                 tollCharger := false
             } // End of template m_chargeReportContent_default
@@ -455,12 +429,57 @@ module ContextData_Templates {
                 accountStatus := omit,
                 transactionCounter := omit,
                 mileage := omit,
-                listOfCCCAttributes := omit,
-                authenticator := omit
+                listOfCCCAttributes := omit
             } // End of template mw_chargeReport_ContextData13
     
         } // End of group ContextData13
     
+        /**
+         * @desc    Group of Context Date describes in Annex C.2: Data structure - Table C.8
+         * @see     Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 1: Charging for data element descriptions
+         */
+        group ContextData20 {
+            /**
+             * @desc    Main template for ContextData20
+             * @param   p_tollContextPartitionId The identifier of the respective toll context partition for which the overview information is provided
+             * @see     ISO 17575-3:2016 Clause 7.3 Application data unit structure (data type Iso17575-3Adu)
+             * @see     ISO 17575-3:2016 Figure 4 — Structure of an ISO 17575-3 ADU
+             */
+            template (value) Iso17575_3AduBody m_ContextData20(in TollContextPartitionId p_tollContextPartitionId)
+            modifies m_ContextData_default := {
+                tollContextPartitionOverview := {
+                    m_tollContextPartitionOverview_default(p_tollContextPartitionId),      // Partition #1
+                    m_tollContextPartitionOverview_default(p_tollContextPartitionId + 1)   // Partition #2
+                }
+            } // End of template m_ContextData20
+            
+            /**
+             * @desc ChargeReport template compliant with Context Data #13
+             */
+            template ChargeReport mw_chargeReport_ContextData20_1
+            modifies mw_chargeReport_any := {
+                obeId := ?,
+                usageStatementList := superset(
+                    {
+                        usageStatement := ?
+                    }
+                )
+            } // End of template mw_chargeReport_ContextData20_1
+            /**
+             * @desc ChargeReport template compliant with Context Data #13
+             */
+            template ChargeReport mw_chargeReport_ContextData20_2
+            modifies mw_chargeReport_any := {
+                obeId := omit,
+                vehicleLPNr := ?,
+                usageStatementList := superset(
+                    {
+                        usageStatement := ?
+                    }
+                )
+            } // End of template mw_chargeReport_ContextData20_2
+        } // End of group ContextData20
+        
         /**
          * @desc    This Context Data templates are used by TC_CR_FE_BE_xx TCs
          */
@@ -496,11 +515,10 @@ module ContextData_Templates {
              * @desc    ChargeReport template with obeId requested only
              * @see     ISO 17575-1:2016 Clause 7.5.1 obeId
              */
-            template (value) ChargeReport m_chargeReportContent_obeId(
+            template (value) ChargeReportContent m_chargeReportContent_obeId(
                                                                       in boolean p_ispresent
             ) modifies m_chargeReportContent_default := {
-                obeId := p_ispresent,
-                tollCharger := false
+                obeId := p_ispresent
             } // End of template m_chargeReportContent_obeId
             
             /**
@@ -541,11 +559,10 @@ module ContextData_Templates {
              * @desc    ChargeReport template with vehicleLPNr requested only
              * @see     ISO 17575-1:2016 Clause 7.5.2 vehicleLPNr
              */
-            template (value) ChargeReport m_chargeReportContent_vehicleLPNr(
+            template (value) ChargeReportContent m_chargeReportContent_vehicleLPNr(
                                                                             in boolean p_ispresent
             ) modifies m_chargeReportContent_default := {
-                vehicleLPNr := p_ispresent,
-                tollCharger := false
+                vehicleLPNr := p_ispresent
             } // End of template m_chargeReportContent_vehicleLPNr
     
             /**
@@ -585,11 +602,10 @@ module ContextData_Templates {
              * @desc    ChargeReport template with paymentMeans requested only
              * @see     ISO 17575-1:2016 Clause 7.5.3 paymentMeans
              */
-            template (value) ChargeReport m_chargeReportContent_paymentMeans(
+            template (value) ChargeReportContent m_chargeReportContent_paymentMeans(
                                                                              in boolean p_ispresent
             ) modifies m_chargeReportContent_default := {
-                paymentMeans := p_ispresent,
-                tollCharger := false
+                paymentMeans := p_ispresent
             } // End of template m_chargeReportContent_paymentMeans
     
             /**
@@ -629,7 +645,7 @@ module ContextData_Templates {
              * @desc    ChargeReport template with tollContext requested only
              * @see     ISO 17575-1:2016 Clause 7.5.5 tollContext
              */
-            template (value) ChargeReport m_chargeReportContent_tollContext(
+            template (value) ChargeReportContent m_chargeReportContent_tollContext(
                                                                             in boolean p_ispresent
             ) modifies m_chargeReportContent_default := {
                 tollContext  := p_ispresent
@@ -680,7 +696,7 @@ module ContextData_Templates {
              * @desc    ChargeReport template with chargeReportFinalRecipient  requested only
              * @see     ISO 17575-1:2016 Clause 7.5.6 chargeReportFinalRecipient
              */
-            template (value) ChargeReport m_chargeReportContent_chargeReportFinalRecipient(
+            template (value) ChargeReportContent m_chargeReportContent_chargeReportFinalRecipient(
                                                                                            in boolean p_ispresent
             ) modifies m_chargeReportContent_default := {
                 chargeReportFinalRecipient  := p_ispresent
@@ -732,7 +748,7 @@ module ContextData_Templates {
              * @desc    ChargeReport template with timeOfReport  requested only
              * @see     ISO 17575-1:2016 Clause 7.3.1 timeOfReport
              */
-            template (value) ChargeReport m_chargeReportContent_timeOfReport(
+            template (value) ChargeReportContent m_chargeReportContent_timeOfReport(
                                                                              in boolean p_ispresent
             ) modifies m_chargeReportContent_default := {
                 timeOfReport  := p_ispresent
@@ -780,7 +796,7 @@ module ContextData_Templates {
              * @desc    ChargeReport template with reportPeriod  requested only
              * @see     ISO 17575-1:2016 Clause 7.3.2 reportPeriod
              */
-            template (value) ChargeReport m_chargeReportContent_reportPeriod(
+            template (value) ChargeReportContent m_chargeReportContent_reportPeriod(
                                                                              in boolean p_ispresent
             ) modifies m_chargeReportContent_default := {
                 reportPeriod  := p_ispresent
@@ -832,7 +848,7 @@ module ContextData_Templates {
              * @desc    ChargeReport template with versionInfo requested only
              * @see     Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Clause 8.3.5.2.1 Data type ChargeReport
              */
-            template (value) ChargeReport m_chargeReportContent_versionInfo(
+            template (value) ChargeReportContent m_chargeReportContent_versionInfo(
                                                                             in boolean p_ispresent
             ) modifies m_chargeReportContent_default := {
                 versionInfo := p_ispresent
@@ -866,16 +882,18 @@ module ContextData_Templates {
              * @param   p_ispresent true if sumVatForThisSession is requested, false otherwise
              * @see     ISO 17575-1:2016 Clause 7.3.3 sumVatForThisSession
              */
-            template (value) ChargeReportConfiguration m_chargeReportConfiguration_sumVatForThisSession (in boolean p_ispresent)
-            modifies m_chargeReportConfiguration_default := {
+            template (value) ChargeReportConfiguration m_chargeReportConfiguration_sumVatForThisSession(
+                                                                                                        in boolean p_ispresent
+            ) modifies m_chargeReportConfiguration_default := {
                 chargeReportContent := m_chargeReportContent_sumVatForThisSession (p_ispresent)
             } // End of template m_chargeReportConfiguration_sumVatForThisSession
             /**
              * @desc    ChargeReport template with sumVatForThisSession requested only
              * @see     ISO 17575-1:2016 Clause 7.3.3 sumVatForThisSession
              */
-            template (value) ChargeReport m_chargeReportContent_sumVatForThisSession (in boolean p_ispresent)
-            modifies m_chargeReportContent_default := {
+            template (value) ChargeReportContent m_chargeReportContent_sumVatForThisSession(
+                                                                                            in boolean p_ispresent
+            ) modifies m_chargeReportContent_default := {
                 sumVatForThisSession := p_ispresent
             } // End of template m_chargeReportContent_sumVatForThisSession
     
@@ -907,16 +925,18 @@ module ContextData_Templates {
              * @param   p_ispresent true if accountStatus is requested, false otherwise
              * @see     ISO 17575-1:2016 Clause 7.7.1 accountStatus
              */
-            template (value) ChargeReportConfiguration m_chargeReportConfiguration_accountStatus (in boolean p_ispresent)
-            modifies m_chargeReportConfiguration_default := {
+            template (value) ChargeReportConfiguration m_chargeReportConfiguration_accountStatus(
+                                                                                                 in boolean p_ispresent
+            ) modifies m_chargeReportConfiguration_default := {
                 chargeReportContent := m_chargeReportContent_accountStatus (p_ispresent)
             } // End of template m_chargeReportConfiguration_accountStatus
             /**
              * @desc    ChargeReport template with accountStatus requested only
              * @see     ISO 17575-1:2016 Clause 7.7.1 accountStatus
              */
-            template (value) ChargeReport m_chargeReportContent_accountStatus (in boolean p_ispresent)
-            modifies m_chargeReportContent_default := {
+            template (value) ChargeReportContent m_chargeReportContent_accountStatus(
+                                                                                     in boolean p_ispresent
+            ) modifies m_chargeReportContent_default := {
                 accountStatus := p_ispresent
             } // End of template m_chargeReportContent_accountStatus
     
@@ -957,7 +977,7 @@ module ContextData_Templates {
              * @desc    ChargeReport template with chargeReportCounter requested only
              * @see     ISO 17575-1:2016 Clause 7.3.4 chargeReportCounte
              */
-            template (value) ChargeReport m_chargeReportContent_chargeReportCounter(
+            template (value) ChargeReportContent m_chargeReportContent_chargeReportCounter(
                                                                                     in boolean p_ispresent
             ) modifies m_chargeReportContent_default := {
                 chargeReportCounter := p_ispresent
@@ -1000,7 +1020,7 @@ module ContextData_Templates {
              * @desc    ChargeReport template with mileage requested only
              * @see     ISO 17575-1:2016 Clause 7.3.5 mileage
              */
-            template (value) ChargeReport m_chargeReportContent_mileage(
+            template (value) ChargeReportContent m_chargeReportContent_mileage(
                                                                         in boolean p_ispresent
             ) modifies m_chargeReportContent_default := {
                 mileage := p_ispresent
@@ -1043,7 +1063,7 @@ module ContextData_Templates {
              * @desc    ChargeReport template with listOfCCCAttributes requested only
              * @see     ISO 17575-1:2016 Clause 7.9 Data group Compliance Checking — listOfCCCAttributes and CCCAttributes
              */
-            template (value) ChargeReport m_chargeReportContent_listOfCCCAttributes(
+            template (value) ChargeReportContent m_chargeReportContent_listOfCCCAttributes(
                                                                                     in boolean p_ispresent
             ) modifies m_chargeReportContent_default := {
                 listOfCCCAttributes := p_ispresent
@@ -1270,16 +1290,18 @@ module ContextData_Templates {
              * @param   p_ispresent true if authenticator is requested, false otherwise
              * @see     ISO 17575-1:2016 Clause 7.5.6 chargeReportFinalRecipient
              */
-            template (value) ChargeReportConfiguration m_chargeReportConfiguration_useOfChargeReportFinalRecipient(in boolean p_ispresent)
-            modifies m_chargeReportConfiguration_default := {
+            template (value) ChargeReportConfiguration m_chargeReportConfiguration_useOfChargeReportFinalRecipient(
+                                                                                                                   in boolean p_ispresent
+            ) modifies m_chargeReportConfiguration_default := {
                 usageStatementContent := m_usageStatementContent_chargeReportFinalRecipient (p_ispresent)
             } // End of template m_chargeReportConfiguration_chargeReportFinalRecipient
             /**
              * @desc    UsageStatementContent template to verify the presence/absence of chargeReportFinalRecipient data element in Charge Report
              * @see     ISO 17575-1:2016 Clause 7.5.6 chargeReportFinalRecipient
              */
-            template (value) UsageStatementContent m_usageStatementContent_chargeReportFinalRecipient (in boolean p_ispresent)
-            modifies m_usageStatementContent_default := {
+            template (value) UsageStatementContent m_usageStatementContent_chargeReportFinalRecipient(
+                                                                                                      in boolean p_ispresent
+            ) modifies m_usageStatementContent_default := {
                 chargeReportFinalRecipient := p_ispresent
             } // End of template m_usageStatementContent_chargeReportFinalRecipient
             /**
@@ -1336,44 +1358,48 @@ module ContextData_Templates {
              * @param   p_ispresent true if authenticator is requested, false otherwise
              * @see     Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Clause 8.3.5.2 EFC attribute ChargeReportConfiguration
              */
-            template (value) ChargeReportConfiguration m_chargeReportConfiguration_aggregatedFee (in boolean p_ispresent)
-            modifies m_chargeReportConfiguration_default := {
+            template (value) ChargeReportConfiguration m_chargeReportConfiguration_aggregatedFee(
+                                                                                                 in boolean p_ispresent
+            ) modifies m_chargeReportConfiguration_default := {
                 usageStatementContent := m_usageStatementContent_aggregatedFee (p_ispresent)
             } // End of template m_chargeReportConfiguration_aggregatedFee
             /**
              * @desc    UsageStatementContent template to verify the presence/absence of aggregatedFee data element in Charge Report
              * @see     Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Clause 8.3.5.2.2 Data type UsageStatementContent
              */
-            template (value) UsageStatementContent m_usageStatementContent_aggregatedFee (in boolean p_ispresent)
-            modifies m_usageStatementContent_default := {
+            template (value) UsageStatementContent m_usageStatementContent_aggregatedFee(
+                                                                                         in boolean p_ispresent
+            ) modifies m_usageStatementContent_default := {
                 aggregatedFee := p_ispresent
             } // End of template m_usageStatementContent_aggregatedFee
-            
+            /**
+             * @desc    Receive template for UsageStatement/aggregatedFee present
+             * @see     ISO 17575-1:2016 Clause 7.6.4 aggregatedFee
+             */
+            template (present) UsageStatement mw_usageStatement_aggregatedFee_present 
+            modifies mw_usageStatement_default := {
+                aggregatedFee := ?
+            }
+            /**
+             * @desc    Receive template for UsageStatement/aggregatedFee not present
+             * @see     ISO 17575-1:2016 Clause 7.6.4 aggregatedFee
+             */
+            template UsageStatement mw_usageStatement_aggregatedFee_not_present 
+            modifies mw_usageStatement_default := {
+                aggregatedFee := complement(?)
+            }
             /**
              * @desc    Template used to verify the presence of aggregatedFee data element
              * @see     B.3.1 ChargeReport
              */
             template ChargeReport mw_chargeReport_aggregatedFee_present
             modifies mw_chargeReport_any := {
-                usageStatementList := complement 
-                ( 
-                    superset 
-                    ( // match if aggregatedFee is present in all elements of usageStatementList
-                        {
-                            *, // usageStatementID
-                            *, // regimeID
-                            omit, // aggregatedFee
-                            *, // vat
-                            *, // aggregatedSingleTariffClassSession
-                            *, // listOfChargeObjects
-                            *, // listOfDSRCUsageData
-                            *, // listOfRawUsageData
-                            *, // noUsage
-                            *, // additionalUsageInformation
-                            * // usageAuthenticator
+                usageStatementList := superset( // match if aggregatedFee is present in all elements of usageStatementList
+                    {
+                        usageStatement                 := mw_usageStatement_aggregatedFee_present,
+                        authenticatedUsageStatement    := *
                         } ifpresent
                     ) // superset
-                ) // complement
             } // End of template mw_chargeReport_aggregatedFee_present
             /**
              * @desc    Template used to verify the absence of aggregatedFee data element
@@ -1381,28 +1407,81 @@ module ContextData_Templates {
              */
             template ChargeReport mw_chargeReport_aggregatedFee_not_present
             modifies mw_chargeReport_any := {
-                usageStatementList := complement 
-                ( 
-                    superset 
-                    ( // match if aggregatedFee is present in all elements of usageStatementList
-                        {
-                            *, // usageStatementID
-                            *, // regimeID
-                            ?, // aggregatedFee
-                            *, // vat
-                            *, // aggregatedSingleTariffClassSession
-                            *, // listOfChargeObjects
-                            *, // listOfDSRCUsageData
-                            *, // listOfRawUsageData
-                            *, // noUsage
-                            *, // additionalUsageInformation
-                            * // usageAuthenticator
+                usageStatementList := superset( // match if aggregatedFee is present in all elements of usageStatementList
+                    {
+                        usageStatement                 := mw_usageStatement_aggregatedFee_not_present,
+                        authenticatedUsageStatement    := *
                         } ifpresent
                     ) // superset
-                ) // complement
             } // End of template mw_chargeReport_aggregatedFee_not_present
         } // End of group ChargeReport_aggregatedFee
     
+        /**
+         * @desc    This group contains all template for ChargeReport/sumVat message
+         * @see     B.3.1 ChargeReport
+         */
+        group ChargeReport_sumVat {
+            /**
+             * @desc    ChargeReportConfiguration with sumVat requested only
+             * @param   p_ispresent true if authenticator is requested, false otherwise
+             * @see     ISO 17575-1:2016 Clause 7.3.3 sumVatForThisSession
+             */
+            template (value) ChargeReportConfiguration m_chargeReportConfiguration_sumVat (in boolean p_ispresent)
+            modifies m_chargeReportConfiguration_default := {
+                usageStatementContent := m_usageStatementContent_sumVat (p_ispresent)
+            } // End of template m_chargeReportConfiguration_sumVat
+            /**
+             * @desc    UsageStatementContent template to verify the presence/absence of sumVat data element in Charge Report
+             * @see     ISO 17575-1:2016 Clause 7.3.3 sumVatForThisSession
+             */
+            template (value) UsageStatementContent m_usageStatementContent_sumVat (in boolean p_ispresent)
+            modifies m_usageStatementContent_default := {
+                sumVat := p_ispresent
+            } // End of template m_usageStatementContent_sumVat
+            /**
+             * @desc    Receive template for UsageStatement/sumVat present
+             * @see     ISO 17575-1:2016 Clause 7.6.4 sumVat
+             */
+            template (present) UsageStatement mw_usageStatement_sumVat_present 
+            modifies mw_usageStatement_default := {
+                sumVat := ?
+            }
+            /**
+             * @desc    Receive template for UsageStatement/sumVat not present
+             * @see     ISO 17575-1:2016 Clause 7.6.4 sumVat
+             */
+            template UsageStatement mw_usageStatement_sumVat_not_present 
+            modifies mw_usageStatement_default := {
+                sumVat := complement(?)
+            }
+            /**
+             * @desc    Template used to verify the presence of sumVat data element
+             * @see     ISO 17575-1:2016 Clause 7.3.3 sumVatForThisSession
+             */
+            template ChargeReport mw_chargeReport_sumVat_present
+            modifies mw_chargeReport_any := {
+                usageStatementList := superset( // match if sumVat is present in all elements of usageStatementList
+                    {
+                        usageStatement                 := mw_usageStatement_sumVat_present,
+                        authenticatedUsageStatement    := *
+                    } ifpresent
+                ) // superset
+            } // End of template mw_chargeReport_sumVat_present
+            /**
+             * @desc    Template used to verify the absence of sumVat data element
+             * @see     ISO 17575-1:2016 Clause 7.3.3 sumVatForThisSession
+             */
+            template ChargeReport mw_chargeReport_sumVat_not_present
+            modifies mw_chargeReport_any := {
+                usageStatementList := superset( // match if sumVat is present in all elements of usageStatementList
+                    {
+                        usageStatement                 := mw_usageStatement_sumVat_not_present,
+                        authenticatedUsageStatement    := *
+                    } ifpresent
+                ) // superset
+            } // End of template mw_chargeReport_sumVat_not_present
+        } // End of group ChargeReport_sumVat
+        
         /**
          * @desc    This group contains all template for ChargeReport/aggregatedSingleTariffClassSession message
          * @see     B.3.1 ChargeReport
@@ -1413,44 +1492,48 @@ module ContextData_Templates {
              * @param   p_ispresent true if authenticator is requested, false otherwise
              * @see     Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Clause 8.3.5.2 EFC attribute ChargeReportConfiguration
              */
-            template (value) ChargeReportConfiguration m_chargeReportConfiguration_aggregatedSingleTariffClassSession (in boolean p_ispresent)
-            modifies m_chargeReportConfiguration_default := {
+            template (value) ChargeReportConfiguration m_chargeReportConfiguration_aggregatedSingleTariffClassSession(
+                                                                                                                      in boolean p_ispresent
+            ) modifies m_chargeReportConfiguration_default := {
                 usageStatementContent := m_usageStatementContent_aggregatedSingleTariffClassSession (p_ispresent)
             } // End of template m_chargeReportConfiguration_aggregatedSingleTariffClassSession
             /**
              * @desc    UsageStatementContent template to verify the presence/absence of aggregatedSingleTariffClassSession data element in Charge Report
              * @see     Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Clause 8.3.5.2.2 Data type UsageStatementContent
              */
-            template (value) UsageStatementContent m_usageStatementContent_aggregatedSingleTariffClassSession (in boolean p_ispresent)
-            modifies m_usageStatementContent_default := {
+            template (value) UsageStatementContent m_usageStatementContent_aggregatedSingleTariffClassSession(
+                                                                                                              in boolean p_ispresent
+            ) modifies m_usageStatementContent_default := {
                 aggregatedSingleTariffClassSession := p_ispresent
             } // End of template m_usageStatementContent_aggregatedSingleTariffClassSession
-    
+            /**
+             * @desc    Receive template for UsageStatement/aggregatedSingleTariffClassSession present
+             * @see     ISO 17575-1:2016 Clause 7.6.5 aggregatedSingleTariffClassSession
+             */
+            template (present) UsageStatement mw_usageStatement_aggregatedSingleTariffClassSession_present 
+            modifies mw_usageStatement_default := {
+                aggregatedSingleTariffClassSession := ?
+            }
+            /**
+             * @desc    Receive template for UsageStatement/aggregatedSingleTariffClassSession not present
+             * @see     ISO 17575-1:2016 Clause 7.6.5 aggregatedSingleTariffClassSession
+             */
+            template UsageStatement mw_usageStatement_aggregatedSingleTariffClassSession_not_present 
+            modifies mw_usageStatement_default := {
+                aggregatedSingleTariffClassSession := complement(?)
+            }
             /**
              * @desc    Template used to verify the presence of aggregatedSingleTariffClassSession data element
              * @see     B.3.1 ChargeReport
              */
             template ChargeReport mw_chargeReport_aggregatedSingleTariffClassSession_present
             modifies mw_chargeReport_any := {
-                usageStatementList := complement 
-                ( 
-                    superset 
-                    ( // match if aggregatedSingleTariffClassSession is present in all elements of usageStatementList
-                        {
-                            *, // usageStatementID
-                            *, // regimeID
-                            *, // aggregatedFee
-                            *, // vat
-                            omit, // aggregatedSingleTariffClassSession
-                            *, // listOfChargeObjects
-                            *, // listOfDSRCUsageData
-                            *, // listOfRawUsageData
-                            *, // noUsage
-                            *, // additionalUsageInformation
-                            * // usageAuthenticator
+                usageStatementList := superset( // match if aggregatedSingleTariffClassSession is present in all elements of usageStatementList
+                    {
+                        usageStatement                 := mw_usageStatement_aggregatedSingleTariffClassSession_present,
+                        authenticatedUsageStatement    := *
                         } ifpresent
                     ) // superset
-                ) // complement
             } // End of template mw_chargeReport_aggregatedSingleTariffClassSession_present
             /**
              * @desc    Template used to verify the absence of aggregatedSingleTariffClassSession data element
@@ -1458,25 +1541,12 @@ module ContextData_Templates {
              */
             template ChargeReport mw_chargeReport_aggregatedSingleTariffClassSession_not_present
             modifies mw_chargeReport_any := {
-                usageStatementList := complement 
-                ( 
-                    superset 
-                    ( // match if aggregatedSingleTariffClassSession is present in all elements of usageStatementList
-                        {
-                            *, // usageStatementID
-                            *, // regimeID
-                            *, // aggregatedFee
-                            *, // vat
-                            ?, // aggregatedSingleTariffClassSession
-                            *, // listOfChargeObjects
-                            *, // listOfDSRCUsageData
-                            *, // listOfRawUsageData
-                            *, // noUsage
-                            *, // additionalUsageInformation
-                            * // usageAuthenticator
+                usageStatementList := superset( // match if aggregatedSingleTariffClassSession is present in all elements of usageStatementList
+                    {
+                        usageStatement                 := mw_usageStatement_aggregatedSingleTariffClassSession_not_present,
+                        authenticatedUsageStatement    := *
                         } ifpresent
                     ) // superset
-                ) // complement
             } // End of template mw_chargeReport_aggregatedSingleTariffClassSession_not_present
         } // End of group ChargeReport_aggregatedSingleTariffClassSession
     
@@ -1490,44 +1560,48 @@ module ContextData_Templates {
              * @param   p_ispresent true if authenticator is requested, false otherwise
              * @see     Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Clause 8.3.5.2 EFC attribute ChargeReportConfiguration
              */
-            template (value) ChargeReportConfiguration m_chargeReportConfiguration_listOfChargeObjects (in boolean p_ispresent)
-            modifies m_chargeReportConfiguration_default := {
+            template (value) ChargeReportConfiguration m_chargeReportConfiguration_listOfChargeObjects(
+                                                                                                       in boolean p_ispresent
+            ) modifies m_chargeReportConfiguration_default := {
                 usageStatementContent := m_usageStatementContent_listOfChargeObjects (p_ispresent)
             } // End of template m_chargeReportConfiguration_listOfChargeObjects
             /**
              * @desc    UsageStatementContent template to verify the presence/absence of listOfChargeObjects data element in Charge Report
              * @see     Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Clause 8.3.5.2.2 Data type UsageStatementContent
              */
-            template (value) UsageStatementContent m_usageStatementContent_listOfChargeObjects (in boolean p_ispresent)
-            modifies m_usageStatementContent_default := {
+            template (value) UsageStatementContent m_usageStatementContent_listOfChargeObjects(
+                                                                                               in boolean p_ispresent
+            ) modifies m_usageStatementContent_default := {
                 listOfChargeObjects := p_ispresent
             } // End of template m_usageStatementContent_listOfChargeObjects
-    
+            /**
+             * @desc    Receive template for UsageStatement/listOfChargeObjects present
+             * @see     ISO 17575-1:2016 Clause 7.6.8 listOfChargeObjects and DetectedChargeObject
+             */
+            template (present) UsageStatement mw_usageStatement_listOfChargeObjects_present 
+            modifies mw_usageStatement_default := {
+                listOfChargeObjects := ?
+            }
+            /**
+             * @desc    Receive template for UsageStatement/listOfChargeObjects not present
+             * @see     ISO 17575-1:2016 Clause 7.6.8 listOfChargeObjects and DetectedChargeObject
+             */
+            template UsageStatement mw_usageStatement_listOfChargeObjects_not_present 
+            modifies mw_usageStatement_default := {
+                listOfChargeObjects := complement(?)
+            }
             /**
              * @desc    Template used to verify the presence of listOfChargeObjects data element
              * @see     B.3.1 ChargeReport
              */
             template ChargeReport mw_chargeReport_listOfChargeObjects_present
             modifies mw_chargeReport_any := {
-                usageStatementList := complement 
-                ( 
-                    superset 
-                    ( // match if listOfChargeObjects is present in all elements of usageStatementList
-                        {
-                            *, // usageStatementID
-                            *, // regimeID
-                            *, // aggregatedFee
-                            *, // vat
-                            *, // aggregatedSingleTariffClassSession
-                            omit, // listOfChargeObjects
-                            *, // listOfDSRCUsageData
-                            *, // listOfRawUsageData
-                            *, // noUsage
-                            *, // additionalUsageInformation
-                            * // usageAuthenticator
+                usageStatementList := superset( // match if listOfChargeObjects is present in all elements of usageStatementList
+                    {
+                        usageStatement                 := mw_usageStatement_listOfChargeObjects_present,
+                        authenticatedUsageStatement    := *
                         } ifpresent
                     ) // superset
-                ) // complement
             } // End of template mw_chargeReport_listOfChargeObjects_present
             /**
              * @desc    Template used to verify the absence of listOfChargeObjects data element
@@ -1535,25 +1609,12 @@ module ContextData_Templates {
              */
             template ChargeReport mw_chargeReport_listOfChargeObjects_not_present
             modifies mw_chargeReport_any := {
-                usageStatementList := complement 
-                ( 
-                    superset 
-                    ( // match if listOfChargeObjects is present in all elements of usageStatementList
-                        {
-                            *, // usageStatementID
-                            *, // regimeID
-                            *, // aggregatedFee
-                            *, // vat
-                            *, // aggregatedSingleTariffClassSession
-                            ?, // listOfChargeObjects
-                            *, // listOfDSRCUsageData
-                            *, // listOfRawUsageData
-                            *, // noUsage
-                            *, // additionalUsageInformation
-                            * // usageAuthenticator
+                usageStatementList := superset( // match if listOfChargeObjects is present in all elements of usageStatementList
+                    {
+                        usageStatement                 := mw_usageStatement_listOfChargeObjects_not_present,
+                        authenticatedUsageStatement    := *
                         } ifpresent
                     ) // superset
-                ) // complement
             } // End of template mw_chargeReport_listOfChargeObjects_not_present
         } // End of group ChargeReport_listOfChargeObjects
     
@@ -1567,44 +1628,48 @@ module ContextData_Templates {
              * @param   p_ispresent true if authenticator is requested, false otherwise
              * @see     Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Clause 8.3.5.2 EFC attribute ChargeReportConfiguration
              */
-            template (value) ChargeReportConfiguration m_chargeReportConfiguration_listOfDSRCUsageData (in boolean p_ispresent)
-            modifies m_chargeReportConfiguration_default := {
+            template (value) ChargeReportConfiguration m_chargeReportConfiguration_listOfDSRCUsageData(
+                                                                                                       in boolean p_ispresent
+            ) modifies m_chargeReportConfiguration_default := {
                 usageStatementContent := m_usageStatementContent_listOfDSRCUsageData (p_ispresent)
             } // End of template m_chargeReportConfiguration_listOfDSRCUsageData
             /**
              * @desc    UsageStatementContent template to verify the presence/absence of listOfDSRCUsageData data element in Charge Report
              * @see     Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Clause 8.3.5.2.2 Data type UsageStatementContent
              */
-            template (value) UsageStatementContent m_usageStatementContent_listOfDSRCUsageData (in boolean p_ispresent)
-            modifies m_usageStatementContent_default := {
+            template (value) UsageStatementContent m_usageStatementContent_listOfDSRCUsageData(
+                                                                                               in boolean p_ispresent
+            ) modifies m_usageStatementContent_default := {
                 listOfDSRCUsageData := p_ispresent
             } // End of template m_usageStatementContent_listOfDSRCUsageData
-    
+            /**
+             * @desc    Receive template for UsageStatement/listOfDSRCUsageData present
+             * @see     ISO 17575-1:2016 Clause 7.6.13 ListOfDSRCUsageData
+             */
+            template (present) UsageStatement mw_usageStatement_listOfDSRCUsageData_present 
+            modifies mw_usageStatement_default := {
+                listOfDSRCUsageData := ?
+            }
+            /**
+             * @desc    Receive template for UsageStatement/listOfDSRCUsageData not present
+             * @see     ISO 17575-1:2016 Clause 7.6.13 ListOfDSRCUsageData
+             */
+            template UsageStatement mw_usageStatement_listOfDSRCUsageData_not_present 
+            modifies mw_usageStatement_default := {
+                listOfDSRCUsageData := complement(?)
+            }
             /**
              * @desc    Template used to verify the presence of listOfDSRCUsageData data element
              * @see     B.3.1 ChargeReport
              */
             template ChargeReport mw_chargeReport_listOfDSRCUsageData_present
             modifies mw_chargeReport_any := {
-                usageStatementList := complement 
-                ( 
-                    superset 
-                    ( // match if listOfDSRCUsageData is present in all elements of usageStatementList
-                        {
-                            *, // usageStatementID
-                            *, // regimeID
-                            *, // aggregatedFee
-                            *, // vat
-                            *, // aggregatedSingleTariffClassSession
-                            *, // listOfChargeObjects
-                            omit, // listOfDSRCUsageData
-                            *, // listOfRawUsageData
-                            *, // noUsage
-                            *, // additionalUsageInformation
-                            * // usageAuthenticator
+                usageStatementList := superset( // match if listOfDSRCUsageData is present in all elements of usageStatementList
+                    {
+                        usageStatement                 := mw_usageStatement_listOfDSRCUsageData_present,
+                        authenticatedUsageStatement    := *
                         } ifpresent
                     ) // superset
-                ) // complement
             } // End of template mw_chargeReport_listOfDSRCUsageData_present
             /**
              * @desc    Template used to verify the absence of listOfDSRCUsageData data element
@@ -1612,25 +1677,12 @@ module ContextData_Templates {
              */
             template ChargeReport mw_chargeReport_listOfDSRCUsageData_not_present
             modifies mw_chargeReport_any := {
-                usageStatementList := complement 
-                ( 
-                    superset 
-                    ( // match if listOfDSRCUsageData is present in all elements of usageStatementList
-                        {
-                            *, // usageStatementID
-                            *, // regimeID
-                            *, // aggregatedFee
-                            *, // vat
-                            *, // aggregatedSingleTariffClassSession
-                            *, // listOfChargeObjects
-                            ?, // listOfDSRCUsageData
-                            *, // listOfRawUsageData
-                            *, // noUsage
-                            *, // additionalUsageInformation
-                            * // usageAuthenticator
+                usageStatementList := superset( // match if listOfDSRCUsageData is present in all elements of usageStatementList
+                    {
+                        usageStatement                 := mw_usageStatement_listOfDSRCUsageData_not_present,
+                        authenticatedUsageStatement    := *
                         } ifpresent
                     ) // superset
-                ) // complement
             } // End of template mw_chargeReport_listOfDSRCUsageData_not_present
         } // End of group ChargeReport_listOfDSRCUsageData
     
@@ -1644,44 +1696,48 @@ module ContextData_Templates {
              * @param   p_ispresent true if authenticator is requested, false otherwise
              * @see     Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Clause 8.3.5.2 EFC attribute ChargeReportConfiguration
              */
-            template (value) ChargeReportConfiguration m_chargeReportConfiguration_listOfRawUsageData (in boolean p_ispresent)
-            modifies m_chargeReportConfiguration_default := {
+            template (value) ChargeReportConfiguration m_chargeReportConfiguration_listOfRawUsageData(
+                                                                                                      in boolean p_ispresent
+            ) modifies m_chargeReportConfiguration_default := {
                 usageStatementContent := m_usageStatementContent_listOfRawUsageData (p_ispresent)
             } // End of template m_chargeReportConfiguration_listOfRawUsageData
             /**
              * @desc    UsageStatementContent template to verify the presence/absence of listOfRawUsageData data element in Charge Report
              * @see     Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Clause 8.3.5.2.2 Data type UsageStatementContent
              */
-            template (value) UsageStatementContent m_usageStatementContent_listOfRawUsageData (in boolean p_ispresent)
-            modifies m_usageStatementContent_default := {
+            template (value) UsageStatementContent m_usageStatementContent_listOfRawUsageData(
+                                                                                              in boolean p_ispresent
+            ) modifies m_usageStatementContent_default := {
                 listOfRawUsageData := p_ispresent
             } // End of template m_usageStatementContent_listOfRawUsageData
-    
+            /**
+             * @desc    Receive template for UsageStatement/listOfRawUsageData present
+             * @see     ISO 17575-1:2016 Clause 7.6.10 ListOfRawUsageData, measuredRawData
+             */
+            template (present) UsageStatement mw_usageStatement_listOfRawUsageData_present 
+            modifies mw_usageStatement_default := {
+                listOfRawUsageData := ?
+            }
+            /**
+             * @desc    Receive template for UsageStatement/listOfRawUsageData not present
+             * @see     ISO 17575-1:2016 Clause 7.6.10 ListOfRawUsageData, measuredRawData
+             */
+            template UsageStatement mw_usageStatement_listOfRawUsageData_not_present 
+            modifies mw_usageStatement_default := {
+                listOfRawUsageData := complement(?)
+            }
             /**
              * @desc    Template used to verify the presence of listOfRawUsageData data element
              * @see     B.3.1 ChargeReport
              */
             template ChargeReport mw_chargeReport_listOfRawUsageData_present
             modifies mw_chargeReport_any := {
-                usageStatementList := complement 
-                ( 
-                    superset 
-                    ( // match if listOfRawUsageData is present in all elements of usageStatementList
-                        {
-                            *, // usageStatementID
-                            *, // regimeID
-                            *, // aggregatedFee
-                            *, // vat
-                            *, // aggregatedSingleTariffClassSession
-                            *, // listOfChargeObjects
-                            *, // listOfDSRCUsageData
-                            omit, // listOfRawUsageData
-                            *, // noUsage
-                            *, // additionalUsageInformation
-                            * // usageAuthenticator
+                usageStatementList := superset( // match if listOfRawUsageData is present in all elements of usageStatementList
+                    {
+                        usageStatement                 := mw_usageStatement_listOfRawUsageData_present,
+                        authenticatedUsageStatement    := *
                         } ifpresent
                     ) // superset
-                ) // complement
             } // End of template mw_chargeReport_listOfRawUsageData_present
             /**
              * @desc    Template used to verify the absence of listOfRawUsageData data element
@@ -1689,25 +1745,12 @@ module ContextData_Templates {
              */
             template ChargeReport mw_chargeReport_listOfRawUsageData_not_present
             modifies mw_chargeReport_any := {
-                usageStatementList := complement 
-                ( 
-                    superset 
-                    ( // match if listOfRawUsageData is present in all elements of usageStatementList
-                        {
-                            *, // usageStatementID
-                            *, // regimeID
-                            *, // aggregatedFee
-                            *, // vat
-                            *, // aggregatedSingleTariffClassSession
-                            *, // listOfChargeObjects
-                            *, // listOfDSRCUsageData
-                            ?, // listOfRawUsageData
-                            *, // noUsage
-                            *, // additionalUsageInformation
-                            * // usageAuthenticator
+                usageStatementList := superset( // match if listOfRawUsageData is present in all elements of usageStatementList
+                    {
+                        usageStatement                 := mw_usageStatement_listOfRawUsageData_not_present,
+                        authenticatedUsageStatement    := *
                         } ifpresent
                     ) // superset
-                ) // complement
             } // End of template mw_chargeReport_listOfRawUsageData_not_present
         } // End of group ChargeReport_listOfRawUsageData
     
@@ -1721,44 +1764,48 @@ module ContextData_Templates {
              * @param   p_ispresent true if authenticator is requested, false otherwise
              * @see     Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Clause 8.3.5.2 EFC attribute ChargeReportConfiguration
              */
-            template (value) ChargeReportConfiguration m_chargeReportConfiguration_noUsage (in boolean p_ispresent)
-            modifies m_chargeReportConfiguration_default := {
+            template (value) ChargeReportConfiguration m_chargeReportConfiguration_noUsage(
+                                                                                           in boolean p_ispresent
+            ) modifies m_chargeReportConfiguration_default := {
                 usageStatementContent := m_usageStatementContent_noUsage (p_ispresent)
             } // End of template m_chargeReportConfiguration_noUsage
             /**
              * @desc    UsageStatementContent template to verify the presence/absence of listOfRawUsageData data element in Charge Report
              * @see     Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Clause 8.3.5.2.2 Data type UsageStatementContent
              */
-            template (value) UsageStatementContent m_usageStatementContent_noUsage (in boolean p_ispresent)
-            modifies m_usageStatementContent_default := {
+            template (value) UsageStatementContent m_usageStatementContent_noUsage(
+                                                                                   in boolean p_ispresent
+            ) modifies m_usageStatementContent_default := {
                 noUsage := p_ispresent
             } // End of template m_usageStatementContent_noUsage
-    
+            /**
+             * @desc    Receive template for UsageStatement/noUsage present
+             * @see     ISO 17575-1:2016 Clause 7.6.2 UsageStatement
+             */
+            template (present) UsageStatement mw_usageStatement_noUsage_present 
+            modifies mw_usageStatement_default := {
+                noUsage := ?
+            }
+            /**
+             * @desc    Receive template for UsageStatement/noUsage not present
+             * @see     ISO 17575-1:2016 Clause 7.6.2 UsageStatement
+             */
+            template UsageStatement mw_usageStatement_noUsage_not_present 
+            modifies mw_usageStatement_default := {
+                noUsage := complement(?)
+            }
             /**
              * @desc    Template used to verify the presence of noUsage data element
              * @see     B.3.1 ChargeReport
              */
             template ChargeReport mw_chargeReport_noUsage_present
             modifies mw_chargeReport_any := {
-                usageStatementList := complement 
-                ( 
-                    superset 
-                    ( // match if noUsage is present in all elements of usageStatementList
-                        {
-                            *, // usageStatementID
-                            *, // regimeID
-                            *, // aggregatedFee
-                            *, // vat
-                            *, // aggregatedSingleTariffClassSession
-                            *, // listOfChargeObjects
-                            *, // listOfDSRCUsageData
-                            *, // listOfRawUsageData
-                            omit, // noUsage
-                            *, // additionalUsageInformation
-                            * // usageAuthenticator
+                usageStatementList := superset( // match if noUsage is present in all elements of usageStatementList
+                    {
+                        usageStatement                 := mw_usageStatement_noUsage_present,
+                        authenticatedUsageStatement    := *
                         } ifpresent
                     ) // superset
-                ) // complement
             } // End of template mw_chargeReport_noUsage_present
             /**
              * @desc    Template used to verify the absence of noUsage data element
@@ -1766,25 +1813,12 @@ module ContextData_Templates {
              */
             template ChargeReport mw_chargeReport_noUsage_not_present
             modifies mw_chargeReport_any := {
-                usageStatementList := complement 
-                ( 
-                    superset 
-                    ( // match if noUsage is present in all elements of usageStatementList
-                        {
-                            *, // usageStatementID
-                            *, // regimeID
-                            *, // aggregatedFee
-                            *, // vat
-                            *, // aggregatedSingleTariffClassSession
-                            *, // listOfChargeObjects
-                            *, // listOfDSRCUsageData
-                            *, // listOfRawUsageData
-                            ?, // noUsage
-                            *, // additionalUsageInformation
-                            * // usageAuthenticator
+                usageStatementList := superset( // match if noUsage is present in all elements of usageStatementList
+                    {
+                        usageStatement                 := mw_usageStatement_noUsage_not_present,
+                        authenticatedUsageStatement    := *
                         } ifpresent
                     ) // superset
-                ) // complement
             } // End of template mw_chargeReport_noUsage_not_present
         } // End of group ChargeReport_noUsage
     
@@ -1792,78 +1826,69 @@ module ContextData_Templates {
          * @desc    This group contains all template for ChargeReport/noUsage message
          * @see     B.3.1 ChargeReport
          */
-        group ChargeReport_usageAuthenticator {
+        group ChargeReport_additionalUsageInformation {
             /**
              * @desc    ChargeReportConfiguration with usageAuthenticator requested only
              * @param   p_ispresent true if authenticator is requested, false otherwise
              * @see     Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Clause 8.3.5.2 EFC attribute ChargeReportConfiguration
              */
-            template (value) ChargeReportConfiguration m_chargeReportConfiguration_usageAuthenticator (in boolean p_ispresent)
-            modifies m_chargeReportConfiguration_default := {
-                usageStatementContent := m_usageStatementContent_usageAuthenticator (p_ispresent)
-            } // End of template m_chargeReportConfiguration_usageAuthenticator
+            template (value) ChargeReportConfiguration m_chargeReportConfiguration_additionalUsageInformation(
+                                                                                                              in boolean p_ispresent
+            ) modifies m_chargeReportConfiguration_default := {
+                usageStatementContent := m_usageStatementContent_additionalUsageInformation (p_ispresent)
+            } // End of template m_chargeReportConfiguration_additionalUsageInformation
             /**
              * @desc    UsageStatementContent template to verify the presence/absence of listOfRawUsageData data element in Charge Report
              * @see     Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Clause 8.3.5.2.2 Data type UsageStatementContent
              */
-            template (value) UsageStatementContent m_usageStatementContent_usageAuthenticator (in boolean p_ispresent)
-            modifies m_usageStatementContent_default := {
-                usageAuthenticator := p_ispresent
-            } // End of template m_usageStatementContent_usageAuthenticator
-    
+            template (value) UsageStatementContent m_usageStatementContent_additionalUsageInformation(
+                                                                                                      in boolean p_ispresent
+            ) modifies m_usageStatementContent_default := {
+                additionalUsageInformation := p_ispresent
+            } // End of template m_usageStatementContent_additionalUsageInformation
             /**
-             * @desc    Template used to verify the presence of usageAuthenticator data element
-             * @see     B.3.1 ChargeReport
+             * @desc    Receive template for UsageStatement/additionalUsageInformation present
+             * @see     ISO 17575-1:2016 Clause 7.6.14 additionalUsageInformation
              */
-            template ChargeReport mw_chargeReport_usageAuthenticator_present
+            template (present) UsageStatement mw_usageStatement_additionalUsageInformation_present 
+            modifies mw_usageStatement_default := {
+                additionalUsageInformation := ?
+            }
+            /**
+             * @desc    Receive template for UsageStatement/additionalUsageInformation not present
+             * @see     ISO 17575-1:2016 Clause 7.6.14 additionalUsageInformation
+             */
+            template UsageStatement mw_usageStatement_additionalUsageInformation_not_present 
+            modifies mw_usageStatement_default := {
+                additionalUsageInformation := complement(?)
+            }
+            /**
+             * @desc    Template used to verify the presence of additionalUsageInformation data element
+             * @see     ISO 17575-1:2016 Clause 7.6.14 additionalUsageInformation
+             */
+            template ChargeReport mw_chargeReport_additionalUsageInformation_present
             modifies mw_chargeReport_any := {
-                usageStatementList := complement 
-                ( 
-                    superset 
-                    ( // match if usageAuthenticator is present in all elements of usageStatementList
+                usageStatementList := superset( // match if additionalUsageInformation is present in all elements of usageStatementList
                         {
-                            *, // usageStatementID
-                            *, // regimeID
-                            *, // aggregatedFee
-                            *, // vat
-                            *, // aggregatedSingleTariffClassSession
-                            *, // listOfChargeObjects
-                            *, // listOfDSRCUsageData
-                            *, // listOfRawUsageData
-                            *, // noUsage
-                            *, // additionalUsageInformation
-                            omit // usageAuthenticator
+                        usageStatement                 := mw_usageStatement_additionalUsageInformation_present,
+                        authenticatedUsageStatement    := *
                         } ifpresent
                     ) // superset
-                ) // complement
-            } // End of template mw_chargeReport_usageAuthenticator_present
+            } // End of template mw_chargeReport_additionalUsageInformation_present
             /**
              * @desc    Template used to verify the absence of usageAuthenticator data element
              * @see     B.3.1 ChargeReport
              */
-            template ChargeReport mw_chargeReport_usageAuthenticator_not_present
+            template ChargeReport mw_chargeReport_additionalUsageInformation_not_present
             modifies mw_chargeReport_any := {
-                usageStatementList := complement 
-                ( 
-                    superset 
-                    ( // match if usageAuthenticator is present in all elements of usageStatementList
+                usageStatementList := superset( // match if additionalUsageInformation is present in all elements of usageStatementList
                         {
-                            *, // usageStatementID
-                            *, // regimeID
-                            *, // aggregatedFee
-                            *, // vat
-                            *, // aggregatedSingleTariffClassSession
-                            *, // listOfChargeObjects
-                            *, // listOfDSRCUsageData
-                            *, // listOfRawUsageData
-                            *, // noUsage
-                            *, // additionalUsageInformation
-                            ? // usageAuthenticator
+                        usageStatement                 := mw_usageStatement_additionalUsageInformation_not_present,
+                        authenticatedUsageStatement    := *
                         } ifpresent
                     ) // superset
-                ) // complement
-            } // End of template mw_chargeReport_usageAuthenticator_not_present
-        } // End of group ChargeReport_usageAuthenticator
+            } // End of template mw_chargeReport_additionalUsageInformation_not_present
+        } // End of group ChargeReport_additionalUsageInformation
     } // End of group Charge_Report_group
 
     /**

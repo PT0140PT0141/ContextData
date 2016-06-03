@@ -7,6 +7,11 @@
  */
 module ContextData_Functions {
     /**
+     * @desc    Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 1: Charging
+     * @see     Annex A (normative) EFC data type specifications
+     */
+    import from EfcAutonomousCharging language "ASN.1:1997" all;
+    /**
      * @desc    Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data
      * @see     A.2 Data specifications
      */
@@ -2024,15 +2029,18 @@ module ContextData_Functions {
         ) runs on EutComp {
             var AuthenticatedChargeReport v_authenticatedChargeReport;
             
-            p_result := false;
             [PICS_SECURED_MODE == false] pco.receive(p_chargeReportValueExpected) -> value p_chargeReportValue {
-                p_chargeReportValue := v_Iso17575_3InformationContent.notAuthenticatedIso17575_3Adu;
                 p_result := true;
             }
             [PICS_SECURED_MODE == true] pco.receive(AuthenticatedChargeReport:?) -> value v_authenticatedChargeReport {
-                if (f_security_extract_ChargeReport(v_authenticatedChargeReport, p_chargeReportValue) == true) {
+                if (f_extract_ChargeReport<integer>(v_authenticatedChargeReport, p_chargeReportValue) == true) {
                     p_result := match(p_chargeReportValueExpected, p_chargeReportValue);
+                } else {
+                    p_result := false;
                 }
+                }
+            [] pco.receive {
+                p_result := false;
             }
         } // End of function a_pco_recv_Iso17575_3Adu
         
@@ -2072,6 +2080,13 @@ module ContextData_Functions {
              */
             const ParameterList raiseContext12Event := {
                 "raiseEvent", "Context12",
+                "", ""
+            };
+            /**
+             * @desc    Request the DUT to send an Iso1117575Adu message
+             */
+            const ParameterList raiseContext20Partition1AndPartition2Event := {
+                "TollContextOverview.context20Partition1AndPartition2", "",
                 "", ""
             };
             /**
