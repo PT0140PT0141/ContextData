@@ -1,5 +1,5 @@
 /**
- * @author  FSCOM 
+ * @author  PT28/PT0141 
  * @desc    This module provides functions used by Context Data TCs
  * @see     Electronic fee collection (EFC) — Conformity evaluation of Front End and Back End equipment to ISO 17575-3 — Part 1: Test suite structure and test purpose
  * @see     Electronic fee collection (EFC) — Evaluation of equipment for conformity to CEN ISO/TS 17575-3 — Part 1: Test suite structure and test purpose
@@ -2038,7 +2038,7 @@ module ContextData_Functions {
                 } else {
                     p_result := false;
                 }
-                }
+            }
             [] pco.receive {
                 p_result := false;
             }
@@ -2087,6 +2087,13 @@ module ContextData_Functions {
              */
             const ParameterList raiseContext20Partition1AndPartition2Event := {
                 "TollContextOverview.context20Partition1AndPartition2", "",
+                "", ""
+            };
+            /**
+             * @desc    Request the DUT to send an Iso1117575Adu message
+             */
+            const ParameterList raiseContext21Partition1AndPartition2Event := {
+                "TollContextOverview.raiseContext21Partition1AndPartition2Event", "",
                 "", ""
             };
             /**

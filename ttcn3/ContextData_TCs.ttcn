@@ -1,5 +1,5 @@
 /**
- * @author  FSCOM 
+ * @author  PT28/PT0141 
  * @desc    This module provides test cases based on Charging TPs
  * @see     Electronic fee collection (EFC) — Conformity evaluation of Front End and Back End equipment to ISO 17575-3 — Part 1: Test suite structure and test purpose
  * @see     Electronic fee collection (EFC) — Evaluation of equipment for conformity to CEN ISO/TS 17575-3 — Part 1: Test suite structure and test purpose
@@ -1496,7 +1496,7 @@ module ContextData_TCs {
 
             /**
              * @desc    TC_CR_FE_BV_27: Verify the usage of authenticated Usage Statement
-             * @remark  [TS 17575-3], Clause 8.5.5.3.3
+             * @remark  [TS 17575-3], Clause 8.5.5.3.3 Data type UsageStatementContent
              */
             testcase TC_CR_FE_BV_27() runs on EutComp system TestAdapter {
                 
@@ -1540,7 +1540,7 @@ module ContextData_TCs {
 
             /**
              * @desc    TC_CR_FE_BV_28: Verify the usage of non-authenticated Usage Statement
-             * @remark  [TS 17575-3], Clause 8.5.5.3.3
+             * @remark  [TS 17575-3], Clause 8.5.5.3.3 Data type UsageStatementContent
              */
             testcase TC_CR_FE_BV_28() runs on EutComp system TestAdapter {
                 
@@ -1584,7 +1584,7 @@ module ContextData_TCs {
 
             /**
              * @desc    TC_CR_FE_BV_29: Verify the presence of usageStatementId data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.5.5.3.3
+             * @remark  [TS 17575-3], Clause 8.5.5.3.3 Data type UsageStatementContent
              */
             testcase TC_CR_FE_BV_29() runs on EutComp system TestAdapter {
                 
@@ -1628,7 +1628,7 @@ module ContextData_TCs {
 
             /**
              * @desc    TC_CR_FE_BV_30: Verify the absence of usageStatementId data element in Usage Statement
-             * @remark  [TS 17575-3], Clause 8.5.5.3.3
+             * @remark  [TS 17575-3], Clause 8.5.5.3.3 Data type UsageStatementContent
              */
             testcase TC_CR_FE_BV_30() runs on EutComp system TestAdapter {
                 
@@ -1673,7 +1673,7 @@ module ContextData_TCs {
             /**
              * @desc    TC_CR_FE_BV_31: Verify the presence of tollContext data element in Charge Report
              * @see     A.2.1 BV test purposes
-             * @remark  [TS 17575-3], Clause 8.5.5.3.3
+             * @remark  [TS 17575-3], Clause 8.5.5.3.3 Data type UsageStatementContent
              */
             testcase TC_CR_FE_BV_31() runs on EutComp system TestAdapter {
                 
@@ -1717,7 +1717,7 @@ module ContextData_TCs {
 
             /**
              * @desc    TC_CR_FE_BV_32: Verify the absence of tollContext data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.5.5.3.3
+             * @remark  [TS 17575-3], Clause 8.5.5.3.3 Data type UsageStatementContent
              */
             testcase TC_CR_FE_BV_32() runs on EutComp system TestAdapter {
                 
@@ -1761,7 +1761,7 @@ module ContextData_TCs {
             
             /**
              * @desc    TC_CR_FE_BV_33: Verify the presence of chargeReportFinalRecipient data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.5.5.3.3
+             * @remark  [TS 17575-3], Clause 8.5.5.3.3 Data type UsageStatementContent
              */
             testcase TC_CR_FE_BV_33() runs on EutComp system TestAdapter {
                 
@@ -1805,7 +1805,7 @@ module ContextData_TCs {
 
             /**
              * @desc    TC_CR_FE_BV_34: Verify the absence of chargeReportFinalRecipient data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.5.5.3.3
+             * @remark  [TS 17575-3], Clause 8.5.5.3.3 Data type UsageStatementContent
              */
             testcase TC_CR_FE_BV_34() runs on EutComp system TestAdapter {
                 
@@ -1849,7 +1849,7 @@ module ContextData_TCs {
 
             /**
              * @desc    TC_CR_FE_BV_35: Verify the presence of aggregatedFee data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.5.5.3.3
+             * @remark  [TS 17575-3], Clause 8.5.5.3.3 Data type UsageStatementContent
              */
             testcase TC_CR_FE_BV_35() runs on EutComp system TestAdapter {
                 
@@ -1893,7 +1893,7 @@ module ContextData_TCs {
 
             /**
              * @desc    TC_CR_FE_BV_36: Verify the absence of aggregatedFee data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.5.5.3.3
+             * @remark  [TS 17575-3], Clause 8.5.5.3.3 Data type UsageStatementContent
              */
             testcase TC_CR_FE_BV_36() runs on EutComp system TestAdapter {
                 
@@ -1936,8 +1936,8 @@ module ContextData_TCs {
             } // End of TC TC_CR_FE_BV_36
 
             /**
-             * @desc    TC_CR_FE_BV_27: Verify the presence of aggregatedSingleTariffClassSession data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.5.5.3.3
+             * @desc    TC_CR_FE_BV_37: Verify the presence of sumVat data element in Charge Report
+             * @remark  [TS 17575-3], Clause 8.5.5.3.3 Data type UsageStatementContent
              */
             testcase TC_CR_FE_BV_37() runs on EutComp system TestAdapter {
                 
@@ -2058,7 +2058,7 @@ module ContextData_TCs {
             } // End of TC TC_CR_FE_BV_39
 
             /**
-             * @desc    TC_CR_FE_BV_28: Verify the absence of aggregatedSingleTariffClassSession data element in Charge Report
+             * @desc    TC_CR_FE_BV_40: Verify the absence of aggregatedSingleTariffClassSession data element in Charge Report
              * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
              */
             testcase TC_CR_FE_BV_40() runs on EutComp system TestAdapter {
@@ -2092,8 +2092,8 @@ module ContextData_TCs {
             } // End of TC TC_CR_FE_BV_40
 
             /**
-             * @desc    TC_CR_FE_BV_29: Verify the presence of listOfChargeObjects data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
+             * @desc    TC_CR_FE_BV_41: Verify the presence of listOfChargeObjects data element in Charge Report
+             * @remark  [TS 17575-3], Clause 8.5.5.3.3 Data type UsageStatementContent
              */
             testcase TC_CR_FE_BV_41() runs on EutComp system TestAdapter {
                 // Preamble
@@ -2126,8 +2126,8 @@ module ContextData_TCs {
             } // End of TC TC_CR_FE_BV_41
 
             /**
-             * @desc    TC_CR_FE_BV_30: Verify the absence of listOfChargeObjects data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
+             * @desc    TC_CR_FE_BV_42: Verify the absence of listOfChargeObjects data element in Charge Report
+             * @remark  [TS 17575-3], Clause 8.5.5.3.3 Data type UsageStatementContent
              */
             testcase TC_CR_FE_BV_42() runs on EutComp system TestAdapter {
                 // Preamble
@@ -2160,7 +2160,7 @@ module ContextData_TCs {
             } // End of TC TC_CR_FE_BV_42
 
             /**
-             * @desc    TC_CR_FE_BV_31: Verify the presence of listOfDSRCUsageData data element in Charge Report
+             * @desc    TC_CR_FE_BV_43: Verify the presence of listOfDSRCUsageData data element in Charge Report
              * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
              */
             testcase TC_CR_FE_BV_43() runs on EutComp system TestAdapter {
@@ -2194,7 +2194,7 @@ module ContextData_TCs {
             } // End of TC TC_CR_FE_BV_43
 
             /**
-             * @desc    TC_CR_FE_BV_32: Verify the absence of listOfDSRCUsageData data element in Charge Report
+             * @desc    TC_CR_FE_BV_44: Verify the absence of listOfDSRCUsageData data element in Charge Report
              * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
              */
             testcase TC_CR_FE_BV_44() runs on EutComp system TestAdapter {
@@ -2228,8 +2228,8 @@ module ContextData_TCs {
             } // End of TC TC_CR_FE_BV_44
 
             /**
-             * @desc    TC_CR_FE_BV_33: Verify the presence of listOfRawUsageData data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
+             * @desc    TC_CR_FE_BV_45: Verify the presence of listOfRawUsageData data element in Charge Report
+             * @remark  [TS 17575-3], Clause 8.5.5.3.3 Data type UsageStatementContent
              */
             testcase TC_CR_FE_BV_45() runs on EutComp system TestAdapter {
                 // Preamble
@@ -2262,8 +2262,8 @@ module ContextData_TCs {
             } // End of TC TC_CR_FE_BV_45
 
             /**
-             * @desc    TC_CR_FE_BV_34: Verify the absence of listOfRawUsageData data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
+             * @desc    TC_CR_FE_BV_46: Verify the absence of listOfRawUsageData data element in Charge Report
+             * @remark  [TS 17575-3], Clause 8.5.5.3.3 Data type UsageStatementContent
              */
             testcase TC_CR_FE_BV_46() runs on EutComp system TestAdapter {
                 // Preamble
@@ -2296,8 +2296,8 @@ module ContextData_TCs {
             } // End of TC TC_CR_FE_BV_46
 
             /**
-             * @desc    TC_CR_FE_BV_35: Verify the presence of noUsage data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
+             * @desc    TC_CR_FE_BV_47: Verify the presence of noUsage data element in Charge Report
+             * @remark  [TS 17575-3], Clause 8.5.5.3.3 Data type UsageStatementContent
              */
             testcase TC_CR_FE_BV_47() runs on EutComp system TestAdapter {
                 // Preamble
@@ -2330,8 +2330,8 @@ module ContextData_TCs {
             } // End of TC TC_CR_FE_BV_47
 
             /**
-             * @desc    TC_CR_FE_BV_36: Verify the absence of noUsage data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
+             * @desc    TC_CR_FE_BV_48: Verify the absence of noUsage data element in Charge Report
+             * @remark  [TS 17575-3], Clause 8.5.5.3.3 Data type UsageStatementContent
              */
             testcase TC_CR_FE_BV_48() runs on EutComp system TestAdapter {
                 // Preamble
@@ -2364,8 +2364,8 @@ module ContextData_TCs {
             } // End of TC TC_CR_FE_BV_48
 
             /**
-             * @desc    TC_CR_FE_BV_37: Verify the presence of usageAuthenticator data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
+             * @desc    TC_CR_FE_BV_49: Verify the presence of additionalUsageInformation data element in Charge Report
+             * @remark  [TS 17575-3], Clause 8.5.5.3.3 Data type UsageStatementContent
              */
             testcase TC_CR_FE_BV_49() runs on EutComp system TestAdapter {
                 // Preamble
@@ -2398,8 +2398,8 @@ module ContextData_TCs {
             } // End of TC TC_CR_FE_BV_49
 
             /**
-             * @desc    TC_CR_FE_BV_38: Verify the absence of usageAuthenticator data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
+             * @desc    TC_CR_FE_BV_50: Verify the absence of additionalUsageInformation data element in Charge Report
+             * @remark  [TS 17575-3], Clause 8.5.5.3.3 Data type UsageStatementContent
              */
             testcase TC_CR_FE_BV_50() runs on EutComp system TestAdapter {
                 // Preamble
@@ -2432,8 +2432,8 @@ module ContextData_TCs {
             } // End of TC TC_CR_FE_BV_50
 
             /**
-             * @desc    TC_CR_FE_BV_39: Verify that DUT reports data elements requested by Context Data (sent in many ADUs)
-             * @remark  [TS 17575-3], Clause 8.1 Rules with respect to support of context data
+             * @desc    TC_CR_FE_BV_51: Charge Report is sent separately upon the same precedenceLevel for overlapping Partitions
+             * @remark  [TS 17575-3], Clause 8.5.2.3 Toll context partition overview
              */
             testcase TC_CR_FE_BV_51() runs on EutComp system TestAdapter {
                 var ChargeReport chargeReport := null; // Used to check usageStatementId (see mw_chargeReport_ContextData10 template limitation)
@@ -2448,7 +2448,7 @@ module ContextData_TCs {
                 // Preamble done
     
                 // Test body start
-                // Step1: Send ContextData20
+                // Step1: Send ContextData20 
                 f_pco_send_Iso17575_3Adu(m_Iso17575_3Adu(m_aduHeader_Table9, m_ContextData20(PX_TOLLCONTEXTPARTITIONID)));
                 // Step2: Event defined for Partition1 and Partition2 occurred
                 f_userActions(cmdTrigger, raiseContext20Partition1AndPartition2Event);
@@ -2492,10 +2492,70 @@ module ContextData_TCs {
             } // End of TC TC_CR_FE_BV_51
 
             /**
-             * @desc    TC_CR_FE_BV_XX_2: Verify the usage of authenticated Charge Report
+             * @desc    TC_CR_FE_BV_52: Charge Report is sent once upon the different precedenceLevel for overlapping Partitions
+             * @remark  [TS 17575-3], Clause 8.5.2.3 Toll context partition overview
+             */
+            testcase TC_CR_FE_BV_52() runs on EutComp system TestAdapter {
+                var ChargeReport chargeReport := null; // Used to check usageStatementId (see mw_chargeReport_ContextData10 template limitation)
+                var integer v_stateCounter := 0;
+                
+                // Preamble
+                f_ContextData_Preambule();
+                // Front End is initialized and can accept Context Data - Assume it's true
+                // OBU belonging to the Front End is located within geographic borders defined in Context Data - Assume it's true
+                // Version of any data element of context data is known for the Front End - Assume it's true
+                // No authentication is required by the Front End
+                // Preamble done
+    
+                // Test body start
+                // Step1: Send ContextData21 
+                f_pco_send_Iso17575_3Adu(m_Iso17575_3Adu(m_aduHeader_Table9, m_ContextData21(PX_TOLLCONTEXTPARTITIONID)));
+                // Step2: Event defined for Partition1 and Partition2 occurred
+                f_userActions(cmdTrigger, raiseContext21Partition1AndPartition2Event);
+                // Step3/4/8: Wait for ChargeReport messages
+                t_ac.start;
+                alt {
+                    [] pco.receive(mw_chargeReport_ContextData21_1) -> value chargeReport { // Step 11
+                        // Stop timer
+                        t_ac.stop;
+                        // Step5 : Verify that tollContext in Context Data message equals to tollContext in ChargeReport1 and ChargeReport2
+                        if (match(chargeReport.usageStatementList, UsageStatement.usageStatementId:m_ContextData20.tollContextPartitionOverview[0].tollContextPartitionId) == false) { 
+                            // Step6: fail
+                            setverdict(fail);
+                         } else {
+                            v_stateCounter := v_stateCounter + 1;
+                            t_ac.start;
+                            repeat;
+                        }
+                    } 
+                    [] pco.receive(mw_chargeReport_ContextData21_2) -> value chargeReport { // Step 11 
+                        // Stop timer
+                        t_ac.stop;
+                        // Step6 : Verify that obeId is present only in one charge report (i.e. ChargeReport1 EXOR ChargeReport2)
+                        if (match(chargeReport.usageStatementList, UsageStatement.usageStatementId:m_ContextData20.tollContextPartitionOverview[1].tollContextPartitionId ) == false) { 
+                            // Step10: fail
+                            setverdict(fail);
+                        } else {
+                           v_stateCounter := v_stateCounter + 1;
+                           t_ac.start;
+                           repeat;
+                        }
+                    }
+                } // End of 'alt' statement
+                if (v_stateCounter == 2) { // Step12
+                    setverdict(pass);
+                }
+                // Test body done
+    
+                // Postamble
+                f_ContextData_Postambule();
+            } // End of TC TC_CR_FE_BV_52
+
+            /**
+             * @desc    TC_CR_FE_BV_58: Verify the usage of authenticated Charge Report
              * @remark  [TS 17575-3], Clause Clause 8.5.5.3.2
              */
-            testcase TC_CR_FE_BV_XX_2() runs on EutComp system TestAdapter {
+            testcase TC_CR_FE_BV_58() runs on EutComp system TestAdapter {
                 
                 // Local variables
                 var boolean v_result;
@@ -2517,7 +2577,7 @@ module ContextData_TCs {
                 // Preamble done
     
                 // Test body start
-                // Step1: Send ContextData1
+                // Step1: Send ContextData1 in secured mode
                 f_pco_send_Iso17575_3Adu(
                     m_Iso17575_3Adu(
                         m_aduHeader, 
@@ -2552,13 +2612,13 @@ module ContextData_TCs {
     
                 // Postamble
                 f_ContextData_Postambule();
-            } // End of TC TC_CR_FE_BV_XX_2
+            } // End of TC TC_CR_FE_BV_58
             
             /**
-             * @desc    TC_CR_FE_BV_XX_1: Verify the usage of non-authenticated Charge Report
+             * @desc    TC_CR_FE_BV_59: Verify the usage of non-authenticated Charge Report
              * @remark  [TS 17575-3], Clause Clause 8.5.5.3.2
              */
-            testcase TC_CR_FE_BV_XX_1() runs on EutComp system TestAdapter {
+            testcase TC_CR_FE_BV_59() runs on EutComp system TestAdapter {
                 
                 // Local variables
                 var boolean v_result;
@@ -2580,7 +2640,7 @@ module ContextData_TCs {
                 // Preamble done
     
                 // Test body start
-                // Step1: Send ContextData1
+                // Step1: Send ContextData1 in non secured mode
                 f_pco_send_Iso17575_3Adu(
                     m_Iso17575_3Adu(
                         m_aduHeader, 
@@ -2609,14 +2669,14 @@ module ContextData_TCs {
                         } else {
                             setverdict(fail);
                         }
-                        }
+                    }
                 } // End of 'alt' statement
                 // Test body done
     
                 // Postamble
                 f_ContextData_Postambule();
-            } // End of TC TC_CR_FE_BV_XX_1
-
+            } // End of TC TC_CR_FE_BV_59
+            
         } // End of group Valid_Behaviour
 
         /**
@@ -2642,37 +2702,37 @@ module ContextData_TCs {
          */
         group Valid_Behaviour {
 
-            /**
-             * @desc    TC_PRO_BE_BV_01: Verify the usage of communication services
-             * @remark  [TS 17575-3], Clause 6.1 Communication services
-             */
-            testcase TC_PRO_BE_BV_01() runs on EutComp system TestAdapter 
-            {
-                // Preamble
-                f_ContextData_Preambule();
-                // Back End is initialized and can send Context Data
-                // Preamble done
-    
-                // Test body start
-                // Step1: Trigger one ISO17575-3ADU message
-                f_userActions(cmdTrigger, raiseADU);
-                // Step1: Wait for ISO17575-3ADU message
-                t_ac.start;
-                alt {
-                    [] pco.receive(mw_Iso17575_3Adu_default) {
-                        // Stop timer
-                        t_ac.stop;
-                        // Step2: Verify that communication services defined in [TS 17575-2] are used to transmit the ADU
-                        f_userActions(cmdCheck, checkCommunicationSystem);
-                        setverdict(pass);
-                    }
-                }
-                // Test body done
-    
-                // Postamble
-                f_ContextData_Postambule();
-            } // End of TC TC_PRO_BE_BV_01
-
+//            /**
+//             * @desc    TC_PRO_BE_BV_01: Verify the usage of communication services
+//             * @remark  [TS 17575-3], Clause 6.1 Communication services
+//             */
+//            testcase TC_PRO_BE_BV_01() runs on EutComp system TestAdapter 
+//            {
+//                // Preamble
+//                f_ContextData_Preambule();
+//                // Back End is initialized and can send Context Data
+//                // Preamble done
+//    
+//                // Test body start
+//                // Step1: Trigger one ISO17575-3ADU message
+//                f_userActions(cmdTrigger, raiseADU);
+//                // Step1: Wait for ISO17575-3ADU message
+//                t_ac.start;
+//                alt {
+//                    [] pco.receive(mw_Iso17575_3Adu_default) {
+//                        // Stop timer
+//                        t_ac.stop;
+//                        // Step2: Verify that communication services defined in [TS 17575-2] are used to transmit the ADU
+//                        f_userActions(cmdCheck, checkCommunicationSystem);
+//                        setverdict(pass);
+//                    }
+//                }
+//                // Test body done
+//    
+//                // Postamble
+//                f_ContextData_Postambule();
+//            } // End of TC TC_PRO_BE_BV_01
+//
             /**
              * @desc    TC_PRO_BE_BV_02: Verify version and validity handling
              * @remark  [TS 17575-3], Clause 6.2 Version and validity handling

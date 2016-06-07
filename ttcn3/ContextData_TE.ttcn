@@ -1,5 +1,5 @@
 /**
- * @author  FSCOM 
+ * @author  PT28/PT0141 
  * @desc    This module provides control par for automatic test execution
  * @see     Electronic fee collection (EFC) — Conformity evaluation of Front End and Back End equipment to ISO 17575-3 — Part 1: Test suite structure and test purpose
  * @see     Electronic fee collection (EFC) — Evaluation of equipment for conformity to CEN ISO/TS 17575-3 — Part 1: Test suite structure and test purpose
@@ -40,7 +40,7 @@ module ContextData_TE {
 //             */
 //            execute(TC_CH_FE_BV_06(), PX_GUARD);
             /**
-             * @desc    TC_CH_FE_BV_07: Verify that DUT updates its Context Data
+             * @desc    TC_CH_FE_BV_01: Verify that DUT updates its Context Data
              * @remark  [TS 17575-3], Clause 8.1 Rules with respect to support of context data
              */
             execute(TC_CH_FE_BV_01(), PX_GUARD);
@@ -263,11 +263,11 @@ module ContextData_TE {
          * @see     Electronic fee collection (EFC) — Conformity evaluation of Front End and Back End equipment to ISO 17575-3 — Part 1: Test suite structure and test purpose - Clause B.2 Procedural test purposes
          */
          if (ContextData_PICS_BE.PIC_iso175752CommunicationServicesSupported == true) {
-            /**
-             * @desc    TC_PRO_BE_BV_01: Verify the usage of communication services
-             * @remark  [TS 17575-3], Clause 6.1 Communication services
-             */
-            execute(TC_PRO_BE_BV_01(), PX_GUARD);
+//            /**
+//             * @desc    TC_PRO_BE_BV_01: Verify the usage of communication services
+//             * @remark  [TS 17575-3], Clause 6.1 Communication services
+//             */
+//            execute(TC_PRO_BE_BV_01(), PX_GUARD);
             /**
              * @desc    TC_PRO_BE_BV_02: Verify version and validity handling
              * @remark  [TS 17575-3], Clause 6.2 Version and validity handling
