@@ -2552,6 +2552,66 @@ module ContextData_TCs {
             } // End of TC TC_CR_FE_BV_52
 
             /**
+             * @desc    TC_CR_FE_BV_53: Charge Report is sent once upon the different precedenceLevel for overlapping Partitions
+             * @remark  [TS 17575-3], Clause 8.5.2.3 Toll context partition overview
+             */
+            testcase TC_CR_FE_BV_53() runs on EutComp system TestAdapter {
+                var ChargeReport chargeReport := null; // Used to check usageStatementId (see mw_chargeReport_ContextData10 template limitation)
+                var integer v_stateCounter := 0;
+                
+                // Preamble
+                f_ContextData_Preambule();
+                // Front End is initialized and can accept Context Data - Assume it's true
+                // OBU belonging to the Front End is located within geographic borders defined in Context Data - Assume it's true
+                // Version of any data element of context data is known for the Front End - Assume it's true
+                // No authentication is required by the Front End
+                // Preamble done
+    
+                // Test body start
+                // Step1: Send ContextData21 
+                f_pco_send_Iso17575_3Adu(m_Iso17575_3Adu(m_aduHeader_Table9, m_ContextData21(PX_TOLLCONTEXTPARTITIONID)));
+                // Step2: Event defined for Partition1 and Partition2 occurred
+                f_userActions(cmdTrigger, raiseContext21Partition1AndPartition2Event);
+                // Step3/4/8: Wait for ChargeReport messages
+                t_ac.start;
+                alt {
+                    [] pco.receive(mw_chargeReport_ContextData21_1) -> value chargeReport { // Step 11
+                        // Stop timer
+                        t_ac.stop;
+                        // Step5 : Verify that tollContext in Context Data message equals to tollContext in ChargeReport1 and ChargeReport2
+                        if (match(chargeReport.usageStatementList, UsageStatement.usageStatementId:m_ContextData20.tollContextPartitionOverview[0].tollContextPartitionId) == false) { 
+                            // Step6: fail
+                            setverdict(fail);
+                         } else {
+                            v_stateCounter := v_stateCounter + 1;
+                            t_ac.start;
+                            repeat;
+                        }
+                    } 
+                    [] pco.receive(mw_chargeReport_ContextData21_2) -> value chargeReport { // Step 11 
+                        // Stop timer
+                        t_ac.stop;
+                        // Step6 : Verify that obeId is present only in one charge report (i.e. ChargeReport1 EXOR ChargeReport2)
+                        if (match(chargeReport.usageStatementList, UsageStatement.usageStatementId:m_ContextData20.tollContextPartitionOverview[1].tollContextPartitionId ) == false) { 
+                            // Step10: fail
+                            setverdict(fail);
+                        } else {
+                           v_stateCounter := v_stateCounter + 1;
+                           t_ac.start;
+                           repeat;
+                        }
+                    }
+                } // End of 'alt' statement
+                if (v_stateCounter == 2) { // Step12
+                    setverdict(pass);
+                }
+                // Test body done
+    
+                // Postamble
+                f_ContextData_Postambule();
+            } // End of TC TC_CR_FE_BV_53
+
+            /**
              * @desc    TC_CR_FE_BV_58: Verify the usage of authenticated Charge Report
              * @remark  [TS 17575-3], Clause Clause 8.5.5.3.2
              */
