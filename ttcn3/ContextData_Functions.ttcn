@@ -2097,10 +2097,24 @@ module ContextData_Functions {
                 "", ""
             };
             /**
+             * @desc    Front End enters a toll context partition area
+             */
+            const ParameterList raiseEntersTollContextPartitionAreaEvent := {
+                "raiseEntersTollContextPartitionAreaEvent", "Context1",
+                "", ""
+            };
+            /**
              * @desc    Event defined in '41'D – ChargeReportingEvents occurred
              */
             const ParameterList raiseChargeReportingEvents := {
                 "raiseChargeReportingEvents", "",
+                "", ""
+            };
+            /**
+             * @desc    Event defined in ContextData22 occurred
+             */
+            const ParameterList raiseContext22Event := {
+                "raiseEvent", "Context22",
                 "", ""
             };
             /**

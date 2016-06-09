@@ -44,7 +44,7 @@ module ContextData_TCs {
      * - Iso17575-3Adu as claimed in [TS 17575-3] clause B.5.4.1/1,
      * - AttributeList as claimed in [TS 17575-3] clause B.5.4.1/3, 
      * - EFC Attributes as claimed in [TS 17575-3] clause B.5.4.3/1-9
-     * @remark  5 TCs
+     * @remark  1 TCs
      */
     group Context_Handling {
         
@@ -344,7 +344,7 @@ module ContextData_TCs {
          * by means of the syntactically and contextual correct ADUs:
          * - single ADU consisting of all necessary attributes;
          * - several consecutive ADUs consisting of all necessary attributes to activate the context
-         * @remark  39 TCs
+         * @remark  59 TCs
          */
         group Valid_Behaviour {
             
@@ -384,7 +384,7 @@ module ContextData_TCs {
                         t_ac.stop;
                         // Step4: Set verdict pass
                         setverdict(pass);
-                    } // mw_chargeReport_default
+                    } // mw_chargeReport_obeId_present
                 } // End of 'alt' statement
                 // Test body done
                 
@@ -428,7 +428,7 @@ module ContextData_TCs {
                         t_ac.stop;
                         // Step4: Set verdict pass
                         setverdict(pass);
-                    } // mw_chargeReport_default
+                    } // mw_chargeReport_obeId_not_present
                 } // End of 'alt' statement
                 // Test body done
                 
@@ -472,7 +472,7 @@ module ContextData_TCs {
                         t_ac.stop;
                         // Step4: Set verdict pass
                         setverdict(pass);
-                    } // mw_chargeReport_default
+                    } // mw_chargeReport_vehicleLPNr_present
                 } // End of 'alt' statement
                 // Test body done
                 
@@ -516,7 +516,7 @@ module ContextData_TCs {
                         t_ac.stop;
                         // Step4: Set verdict pass
                         setverdict(pass);
-                    } // mw_chargeReport_default
+                    } // mw_chargeReport_vehicleLPNr_present
                 } // End of 'alt' statement
                 // Test body done
                 
@@ -560,7 +560,7 @@ module ContextData_TCs {
                         t_ac.stop;
                         // Step4: Set verdict pass
                         setverdict(pass);
-                    } // mw_chargeReport_default
+                    } // mw_chargeReport_paymentMeans_present
                 } // End of 'alt' statement
                 // Test body done
                 
@@ -604,7 +604,7 @@ module ContextData_TCs {
                         t_ac.stop;
                         // Step4: Set verdict pass
                         setverdict(pass);
-                    } // mw_chargeReport_default
+                    } // mw_chargeReport_paymentMeans_not_present
                 } // End of 'alt' statement
                 // Test body done
                 
@@ -648,7 +648,7 @@ module ContextData_TCs {
                         t_ac.stop;
                         // Step4: Set verdict pass
                         setverdict(pass);
-                    } // mw_chargeReport_default
+                    } // mw_chargeReport_tollContext_present
                 } // End of 'alt' statement
                 // Test body done
                 
@@ -693,7 +693,7 @@ module ContextData_TCs {
                         t_ac.stop;
                         // Step4: Set verdict pass
                         setverdict(pass);
-                    } // mw_chargeReport_default
+                    } // mw_chargeReport_tollContext_not_present
                 } // End of 'alt' statement
                 // Test body done
                 
@@ -737,7 +737,7 @@ module ContextData_TCs {
                         t_ac.stop;
                         // Step4: Set verdict pass
                         setverdict(pass);
-                    } // mw_chargeReport_default
+                    } // mw_chargeReport_chargeReportFinalRecipient_present
                 } // End of 'alt' statement
                 // Test body done
                 
@@ -781,7 +781,7 @@ module ContextData_TCs {
                         t_ac.stop;
                         // Step4: Set verdict pass
                         setverdict(pass);
-                    } // mw_chargeReport_default
+                    } // mw_chargeReport_chargeReportFinalRecipient_not_present
                 } // End of 'alt' statement
                 // Test body done
                 
@@ -825,7 +825,7 @@ module ContextData_TCs {
                         t_ac.stop;
                         // Step4: Set verdict pass
                         setverdict(pass);
-                    } // mw_chargeReport_default
+                    } // mw_chargeReport_timeOfReport_present
                 } // End of 'alt' statement
                 // Test body done
                 
@@ -869,7 +869,7 @@ module ContextData_TCs {
                         t_ac.stop;
                         // Step4: Set verdict pass
                         setverdict(pass);
-                    } // mw_chargeReport_default
+                    } // mw_chargeReport_timeOfReport_not_present
                 } // End of 'alt' statement
                 // Test body done
                 
@@ -913,7 +913,7 @@ module ContextData_TCs {
                         t_ac.stop;
                         // Step4: Set verdict pass
                         setverdict(pass);
-                    } // mw_chargeReport_default
+                    } // mw_chargeReport_reportPeriod_present
                 } // End of 'alt' statement
                 // Test body done
                 
@@ -957,7 +957,7 @@ module ContextData_TCs {
                         t_ac.stop;
                         // Step4: Set verdict pass
                         setverdict(pass);
-                    } // mw_chargeReport_default
+                    } // mw_chargeReport_reportPeriod_not_present
                 } // End of 'alt' statement
                 // Test body done
                 
@@ -1002,7 +1002,7 @@ module ContextData_TCs {
                         t_ac.stop;
                         // Step4: Set verdict pass
                         setverdict(pass);
-                    } // mw_chargeReport_default
+                    } // mw_chargeReport_versionInfo_present
                 } // End of 'alt' statement
                 // Test body done
                 
@@ -1046,7 +1046,7 @@ module ContextData_TCs {
                         t_ac.stop;
                         // Step4: Set verdict pass
                         setverdict(pass);
-                    } // mw_chargeReport_default
+                    } // mw_chargeReport_versionInfo_not_present
                 } // End of 'alt' statement
                 // Test body done
                 
@@ -1090,7 +1090,7 @@ module ContextData_TCs {
                         t_ac.stop;
                         // Step4: Set verdict pass
                         setverdict(pass);
-                    } // mw_chargeReport_default
+                    } // mw_chargeReport_sumVatForThisSession_present
                 } // End of 'alt' statement
                 // Test body done
                 
@@ -1134,7 +1134,7 @@ module ContextData_TCs {
                         t_ac.stop;
                         // Step4: Set verdict pass
                         setverdict(pass);
-                    } // mw_chargeReport_default
+                    } // mw_chargeReport_sumVatForThisSession_not_present
                 } // End of 'alt' statement
                 // Test body done
                 
@@ -1178,7 +1178,7 @@ module ContextData_TCs {
                         t_ac.stop;
                         // Step4: Set verdict pass
                         setverdict(pass);
-                    } // mw_chargeReport_default
+                    } // mw_chargeReport_accountStatus_present
                 } // End of 'alt' statement
                 // Test body done
     
@@ -1222,7 +1222,7 @@ module ContextData_TCs {
                         t_ac.stop;
                         // Step4: Set verdict pass
                         setverdict(pass);
-                    } // mw_chargeReport_default
+                    } // mw_chargeReport_accountStatus_not_present
                 } // End of 'alt' statement
                 // Test body done
     
@@ -1266,7 +1266,7 @@ module ContextData_TCs {
                         t_ac.stop;
                         // Step4: Set verdict pass
                         setverdict(pass);
-                    } // mw_chargeReport_default
+                    } // mw_chargeReport_chargeReportCounter_present
                 } // End of 'alt' statement
                 // Test body done
     
@@ -1310,7 +1310,7 @@ module ContextData_TCs {
                         t_ac.stop;
                         // Step4: Set verdict pass
                         setverdict(pass);
-                    } // mw_chargeReport_default
+                    } // mw_chargeReport_chargeReportCounter_not_present
                 } // End of 'alt' statement
                 // Test body done
     
@@ -1354,7 +1354,7 @@ module ContextData_TCs {
                         t_ac.stop;
                         // Step4: Set verdict pass
                         setverdict(pass);
-                    } // mw_chargeReport_default
+                    } // mw_chargeReport_mileage_present
                 } // End of 'alt' statement
                 // Test body done
     
@@ -1398,7 +1398,7 @@ module ContextData_TCs {
                         t_ac.stop;
                         // Step4: Set verdict pass
                         setverdict(pass);
-                    } // mw_chargeReport_default
+                    } // mw_chargeReport_mileage_not_present
                 } // End of 'alt' statement
                 // Test body done
     
@@ -1442,7 +1442,7 @@ module ContextData_TCs {
                         t_ac.stop;
                         // Step4: Set verdict pass
                         setverdict(pass);
-                    } // mw_chargeReport_default
+                    } // mw_chargeReport_listOfCCCAttributes_present
                 } // End of 'alt' statement
                 // Test body done
     
@@ -1486,7 +1486,7 @@ module ContextData_TCs {
                         t_ac.stop;
                         // Step4: Set verdict pass
                         setverdict(pass);
-                    } // mw_chargeReport_default
+                    } // mw_chargeReport_listOfCCCAttributes_not_present
                 } // End of 'alt' statement
                 // Test body done
     
@@ -1530,7 +1530,7 @@ module ContextData_TCs {
                         t_ac.stop;
                         // Step4: Set verdict pass
                         setverdict(pass);
-                    } // mw_chargeReport_default
+                    } // mw_chargeReport_UsageStatement_AuthenticatedUsageStatement_present
                 } // End of 'alt' statement
                 // Test body done
     
@@ -1574,7 +1574,7 @@ module ContextData_TCs {
                         t_ac.stop;
                         // Step4: Set verdict pass
                         setverdict(pass);
-                    } // mw_chargeReport_default
+                    } // mw_chargeReport_UsageStatement_AuthenticatedUsageStatement_not_present
                 } // End of 'alt' statement
                 // Test body done
     
@@ -1618,7 +1618,7 @@ module ContextData_TCs {
                         t_ac.stop;
                         // Step4: Set verdict pass
                         setverdict(pass);
-                    } // mw_chargeReport_default
+                    } // mw_chargeReport_useOfUsageStatementId_present
                 } // End of 'alt' statement
                 // Test body done
     
@@ -1662,7 +1662,7 @@ module ContextData_TCs {
                         t_ac.stop;
                         // Step4: Set verdict pass
                         setverdict(pass);
-                    } // mw_chargeReport_default
+                    } // mw_chargeReport_useOfUsageStatementId_not_present
                 } // End of 'alt' statement
                 // Test body done
     
@@ -1707,7 +1707,7 @@ module ContextData_TCs {
                         t_ac.stop;
                         // Step4: Set verdict pass
                         setverdict(pass);
-                    } // mw_chargeReport_default
+                    } // mw_chargeReport_usageStatementTollContext_present
                 } // End of 'alt' statement
                 // Test body done
     
@@ -1751,7 +1751,7 @@ module ContextData_TCs {
                         t_ac.stop;
                         // Step4: Set verdict pass
                         setverdict(pass);
-                    } // mw_chargeReport_default
+                    } // mw_chargeReport_usageStatementTollContext_not_present
                 } // End of 'alt' statement
                 // Test body done
     
@@ -1795,7 +1795,7 @@ module ContextData_TCs {
                         t_ac.stop;
                         // Step4: Set verdict pass
                         setverdict(pass);
-                    } // mw_chargeReport_default
+                    } // mw_chargeReport_chargeReportFinalRecipient_present
                 } // End of 'alt' statement
                 // Test body done
     
@@ -1839,7 +1839,7 @@ module ContextData_TCs {
                         t_ac.stop;
                         // Step4: Set verdict pass
                         setverdict(pass);
-                    } // mw_chargeReport_default
+                    } // mw_chargeReport_chargeReportFinalRecipient_not_present
                 } // End of 'alt' statement
                 // Test body done
     
@@ -1883,7 +1883,7 @@ module ContextData_TCs {
                         t_ac.stop;
                         // Step4: Set verdict pass
                         setverdict(pass);
-                    } // mw_chargeReport_default
+                    } // mw_chargeReport_aggregatedFee_present
                 } // End of 'alt' statement
                 // Test body done
     
@@ -1927,7 +1927,7 @@ module ContextData_TCs {
                         t_ac.stop;
                         // Step4: Set verdict pass
                         setverdict(pass);
-                    } // mw_chargeReport_default
+                    } // mw_chargeReport_aggregatedFee_not_present
                 } // End of 'alt' statement
                 // Test body done
     
@@ -1971,7 +1971,7 @@ module ContextData_TCs {
                         t_ac.stop;
                         // Step4: Set verdict pass
                         setverdict(pass);
-                    } // mw_chargeReport_default
+                    } // mw_chargeReport_sumVat_present
                 } // End of 'alt' statement
                 // Test body done
     
@@ -2015,7 +2015,7 @@ module ContextData_TCs {
                         t_ac.stop;
                         // Step4: Set verdict pass
                         setverdict(pass);
-                    } // mw_chargeReport_default
+                    } // mw_chargeReport_sumVat_not_present
                 } // End of 'alt' statement
                 // Test body done
     
@@ -2049,7 +2049,7 @@ module ContextData_TCs {
                         t_ac.stop;
                         // Step4: Set verdict pass
                         setverdict(pass);
-                    } // mw_chargeReport_default
+                    } // mw_chargeReport_aggregatedSingleTariffClassSession_present
                 } // End of 'alt' statement
                 // Test body done
     
@@ -2083,7 +2083,7 @@ module ContextData_TCs {
                         t_ac.stop;
                         // Step4: Set verdict pass
                         setverdict(pass);
-                    } // mw_chargeReport_default
+                    } // mw_chargeReport_aggregatedSingleTariffClassSession_not_present
                 } // End of 'alt' statement
                 // Test body done
     
@@ -2117,7 +2117,7 @@ module ContextData_TCs {
                         t_ac.stop;
                         // Step4: Set verdict pass
                         setverdict(pass);
-                    } // mw_chargeReport_default
+                    } // mw_chargeReport_listOfChargeObjects_present
                 } // End of 'alt' statement
                 // Test body done
     
@@ -2151,7 +2151,7 @@ module ContextData_TCs {
                         t_ac.stop;
                         // Step4: Set verdict pass
                         setverdict(pass);
-                    } // mw_chargeReport_default
+                    } // mw_chargeReport_listOfChargeObjects_not_present
                 } // End of 'alt' statement
                 // Test body done
     
@@ -2185,7 +2185,7 @@ module ContextData_TCs {
                         t_ac.stop;
                         // Step4: Set verdict pass
                         setverdict(pass);
-                    } // mw_chargeReport_default
+                    } // mw_chargeReport_listOfDSRCUsageData_present
                 } // End of 'alt' statement
                 // Test body done
     
@@ -2219,7 +2219,7 @@ module ContextData_TCs {
                         t_ac.stop;
                         // Step4: Set verdict pass
                         setverdict(pass);
-                    } // mw_chargeReport_default
+                    } // mw_chargeReport_listOfDSRCUsageData_not_present
                 } // End of 'alt' statement
                 // Test body done
     
@@ -2253,7 +2253,7 @@ module ContextData_TCs {
                         t_ac.stop;
                         // Step4: Set verdict pass
                         setverdict(pass);
-                    } // mw_chargeReport_default
+                    } // mw_chargeReport_listOfRawUsageData_present
                 } // End of 'alt' statement
                 // Test body done
     
@@ -2287,7 +2287,7 @@ module ContextData_TCs {
                         t_ac.stop;
                         // Step4: Set verdict pass
                         setverdict(pass);
-                    } // mw_chargeReport_default
+                    } // mw_chargeReport_listOfRawUsageData_not_present
                 } // End of 'alt' statement
                 // Test body done
     
@@ -2321,7 +2321,7 @@ module ContextData_TCs {
                         t_ac.stop;
                         // Step4: Set verdict pass
                         setverdict(pass);
-                    } // mw_chargeReport_default
+                    } // mw_chargeReport_noUsage_present
                 } // End of 'alt' statement
                 // Test body done
     
@@ -2355,7 +2355,7 @@ module ContextData_TCs {
                         t_ac.stop;
                         // Step4: Set verdict pass
                         setverdict(pass);
-                    } // mw_chargeReport_default
+                    } // mw_chargeReport_noUsage_not_present
                 } // End of 'alt' statement
                 // Test body done
     
@@ -2389,7 +2389,7 @@ module ContextData_TCs {
                         t_ac.stop;
                         // Step4: Set verdict pass
                         setverdict(pass);
-                    } // mw_chargeReport_default
+                    } // mw_chargeReport_additionalUsageInformation_present
                 } // End of 'alt' statement
                 // Test body done
     
@@ -2423,7 +2423,7 @@ module ContextData_TCs {
                         t_ac.stop;
                         // Step4: Set verdict pass
                         setverdict(pass);
-                    } // mw_chargeReport_default
+                    } // mw_chargeReport_additionalUsageInformation_not_present
                 } // End of 'alt' statement
                 // Test body done
     
@@ -2436,7 +2436,7 @@ module ContextData_TCs {
              * @remark  [TS 17575-3], Clause 8.5.2.3 Toll context partition overview
              */
             testcase TC_CR_FE_BV_51() runs on EutComp system TestAdapter {
-                var ChargeReport chargeReport := null; // Used to check usageStatementId (see mw_chargeReport_ContextData10 template limitation)
+                var ChargeReport chargeReport := null; // Used to check specific values
                 var integer v_stateCounter := 0;
                 
                 // Preamble
@@ -2496,7 +2496,7 @@ module ContextData_TCs {
              * @remark  [TS 17575-3], Clause 8.5.2.3 Toll context partition overview
              */
             testcase TC_CR_FE_BV_52() runs on EutComp system TestAdapter {
-                var ChargeReport chargeReport := null; // Used to check usageStatementId (see mw_chargeReport_ContextData10 template limitation)
+                var ChargeReport chargeReport := null; // Used to check specific values
                 var integer v_stateCounter := 0;
                 
                 // Preamble
@@ -2515,12 +2515,12 @@ module ContextData_TCs {
                 // Step3/4/8: Wait for ChargeReport messages
                 t_ac.start;
                 alt {
-                    [] pco.receive(mw_chargeReport_ContextData21_1) -> value chargeReport { // Step 11
+                    [] pco.receive(mw_chargeReport_ContextData21_1) -> value chargeReport { 
                         // Stop timer
                         t_ac.stop;
                         // Step5 : Verify that tollContext in Context Data message equals to tollContext in ChargeReport1 and ChargeReport2
                         if (match(chargeReport.usageStatementList, UsageStatement.usageStatementId:m_ContextData20.tollContextPartitionOverview[0].tollContextPartitionId) == false) { 
-                            // Step6: fail
+                            // Step7: fail
                             setverdict(fail);
                          } else {
                             v_stateCounter := v_stateCounter + 1;
@@ -2528,12 +2528,12 @@ module ContextData_TCs {
                             repeat;
                         }
                     } 
-                    [] pco.receive(mw_chargeReport_ContextData21_2) -> value chargeReport { // Step 11 
+                    [] pco.receive(mw_chargeReport_ContextData21_2) -> value chargeReport { // Step 6: Verify that obeId is present in ChargeReport1 AND vehicleLPNr is absent
                         // Stop timer
                         t_ac.stop;
-                        // Step6 : Verify that obeId is present only in one charge report (i.e. ChargeReport1 EXOR ChargeReport2)
+                        // Step8 : Verify that obeId is present only in one charge report (i.e. ChargeReport1 EXOR ChargeReport2)
                         if (match(chargeReport.usageStatementList, UsageStatement.usageStatementId:m_ContextData20.tollContextPartitionOverview[1].tollContextPartitionId ) == false) { 
-                            // Step10: fail
+                            // Step9: fail
                             setverdict(fail);
                         } else {
                            v_stateCounter := v_stateCounter + 1;
@@ -2552,12 +2552,10 @@ module ContextData_TCs {
             } // End of TC TC_CR_FE_BV_52
 
             /**
-             * @desc    TC_CR_FE_BV_53: Charge Report is sent once upon the different precedenceLevel for overlapping Partitions
+             * @desc    TC_CR_FE_BV_53: Front End sends a charge report entering the toll context partition
              * @remark  [TS 17575-3], Clause 8.5.2.3 Toll context partition overview
              */
             testcase TC_CR_FE_BV_53() runs on EutComp system TestAdapter {
-                var ChargeReport chargeReport := null; // Used to check usageStatementId (see mw_chargeReport_ContextData10 template limitation)
-                var integer v_stateCounter := 0;
                 
                 // Preamble
                 f_ContextData_Preambule();
@@ -2568,49 +2566,78 @@ module ContextData_TCs {
                 // Preamble done
     
                 // Test body start
-                // Step1: Send ContextData21 
-                f_pco_send_Iso17575_3Adu(m_Iso17575_3Adu(m_aduHeader_Table9, m_ContextData21(PX_TOLLCONTEXTPARTITIONID)));
-                // Step2: Event defined for Partition1 and Partition2 occurred
-                f_userActions(cmdTrigger, raiseContext21Partition1AndPartition2Event);
-                // Step3/4/8: Wait for ChargeReport messages
+                // Step1: Front End enters a toll context partition area 
+                f_userActions(cmdTrigger, raiseEntersTollContextPartitionAreaEvent);
+                // Step2: Wait for ChargeReport messages
                 t_ac.start;
                 alt {
-                    [] pco.receive(mw_chargeReport_ContextData21_1) -> value chargeReport { // Step 11
+                    [] pco.receive(
+                        mw_chargeReport_tollContext(
+                            valueof(
+                                m_ContextData1(
+                                    valueof(m_aduHeader.contextId)).tollContextOverview.tollContext
+                    ))) { // Step 3: Verify that ChargeReport  for toll context is received
                         // Stop timer
                         t_ac.stop;
-                        // Step5 : Verify that tollContext in Context Data message equals to tollContext in ChargeReport1 and ChargeReport2
-                        if (match(chargeReport.usageStatementList, UsageStatement.usageStatementId:m_ContextData20.tollContextPartitionOverview[0].tollContextPartitionId) == false) { 
-                            // Step6: fail
-                            setverdict(fail);
-                         } else {
-                            v_stateCounter := v_stateCounter + 1;
-                            t_ac.start;
-                            repeat;
-                        }
+                        // Step4
+                        setverdict(pass);
                     } 
-                    [] pco.receive(mw_chargeReport_ContextData21_2) -> value chargeReport { // Step 11 
-                        // Stop timer
-                        t_ac.stop;
-                        // Step6 : Verify that obeId is present only in one charge report (i.e. ChargeReport1 EXOR ChargeReport2)
-                        if (match(chargeReport.usageStatementList, UsageStatement.usageStatementId:m_ContextData20.tollContextPartitionOverview[1].tollContextPartitionId ) == false) { 
-                            // Step10: fail
-                            setverdict(fail);
-                        } else {
-                           v_stateCounter := v_stateCounter + 1;
-                           t_ac.start;
-                           repeat;
-                        }
-                    }
                 } // End of 'alt' statement
-                if (v_stateCounter == 2) { // Step12
-                    setverdict(pass);
-                }
                 // Test body done
     
                 // Postamble
                 f_ContextData_Postambule();
             } // End of TC TC_CR_FE_BV_53
-
+            
+            /**
+             * @desc    TC_CR_FE_BV_54: Verify fee calculation algorithm - no rounding rules
+             * @remark  [TS 17575-3], Clause 8.5.3.7 The fee calculation algorithm
+             */
+            testcase TC_CR_FE_BV_54() runs on EutComp system TestAdapter {
+                var ChargeReport v_chargeReport := null; // Used to check fee calculation algorithm
+                var template (value) Iso17575_3AduBody v_context;
+                var boolean v_result;
+                
+                // Preamble
+                f_ContextData_Preambule();
+                // Front End is initialized and can accept Context Data - Assume it's true
+                // OBU belonging to the Front End is located within geographic borders defined in Context Data - Assume it's true
+                // Version of any data element of context data is known for the Front End - Assume it's true
+                // No authentication is required by the Front End
+                // Preamble done
+    
+                // Test body start
+                // Step1: Send ContextData22 
+                v_context := m_ContextData22(PX_TOLLCONTEXTPARTITIONID);
+                f_pco_send_Iso17575_3Adu(m_Iso17575_3Adu(m_aduHeader_Table9, v_context));
+                // Step2: Event defined for Partition1 and Partition2 occurred
+                f_userActions(cmdTrigger, raiseContext22Event);
+                // Step 3: Wait for ChargeReport messages
+                t_ac.start;
+                alt {
+                    [] a_pco_recv_Iso17575_3Adu(
+                        mw_chargeReport_tollContext(
+                            valueof(
+                                v_context(
+                                    valueof(m_aduHeader.contextId)).tollContextOverview.tollContext
+                            )),
+                            v_chargeReport,
+                            v_result
+                    ) { // Step 4: Verify that tollContext equals to TC1 AND Verify that usageStatementList[i].tollContext equals to TC1
+                        // Stop timer
+                        t_ac.stop;
+                        // Step6 : TODO
+                        
+                        
+                        setverdict(pass);
+                    } 
+                } // End of 'alt' statement
+                // Test body done
+    
+                // Postamble
+                f_ContextData_Postambule();
+            } // End of TC TC_CR_FE_BV_54
+            
             /**
              * @desc    TC_CR_FE_BV_58: Verify the usage of authenticated Charge Report
              * @remark  [TS 17575-3], Clause Clause 8.5.5.3.2

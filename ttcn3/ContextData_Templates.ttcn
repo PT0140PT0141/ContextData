@@ -87,7 +87,7 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
              */
             template (value) TollContextOverview m_tollContextOverview_ContextData2(in ContextId p_contextId, in Provider p_tollCharger)
             modifies m_tollContextOverview_default := {
-                tollCharger :=p_tollCharger
+                tollContext := p_tollCharger
             } // End of template m_tollContextOverview_ContextData2
         } // End of group ContextData2
     
@@ -314,7 +314,7 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
              */
             template (value) TollContextOverview m_tollContextOverview_ContextData12(in ContextId p_contextId)
             modifies m_tollContextOverview_default := {
-                tollCharger := {
+                tollContext := {
                     efcOperator := m_informationSender,
                     recipient := m_recipient
                 }
@@ -401,7 +401,7 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
              */
             template (value) ChargeReportContent m_chargeReportContent_ContextData13
             modifies m_chargeReportContent_default := {
-                tollCharger := false
+                tollContext := false
             } // End of template m_chargeReportContent_default
             /**
              * @desc    UsageStatementContent template for Context Data #13
@@ -415,21 +415,20 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
             /**
              * @desc ChargeReport template compliant with Context Data #13
              */
-            template ChargeReport mw_chargeReport_ContextData13 := {
+            template ChargeReport<Container> mw_chargeReport_ContextData13<Container>
+            modifies mw_chargeReport_default<Container> := {
                 obeId := ?,
-                vehicleLPNr := omit,
-                paymentMeans := omit,
-                serviceProviderContract := *,
-                tollCharger := omit,
-                timeOfReport := *,
+                vehicleLPNr := complement(?),
+                paymentMeans := complement(?),
+                tollContext := complement(?),
                 reportPeriod := ?,
-                versionInfo := omit,
+                versionInfo := complement(?),
                 usageStatementList := { },
-                vatForThisSession := omit,
-                accountStatus := omit,
-                transactionCounter := omit,
-                mileage := omit,
-                listOfCCCAttributes := omit
+                vatForThisSession := complement(?),
+                accountStatus := complement(?),
+                transactionCounter := complement(?),
+                mileage := complement(?),
+                listOfCCCAttributes := complement(?)
             } // End of template mw_chargeReport_ContextData13
             
         } // End of group ContextData13
@@ -456,8 +455,8 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
             /**
              * @desc ChargeReport template compliant with Context Data #13
              */
-            template ChargeReport mw_chargeReport_ContextData20_1
-            modifies mw_chargeReport_any := {
+            template ChargeReport<Container> mw_chargeReport_ContextData20_1<Container>
+            modifies mw_chargeReport_default<Container> := {
                 obeId := ?,
                 usageStatementList := superset(
                     {
@@ -468,8 +467,8 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
             /**
              * @desc ChargeReport template compliant with Context Data #13
              */
-            template ChargeReport mw_chargeReport_ContextData20_2
-            modifies mw_chargeReport_ContextData20_1 := {
+            template ChargeReport<Container> mw_chargeReport_ContextData20_2<Container>
+            modifies mw_chargeReport_ContextData20_1<Container> := {
                 obeId := *,
                 vehicleLPNr := ?
             } // End of template mw_chargeReport_ContextData20_2
@@ -497,8 +496,8 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
             /**
              * @desc ChargeReport template compliant with Context Data #13
              */
-            template ChargeReport mw_chargeReport_ContextData21_1
-            modifies mw_chargeReport_any := {
+            template ChargeReport<Container> mw_chargeReport_ContextData21_1<Container>
+            modifies mw_chargeReport_default<Container> := {
                 obeId := ?,
                 usageStatementList := superset(
                     {
@@ -507,19 +506,47 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
                 )
             } // End of template mw_chargeReport_ContextData21_1
             /**
-             * @desc ChargeReport template compliant with Context Data #13
+             * @desc ChargeReport template compliant with Context Data #21
              */
-            template ChargeReport mw_chargeReport_ContextData21_2
-            modifies mw_chargeReport_any := {
-                obeId := omit,
-                vehicleLPNr := ?,
-                usageStatementList := superset(
-                    {
-                        usageStatement := ?
-                    }
-                )
+            template ChargeReport<Container> mw_chargeReport_ContextData21_2<Container>
+            modifies mw_chargeReport_ContextData21_1<Container> := {
+                obeId := *,
+                vehicleLPNr := ?
             } // End of template mw_chargeReport_ContextData21_2
         } // End of group ContextData21
+        
+        /**
+         * @desc    Group of Context Date describes in Annex C.2: Data structure - Table C.8
+         * @see     Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 1: Charging for data element descriptions
+         */
+        group ContextData22 {
+            /**
+             * @desc    Main template for ContextData22
+             * @param   p_tollContextPartitionId The identifier of the respective toll context partition for which the overview information is provided
+             * @see     ISO 17575-3:2216 Clause 7.3 Application data unit structure (data type Iso17575-3Adu)
+             * @see     ISO 17575-3:2216 Figure 4 — Structure of an ISO 17575-3 ADU
+             */
+            template (value) Iso17575_3AduBody m_ContextData22(in TollContextPartitionId p_tollContextPartitionId)
+            modifies m_ContextData_default := {
+                tollContextPartitionOverview := {
+                    m_tollContextPartitionOverview_default(p_tollContextPartitionId)
+                }
+            } // End of template m_ContextData22
+            
+            /**
+             * @desc ChargeReport template compliant with Context Data #22
+             */
+            template ChargeReport<Container> mw_chargeReport_ContextData22<Container>(
+                                                                                      in template (present) Provider p_tollContext := ?
+            ) modifies mw_chargeReport_default<Container> := {
+                obeId := ?,
+                usageStatementList := superset(
+                    {
+                        usageStatement := mw_usageStatement_tollContext(p_tollContext)
+                    }
+                )
+            } // End of template mw_chargeReport_ContextData22
+        } // End of group ContextData22
         
         /**
          * @desc    This Context Data templates are used by TC_CR_FE_BE_xx TCs
@@ -566,16 +593,16 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
              * @desc    Template used to verify the presence of obeId data element
              * @see     ISO 17575-1:2016 Clause 7.5.1 obeId
              */
-            template (present) ChargeReport mw_chargeReport_obeId_present
-            modifies mw_chargeReport_any := {
+            template (present) ChargeReport<Container> mw_chargeReport_obeId_present<Container>
+            modifies mw_chargeReport_any<Container> := {
                 obeId := ?
             } // End of template mw_chargeReport_obeId_present
             /**
              * @desc    Template used to verify the absence of obeId data element
              * @see     ISO 17575-1:2016 Clause 7.5.1 obeId
              */
-            template ChargeReport mw_chargeReport_obeId_not_present
-            modifies mw_chargeReport_any := {
+            template ChargeReport<Container> mw_chargeReport_obeId_not_present<Container>
+            modifies mw_chargeReport_any<Container> := {
                 obeId := omit
             } // End of template mw_chargeReport_obeId_not_present
             
@@ -610,16 +637,16 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
              * @desc    Template used to verify the presence of vehicleLPNr data element
              * @see     ISO 17575-1:2016 Clause 7.5.2 vehicleLPNr
              */
-            template (present) ChargeReport mw_chargeReport_vehicleLPNr_present
-            modifies mw_chargeReport_any := {
+            template (present) ChargeReport<Container> mw_chargeReport_vehicleLPNr_present<Container>
+            modifies mw_chargeReport_any<Container> := {
                 vehicleLPNr := ?
             } // End of template mw_chargeReport_vehicleLPNr_present
             /**
              * @desc    Template used to verify the absence of vehicleLPNr data element
              * @see     ISO 17575-1:2016 Clause 7.5.2 vehicleLPNr
              */
-            template ChargeReport mw_chargeReport_vehicleLPNr_not_present
-            modifies mw_chargeReport_any := {
+            template ChargeReport<Container> mw_chargeReport_vehicleLPNr_not_present<Container>
+            modifies mw_chargeReport_any<Container> := {
                 vehicleLPNr := omit
             } // End of template mw_chargeReport_vehicleLPNr_not_present
         } // End of group ChargeReport_vehicleLPNr
@@ -653,16 +680,16 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
              * @desc    Template used to verify the presence of paymentMeans data element
              * @see     ISO 17575-1:2016 Clause 7.5.3 paymentMeans
              */
-            template (present) ChargeReport mw_chargeReport_paymentMeans_present
-            modifies mw_chargeReport_any := {
+            template (present) ChargeReport<Container> mw_chargeReport_paymentMeans_present<Container>
+            modifies mw_chargeReport_any<Container> := {
                 paymentMeans := ?
             } // End of template mw_chargeReport_paymentMeans_present
             /**
              * @desc    Template used to verify the absence of paymentMeans data element
              * @see     ISO 17575-1:2016 Clause 7.5.3 paymentMeans
              */
-            template ChargeReport mw_chargeReport_paymentMeans_not_present
-            modifies mw_chargeReport_any := {
+            template ChargeReport<Container> mw_chargeReport_paymentMeans_not_present<Container>
+            modifies mw_chargeReport_any<Container> := {
                 paymentMeans := omit
             } // End of template mw_chargeReport_paymentMeans_not_present
         } // End of group ChargeReport_paymentMeans
@@ -696,25 +723,25 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
              * @desc    Template used to verify the presence of tollContext data element
              * @see     ISO 17575-1:2016 Clause 7.5.5 tollContext
              */
-            template (present) ChargeReport mw_chargeReport_tollContext_present
-            modifies mw_chargeReport_any := {
+            template (present) ChargeReport<Container> mw_chargeReport_tollContext_present<Container>
+            modifies mw_chargeReport_any<Container> := {
                 tollContext  := ?
             } // End of template mw_chargeReport_tollContext _present
             /**
              * @desc    Template used to verify the absence of tollContext data element
              * @see     ISO 17575-1:2016 Clause 7.5.5 tollContext
              */
-            template ChargeReport mw_chargeReport_tollContext_not_present
-            modifies mw_chargeReport_any := {
+            template ChargeReport<Container> mw_chargeReport_tollContext_not_present<Container>
+            modifies mw_chargeReport_any<Container> := {
                 tollContext  := omit
             } // End of template mw_chargeReport_tollContext _not_present
            /**
              * @desc    ChargeReport template with tollContext  specific value
              * @see     ISO 17575-1:2016 Clause 7.5.5 tollContext
              */
-            template (present) ChargeReport mw_chargeReport_tollContext(
-                                                                        in Provider p_tollContext
-            ) modifies mw_chargeReport_any := {
+            template (present) ChargeReport<Container> mw_chargeReport_tollContext<Container>(
+                                                                                              in Provider p_tollContext
+            ) modifies mw_chargeReport_any<Container> := {
                 tollContext  := p_tollContext 
             } // End of template mw_chargeReport_tollContext 
         } // End of group ChargeReport_tollContext 
@@ -747,25 +774,25 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
              * @desc    Template used to verify the presence of chargeReportFinalRecipient  data element
              * @see     ISO 17575-1:2016 Clause 7.5.6 chargeReportFinalRecipient
              */
-            template (present) ChargeReport mw_chargeReport_chargeReportFinalRecipient_present
-            modifies mw_chargeReport_any := {
+            template (present) ChargeReport<Container> mw_chargeReport_chargeReportFinalRecipient_present<Container>
+            modifies mw_chargeReport_any<Container> := {
                 chargeReportFinalRecipient  := ?
             } // End of template mw_chargeReport_chargeReportFinalRecipient _present
             /**
              * @desc    Template used to verify the absence of chargeReportFinalRecipient  data element
              * @see     ISO 17575-1:2016 Clause 7.5.6 chargeReportFinalRecipient
              */
-            template ChargeReport mw_chargeReport_chargeReportFinalRecipient_not_present
-            modifies mw_chargeReport_any := {
+            template ChargeReport<Container> mw_chargeReport_chargeReportFinalRecipient_not_present<Container>
+            modifies mw_chargeReport_any<Container> := {
                 chargeReportFinalRecipient  := omit
             } // End of template mw_chargeReport_chargeReportFinalRecipient _not_present
            /**
              * @desc    ChargeReport template with chargeReportFinalRecipient  specific value
              * @see     ISO 17575-1:2016 Clause 7.5.6 chargeReportFinalRecipient
              */
-            template (present) ChargeReport mw_chargeReport_chargeReportFinalRecipient(
-                                                                                       in Provider p_chargeReportFinalRecipient
-            ) modifies mw_chargeReport_any := {
+            template (present) ChargeReport<Container> mw_chargeReport_chargeReportFinalRecipient<Container>(
+                                                                                                             in Provider p_chargeReportFinalRecipient
+            ) modifies mw_chargeReport_any<Container> := {
                 chargeReportFinalRecipient  := p_chargeReportFinalRecipient 
             } // End of template mw_chargeReport_chargeReportFinalRecipient 
         } // End of group ChargeReport_chargeReportFinalRecipient 
@@ -799,25 +826,25 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
              * @desc    Template used to verify the presence of timeOfReport  data element
              * @see     ISO 17575-1:2016 Clause 7.3.1 timeOfReport
              */
-            template (present) ChargeReport mw_chargeReport_timeOfReport_present
-            modifies mw_chargeReport_any := {
+            template (present) ChargeReport<Container> mw_chargeReport_timeOfReport_present<Container>
+            modifies mw_chargeReport_any<Container> := {
                 timeOfReport  := ?
             } // End of template mw_chargeReport_timeOfReport _present
             /**
              * @desc    Template used to verify the absence of timeOfReport  data element
              * @see     ISO 17575-1:2016 Clause 7.3.1 timeOfReport
              */
-            template ChargeReport mw_chargeReport_timeOfReport_not_present
-            modifies mw_chargeReport_any := {
+            template ChargeReport<Container>  mw_chargeReport_timeOfReport_not_present<Container> 
+            modifies mw_chargeReport_any<Container> := {
                 timeOfReport  := omit
             } // End of template mw_chargeReport_timeOfReport _not_present
            /**
              * @desc    ChargeReport template with timeOfReport  specific value
              * @see     ISO 17575-1:2016 Clause 7.3.1 timeOfReport
              */
-            template (present) ChargeReport mw_chargeReport_timeOfReport(
-                                                                         in GeneralizedTime p_timeOfReport
-            ) modifies mw_chargeReport_any := {
+            template (present) ChargeReport<Container>  mw_chargeReport_timeOfReport<Container> (
+                                                                                                 in GeneralizedTime p_timeOfReport
+            ) modifies mw_chargeReport_any<Container> := {
                 timeOfReport  := p_timeOfReport 
             } // End of template mw_chargeReport_timeOfReport 
         } // End of group ChargeReport_timeOfReport 
@@ -847,25 +874,25 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
              * @desc    Template used to verify the presence of reportPeriod  data element
              * @see     ISO 17575-1:2016 Clause 7.3.2 reportPeriod
              */
-            template (present) ChargeReport mw_chargeReport_reportPeriod_present
-            modifies mw_chargeReport_any := {
+            template (present) ChargeReport<Container> mw_chargeReport_reportPeriod_present<Container>
+            modifies mw_chargeReport_any<Container> := {
                 reportPeriod  := ?
             } // End of template mw_chargeReport_reportPeriod _present
             /**
              * @desc    Template used to verify the absence of reportPeriod  data element
              * @see     ISO 17575-1:2016 Clause 7.3.2 reportPeriod
              */
-            template ChargeReport mw_chargeReport_reportPeriod_not_present
-            modifies mw_chargeReport_any := {
+            template ChargeReport<Container> mw_chargeReport_reportPeriod_not_present<Container>
+            modifies mw_chargeReport_any<Container> := {
                 reportPeriod  := omit
             } // End of template mw_chargeReport_reportPeriod _not_present
            /**
              * @desc    ChargeReport template with reportPeriod  specific value
              * @see     ISO 17575-1:2016 Clause 7.3.2 reportPeriod
              */
-            template (present) ChargeReport mw_chargeReport_reportPeriod(
-                                                                         in Period p_reportPeriod
-            ) modifies mw_chargeReport_any := {
+            template (present) ChargeReport<Container> mw_chargeReport_reportPeriod<Container>(
+                                                                                               in Period p_reportPeriod
+            ) modifies mw_chargeReport_any<Container> := {
                 reportPeriod  := p_reportPeriod 
             } // End of template mw_chargeReport_reportPeriod 
         } // End of group ChargeReport_reportPeriod 
@@ -899,16 +926,16 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
              * @desc    Template used to verify the presence of versionInfo data element
              * @see     ISO 17575-1:2016 Clause 7.8.2 versionInfo
              */
-            template (present) ChargeReport mw_chargeReport_versionInfo_present
-            modifies mw_chargeReport_any := {
+            template (present) ChargeReport<Container> mw_chargeReport_versionInfo_present<Container>
+            modifies mw_chargeReport_any<Container> := {
                 versionInfo := ?
             } // End of template mw_chargeReport_versionInfo_present
             /**
              * @desc    Template used to verify the absence of versionInfo data element
              * @see     ISO 17575-1:2016 Clause 7.8.2 versionInfo
              */
-            template ChargeReport mw_chargeReport_versionInfo_not_present
-            modifies mw_chargeReport_any := {
+            template ChargeReport<Container> mw_chargeReport_versionInfo_not_present<Container>
+            modifies mw_chargeReport_any<Container> := {
                 versionInfo := omit
             } // End of template mw_chargeReport_versionInfo_not_present
         } // End of group ChargeReport_versionInfo
@@ -942,16 +969,16 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
              * @desc    Template used to verify the presence of sumVatForThisSession data element
              * @see     ISO 17575-1:2016 Clause 7.3.3 sumVatForThisSession
              */
-            template ChargeReport mw_chargeReport_sumVatForThisSession_present
-            modifies mw_chargeReport_any := {
+            template ChargeReport<Container> mw_chargeReport_sumVatForThisSession_present<Container>
+            modifies mw_chargeReport_any<Container> := {
                 sumVatForThisSession := ?
             } // End of template mw_chargeReport_sumVatForThisSession_present
             /**
              * @desc    Template used to verify the absence of sumVatForThisSession data element
              * @see     ISO 17575-1:2016 Clause 7.3.3 sumVatForThisSession
              */
-            template ChargeReport mw_chargeReport_sumVatForThisSession_not_present
-            modifies mw_chargeReport_any := {
+            template ChargeReport<Container> mw_chargeReport_sumVatForThisSession_not_present<Container>
+            modifies mw_chargeReport_any<Container> := {
                 sumVatForThisSession := omit
             } // End of template mw_chargeReport_sumVatForThisSession_not_present
         } // End of group ChargeReport_sumVatForThisSession
@@ -985,16 +1012,16 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
              * @desc    Template used to verify the presence of accountStatus data element
              * @see     ISO 17575-1:2016 Clause 7.7.1 accountStatus
              */
-            template ChargeReport mw_chargeReport_accountStatus_present
-            modifies mw_chargeReport_any := {
+            template ChargeReport<Container> mw_chargeReport_accountStatus_present<Container>
+            modifies mw_chargeReport_any<Container> := {
                 accountStatus := ?
             } // End of template mw_chargeReport_accountStatus_present
             /**
              * @desc    Template used to verify the absence of accountStatus data element
              * @see     ISO 17575-1:2016 Clause 7.7.1 accountStatus
              */
-            template ChargeReport mw_chargeReport_accountStatus_not_present
-            modifies mw_chargeReport_any := {
+            template ChargeReport<Container> mw_chargeReport_accountStatus_not_present<Container>
+            modifies mw_chargeReport_any<Container> := {
                 accountStatus := omit
             } // End of template mw_chargeReport_accountStatus_not_present
         } // End of group ChargeReport_accountStatus
@@ -1028,16 +1055,16 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
              * @desc    Template used to verify the presence of chargeReportCounter data element
              * @see     ISO 17575-1:2016 Clause 7.3.4 chargeReportCounte
              */
-            template (present) ChargeReport mw_chargeReport_chargeReportCounter_present
-            modifies mw_chargeReport_any := {
+            template (present) ChargeReport<Container> mw_chargeReport_chargeReportCounter_present<Container>
+            modifies mw_chargeReport_any<Container> := {
                 chargeReportCounter := ?
             } // End of template mw_chargeReport_chargeReportCounter_present
             /**
              * @desc    Template used to verify the absence of chargeReportCounter data element
              * @see     ISO 17575-1:2016 Clause 7.3.4 chargeReportCounte
              */
-            template ChargeReport mw_chargeReport_chargeReportCounter_not_present
-            modifies mw_chargeReport_any := {
+            template ChargeReport<Container> mw_chargeReport_chargeReportCounter_not_present<Container>
+            modifies mw_chargeReport_any<Container> := {
                 chargeReportCounter := omit
             } // End of template mw_chargeReport_chargeReportCounter_not_present
         } // End of group ChargeReport_chargeReportCounter
@@ -1071,16 +1098,16 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
              * @desc    Template used to verify the presence of mileage data element
              * @see     ISO 17575-1:2016 Clause 7.3.5 mileage
              */
-            template (present) ChargeReport mw_chargeReport_mileage_present
-            modifies mw_chargeReport_any := {
+            template (present) ChargeReport<Container> mw_chargeReport_mileage_present<Container>
+            modifies mw_chargeReport_any<Container> := {
                 mileage := ?
             } // End of template mw_chargeReport_mileage_present
             /**
              * @desc    Template used to verify the absence of mileage data element
              * @see     ISO 17575-1:2016 Clause 7.3.5 mileage
              */
-            template ChargeReport mw_chargeReport_mileage_not_present
-            modifies mw_chargeReport_any := {
+            template ChargeReport<Container> mw_chargeReport_mileage_not_present<Container>
+            modifies mw_chargeReport_any<Container> := {
                 mileage := omit
             } // End of template mw_chargeReport_mileage_not_present
         } // End of group ChargeReport_mileage
@@ -1114,16 +1141,16 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
              * @desc    Template used to verify the presence of listOfCCCAttributes data element
              * @see     ISO 17575-1:2016 Clause 7.9 Data group Compliance Checking — listOfCCCAttributes and CCCAttributes
              */
-            template (present) ChargeReport mw_chargeReport_listOfCCCAttributes_present
-            modifies mw_chargeReport_any := {
+            template (present) ChargeReport<Container> mw_chargeReport_listOfCCCAttributes_present<Container>
+            modifies mw_chargeReport_any<Container> := {
                 listOfCCCAttributes := ?
             } // End of template mw_chargeReport_listOfCCCAttributes_present
             /**
              * @desc    Template used to verify the absence of listOfCCCAttributes data element
              * @see     ISO 17575-1:2016 Clause 7.9 Data group Compliance Checking — listOfCCCAttributes and CCCAttributes
              */
-            template ChargeReport mw_chargeReport_listOfCCCAttributes_not_present
-            modifies mw_chargeReport_any := {
+            template ChargeReport<Container> mw_chargeReport_listOfCCCAttributes_not_present<Container>
+            modifies mw_chargeReport_any<Container> := {
                 listOfCCCAttributes := omit
             } // End of template mw_chargeReport_listOfCCCAttributes_not_present
         } // End of group ChargeReport_listOfCCCAttributes
@@ -1159,8 +1186,8 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
              * @desc    Template used to verify the presence of usageStatementList/authenticatedUsageStatement data element
              * @see     ISO 17575-1:2016 Clause 7.4.3 AuthenticatedUsageStatement
              */
-            template (present) ChargeReport mw_chargeReport_UsageStatement_AuthenticatedUsageStatement_present
-            modifies mw_chargeReport_any := {
+            template (present) ChargeReport<Container> mw_chargeReport_UsageStatement_AuthenticatedUsageStatement_present<Container>
+            modifies mw_chargeReport_any<Container> := {
                 usageStatementList := superset( // match if authenticatedUsageStatement is present in all elements of usageStatementList
                     {
                         usageStatement                 := *,
@@ -1172,8 +1199,8 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
              * @desc    Template used to verify the absence of usageStatementList data element
              * @see     ISO 17575-1:2016 Clause 7.4.3 AuthenticatedUsageStatement
              */
-            template ChargeReport mw_chargeReport_UsageStatement_AuthenticatedUsageStatement_not_present
-            modifies mw_chargeReport_any := {
+            template ChargeReport<Container> mw_chargeReport_UsageStatement_AuthenticatedUsageStatement_not_present<Container>
+            modifies mw_chargeReport_any<Container> := {
                 usageStatementList := superset( // match if authenticatedUsageStatement is not present in all elements of usageStatementList
                     {
                         usageStatement                 := *,
@@ -1213,24 +1240,24 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
              * @desc    Receive template for UsageStatement/usageStatementId present
              * @see     ISO 17575-1:2016 Clause 7.6.3 usageStatementID
              */
-            template (present) UsageStatement mw_usageStatement_useOfUsageStatementId_present 
-            modifies mw_usageStatement_default := {
+            template (present) UsageStatement<Container> mw_usageStatement_useOfUsageStatementId_present<Container> 
+            modifies mw_usageStatement_default<Container> := {
                 usageStatementId := ?
             }
             /**
              * @desc    Receive template for UsageStatement/usageStatementId not present
              * @see     ISO 17575-1:2016 Clause 7.6.3 usageStatementID
              */
-            template UsageStatement mw_usageStatement_useOfUsageStatementId_not_present 
-            modifies mw_usageStatement_default := {
+            template UsageStatement<Container> mw_usageStatement_useOfUsageStatementId_not_present<Container> 
+            modifies mw_usageStatement_default<Container> := {
                 usageStatementId := complement(?)
             }
             /**
              * @desc    Template used to verify the presence of UsageStatement/usageStatementId data element
              * @see     ISO 17575-1:2016 Clause  7.6.3 usageStatementID
              */
-            template (present) ChargeReport mw_chargeReport_useOfUsageStatementId_present
-            modifies mw_chargeReport_any := {
+            template (present) ChargeReport<Container> mw_chargeReport_useOfUsageStatementId_present<Container>
+            modifies mw_chargeReport_any<Container> := {
                 usageStatementList := superset( // match if useOfUsageStatementId is present in all elements of usageStatementList
                     {
                         usageStatement                 := mw_usageStatement_useOfUsageStatementId_present,
@@ -1242,8 +1269,8 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
              * @desc    Template used to verify the absence of usageStatementList data element
              * @see     ISO 17575-1:2016 Clause  7.6.3 usageStatementID
              */
-            template ChargeReport mw_chargeReport_useOfUsageStatementId_not_present
-            modifies mw_chargeReport_any := {
+            template ChargeReport<Container> mw_chargeReport_useOfUsageStatementId_not_present<Container>
+            modifies mw_chargeReport_any<Container> := {
                 usageStatementList := superset( // match if authenticatedUsageStatement is not present in all elements of usageStatementList
                     {
                         usageStatement                 := mw_usageStatement_useOfUsageStatementId_not_present,
@@ -1278,31 +1305,22 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
                 tollContext := p_ispresent
             } // End of template m_usageStatementContent_tollContext
             /**
-             * @desc    Receive template for UsageStatement/tollContext present
-             * @see     ISO 17575-1:2016 Clause 7.5.5 tollContext
-             */
-            template (present) UsageStatement mw_usageStatement_tollContext_present 
-            modifies mw_usageStatement_default := {
-                tollContext := ?
-            }
-            /**
              * @desc    Receive template for UsageStatement/tollContext not present
              * @see     ISO 17575-1:2016 Clause 7.5.5 tollContext
              */
-            template UsageStatement mw_usageStatement_tollContext_not_present 
-            modifies mw_usageStatement_default := {
+            template UsageStatement<Container> mw_usageStatement_tollContext_not_present<Container> 
+            modifies mw_usageStatement_default<Container> := {
                 tollContext := complement(?)
             }
             /**
              * @desc    Template used to verify the presence of tollContext data element
              * @see     ISO 17575-1:2016 Clause 7.5.5 tollContext
              */
-            template ChargeReport mw_chargeReport_usageStatementTollContext_present
-            modifies mw_chargeReport_any := {
+            template ChargeReport<Container> mw_chargeReport_usageStatementTollContext_present<Container>
+            modifies mw_chargeReport_any<Container> := {
                 usageStatementList := superset ( // match if tollContext is present in all elements of usageStatementList
                     {
-                        usageStatement                 := mw_usageStatement_tollContext_present,
-                        authenticatedUsageStatement    := *
+                        usageStatement                 := mw_usageStatement_tollContext
                     } ifpresent
                 ) // superset
             } // End of template mw_chargeReport_usageStatementTollContext_present
@@ -1310,12 +1328,11 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
              * @desc    Template used to verify the absence of tollContext data element
              * @see     ISO 17575-1:2016 Clause 7.5.5 tollContext
              */
-            template ChargeReport mw_chargeReport_usageStatementTollContext_not_present
-            modifies mw_chargeReport_any := {
+            template ChargeReport<Container> mw_chargeReport_usageStatementTollContext_not_present<Container>
+            modifies mw_chargeReport_any<Container> := {
                 usageStatementList := superset( // match if tollContext is present in all elements of usageStatementList
                     {
-                        usageStatement                 := mw_usageStatement_tollContext_not_present,
-                        authenticatedUsageStatement    := *
+                        usageStatement                 := mw_usageStatement_tollContext_not_present
                     } ifpresent
                 ) // superset
             } // End of template mw_chargeReport_usageStatementTollContext_not_present
@@ -1349,28 +1366,27 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
              * @desc    Receive template for UsageStatement/chargeReportFinalRecipient present
              * @see     ISO 17575-1:2016 Clause 7.5.6 chargeReportFinalRecipient
              */
-            template (present) UsageStatement mw_usageStatement_chargeReportFinalRecipient_present 
-            modifies mw_usageStatement_default := {
+            template (present) UsageStatement<Container> mw_usageStatement_chargeReportFinalRecipient_present<Container> 
+            modifies mw_usageStatement_default<Container> := {
                 chargeReportFinalRecipient := ?
             }
             /**
              * @desc    Receive template for UsageStatement/chargeReportFinalRecipient not present
              * @see     ISO 17575-1:2016 Clause 7.5.6 chargeReportFinalRecipient
              */
-            template UsageStatement mw_usageStatement_chargeReportFinalRecipient_not_present 
-            modifies mw_usageStatement_default := {
+            template UsageStatement<Container> mw_usageStatement_chargeReportFinalRecipient_not_present<Container> 
+            modifies mw_usageStatement_default<Container> := {
                 chargeReportFinalRecipient := complement(?)
             }
             /**
              * @desc    Template used to verify the presence of chargeReportFinalRecipient data element
              * @see     ISO 17575-1:2016 Clause 7.5.6 chargeReportFinalRecipient
              */
-            template ChargeReport mw_chargeReport_usageStatementChargeReportFinalRecipient_present
-            modifies mw_chargeReport_any := {
+            template ChargeReport<Container> mw_chargeReport_usageStatementChargeReportFinalRecipient_present<Container>
+            modifies mw_chargeReport_any<Container> := {
                 usageStatementList := superset ( // match if chargeReportFinalRecipient is present in all elements of usageStatementList
                     {
-                        usageStatement                 := mw_usageStatement_chargeReportFinalRecipient_present,
-                        authenticatedUsageStatement    := *
+                        usageStatement                 := mw_usageStatement_chargeReportFinalRecipient_present
                     } ifpresent
                 ) // superset
             } // End of template mw_chargeReport_usageStatementChargeReportFinalRecipient_present
@@ -1378,12 +1394,11 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
              * @desc    Template used to verify the absence of chargeReportFinalRecipient data element
              * @see     ISO 17575-1:2016 Clause 7.5.6 chargeReportFinalRecipient
              */
-            template ChargeReport mw_chargeReport_usageStatementChargeReportFinalRecipient_not_present
-            modifies mw_chargeReport_any := {
+            template ChargeReport<Container> mw_chargeReport_usageStatementChargeReportFinalRecipient_not_present<Container>
+            modifies mw_chargeReport_any<Container> := {
                 usageStatementList := superset( // match if chargeReportFinalRecipient is present in all elements of usageStatementList
                     {
-                        usageStatement                 := mw_usageStatement_chargeReportFinalRecipient_not_present,
-                        authenticatedUsageStatement    := *
+                        usageStatement                 := mw_usageStatement_chargeReportFinalRecipient_not_present
                     } ifpresent
                 ) // superset
             } // End of template mw_chargeReport_usageStatementChargeReportFinalRecipient_not_present
@@ -1417,28 +1432,27 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
              * @desc    Receive template for UsageStatement/aggregatedFee present
              * @see     ISO 17575-1:2016 Clause 7.6.4 aggregatedFee
              */
-            template (present) UsageStatement mw_usageStatement_aggregatedFee_present 
-            modifies mw_usageStatement_default := {
+            template (present) UsageStatement<Container> mw_usageStatement_aggregatedFee_present<Container> 
+            modifies mw_usageStatement_default<Container> := {
                 aggregatedFee := ?
             }
             /**
              * @desc    Receive template for UsageStatement/aggregatedFee not present
              * @see     ISO 17575-1:2016 Clause 7.6.4 aggregatedFee
              */
-            template UsageStatement mw_usageStatement_aggregatedFee_not_present 
-            modifies mw_usageStatement_default := {
+            template UsageStatement<Container> mw_usageStatement_aggregatedFee_not_present<Container> 
+            modifies mw_usageStatement_default<Container> := {
                 aggregatedFee := complement(?)
             }
             /**
              * @desc    Template used to verify the presence of aggregatedFee data element
              * @see     ISO 17575-1:2016 Clause 7.6.4 aggregatedFee
              */
-            template ChargeReport mw_chargeReport_aggregatedFee_present
-            modifies mw_chargeReport_any := {
+            template ChargeReport<Container> mw_chargeReport_aggregatedFee_present<Container>
+            modifies mw_chargeReport_any<Container> := {
                 usageStatementList := superset( // match if aggregatedFee is present in all elements of usageStatementList
                     {
-                        usageStatement                 := mw_usageStatement_aggregatedFee_present,
-                        authenticatedUsageStatement    := *
+                        usageStatement                 := mw_usageStatement_aggregatedFee_present
                     } ifpresent
                 ) // superset
             } // End of template mw_chargeReport_aggregatedFee_present
@@ -1446,12 +1460,11 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
              * @desc    Template used to verify the absence of aggregatedFee data element
              * @see     ISO 17575-1:2016 Clause 7.6.4 aggregatedFee
              */
-            template ChargeReport mw_chargeReport_aggregatedFee_not_present
-            modifies mw_chargeReport_any := {
+            template ChargeReport<Container> mw_chargeReport_aggregatedFee_not_present<Container>
+            modifies mw_chargeReport_any<Container> := {
                 usageStatementList := superset( // match if aggregatedFee is present in all elements of usageStatementList
                     {
-                        usageStatement                 := mw_usageStatement_aggregatedFee_not_present,
-                        authenticatedUsageStatement    := *
+                        usageStatement                 := mw_usageStatement_aggregatedFee_not_present
                     } ifpresent
                 ) // superset
             } // End of template mw_chargeReport_aggregatedFee_not_present
@@ -1483,28 +1496,27 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
              * @desc    Receive template for UsageStatement/sumVat present
              * @see     ISO 17575-1:2016 Clause 7.6.4 sumVat
              */
-            template (present) UsageStatement mw_usageStatement_sumVat_present 
-            modifies mw_usageStatement_default := {
+            template (present) UsageStatement<Container> mw_usageStatement_sumVat_present<Container> 
+            modifies mw_usageStatement_default<Container> := {
                 sumVat := ?
             }
             /**
              * @desc    Receive template for UsageStatement/sumVat not present
              * @see     ISO 17575-1:2016 Clause 7.6.4 sumVat
              */
-            template UsageStatement mw_usageStatement_sumVat_not_present 
-            modifies mw_usageStatement_default := {
+            template UsageStatement<Container> mw_usageStatement_sumVat_not_present<Container> 
+            modifies mw_usageStatement_default<Container> := {
                 sumVat := complement(?)
             }
             /**
              * @desc    Template used to verify the presence of sumVat data element
              * @see     ISO 17575-1:2016 Clause 7.3.3 sumVatForThisSession
              */
-            template ChargeReport mw_chargeReport_sumVat_present
-            modifies mw_chargeReport_any := {
+            template ChargeReport<Container> mw_chargeReport_sumVat_present<Container>
+            modifies mw_chargeReport_any<Container> := {
                 usageStatementList := superset( // match if sumVat is present in all elements of usageStatementList
                     {
-                        usageStatement                 := mw_usageStatement_sumVat_present,
-                        authenticatedUsageStatement    := *
+                        usageStatement                 := mw_usageStatement_sumVat_present
                     } ifpresent
                 ) // superset
             } // End of template mw_chargeReport_sumVat_present
@@ -1512,12 +1524,11 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
              * @desc    Template used to verify the absence of sumVat data element
              * @see     ISO 17575-1:2016 Clause 7.3.3 sumVatForThisSession
              */
-            template ChargeReport mw_chargeReport_sumVat_not_present
-            modifies mw_chargeReport_any := {
+            template ChargeReport<Container> mw_chargeReport_sumVat_not_present<Container>
+            modifies mw_chargeReport_any<Container> := {
                 usageStatementList := superset( // match if sumVat is present in all elements of usageStatementList
                     {
-                        usageStatement                 := mw_usageStatement_sumVat_not_present,
-                        authenticatedUsageStatement    := *
+                        usageStatement                 := mw_usageStatement_sumVat_not_present
                     } ifpresent
                 ) // superset
             } // End of template mw_chargeReport_sumVat_not_present
@@ -1551,28 +1562,27 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
              * @desc    Receive template for UsageStatement/aggregatedSingleTariffClassSession present
              * @see     ISO 17575-1:2016 Clause 7.6.5 aggregatedSingleTariffClassSession
              */
-            template (present) UsageStatement mw_usageStatement_aggregatedSingleTariffClassSession_present 
-            modifies mw_usageStatement_default := {
+            template (present) UsageStatement<Container> mw_usageStatement_aggregatedSingleTariffClassSession_present<Container> 
+            modifies mw_usageStatement_default<Container> := {
                 aggregatedSingleTariffClassSession := ?
             }
             /**
              * @desc    Receive template for UsageStatement/aggregatedSingleTariffClassSession not present
              * @see     ISO 17575-1:2016 Clause 7.6.5 aggregatedSingleTariffClassSession
              */
-            template UsageStatement mw_usageStatement_aggregatedSingleTariffClassSession_not_present 
-            modifies mw_usageStatement_default := {
+            template UsageStatement<Container> mw_usageStatement_aggregatedSingleTariffClassSession_not_present<Container> 
+            modifies mw_usageStatement_default<Container> := {
                 aggregatedSingleTariffClassSession := complement(?)
             }
             /**
              * @desc    Template used to verify the presence of aggregatedSingleTariffClassSession data element
              * @see     ISO 17575-1:2016 Clause 7.6.5 aggregatedSingleTariffClassSession
              */
-            template ChargeReport mw_chargeReport_aggregatedSingleTariffClassSession_present
-            modifies mw_chargeReport_any := {
+            template ChargeReport<Container> mw_chargeReport_aggregatedSingleTariffClassSession_present<Container>
+            modifies mw_chargeReport_any<Container> := {
                 usageStatementList := superset( // match if aggregatedSingleTariffClassSession is present in all elements of usageStatementList
                     {
-                        usageStatement                 := mw_usageStatement_aggregatedSingleTariffClassSession_present,
-                        authenticatedUsageStatement    := *
+                        usageStatement                 := mw_usageStatement_aggregatedSingleTariffClassSession_present
                     } ifpresent
                 ) // superset
             } // End of template mw_chargeReport_aggregatedSingleTariffClassSession_present
@@ -1580,12 +1590,11 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
              * @desc    Template used to verify the absence of aggregatedSingleTariffClassSession data element
              * @see     ISO 17575-1:2016 Clause 7.6.5 aggregatedSingleTariffClassSession
              */
-            template ChargeReport mw_chargeReport_aggregatedSingleTariffClassSession_not_present
-            modifies mw_chargeReport_any := {
+            template ChargeReport<Container> mw_chargeReport_aggregatedSingleTariffClassSession_not_present<Container>
+            modifies mw_chargeReport_any<Container> := {
                 usageStatementList := superset( // match if aggregatedSingleTariffClassSession is present in all elements of usageStatementList
                     {
-                        usageStatement                 := mw_usageStatement_aggregatedSingleTariffClassSession_not_present,
-                        authenticatedUsageStatement    := *
+                        usageStatement                 := mw_usageStatement_aggregatedSingleTariffClassSession_not_present
                     } ifpresent
                 ) // superset
             } // End of template mw_chargeReport_aggregatedSingleTariffClassSession_not_present
@@ -1619,28 +1628,27 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
              * @desc    Receive template for UsageStatement/listOfChargeObjects present
              * @see     ISO 17575-1:2016 Clause 7.6.8 listOfChargeObjects and DetectedChargeObject
              */
-            template (present) UsageStatement mw_usageStatement_listOfChargeObjects_present 
-            modifies mw_usageStatement_default := {
+            template (present) UsageStatement<Container> mw_usageStatement_listOfChargeObjects_present<Container> 
+            modifies mw_usageStatement_default<Container> := {
                 listOfChargeObjects := ?
             }
             /**
              * @desc    Receive template for UsageStatement/listOfChargeObjects not present
              * @see     ISO 17575-1:2016 Clause 7.6.8 listOfChargeObjects and DetectedChargeObject
              */
-            template UsageStatement mw_usageStatement_listOfChargeObjects_not_present 
-            modifies mw_usageStatement_default := {
+            template UsageStatement<Container> mw_usageStatement_listOfChargeObjects_not_present<Container> 
+            modifies mw_usageStatement_default<Container> := {
                 listOfChargeObjects := complement(?)
             }
             /**
              * @desc    Template used to verify the presence of listOfChargeObjects data element
              * @see     ISO 17575-1:2016 Clause 7.6.8 listOfChargeObjects and DetectedChargeObject
              */
-            template ChargeReport mw_chargeReport_listOfChargeObjects_present
-            modifies mw_chargeReport_any := {
+            template ChargeReport<Container> mw_chargeReport_listOfChargeObjects_present<Container>
+            modifies mw_chargeReport_any<Container> := {
                 usageStatementList := superset( // match if listOfChargeObjects is present in all elements of usageStatementList
                     {
-                        usageStatement                 := mw_usageStatement_listOfChargeObjects_present,
-                        authenticatedUsageStatement    := *
+                        usageStatement                 := mw_usageStatement_listOfChargeObjects_present
                     } ifpresent
                 ) // superset
             } // End of template mw_chargeReport_listOfChargeObjects_present
@@ -1648,12 +1656,11 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
              * @desc    Template used to verify the absence of listOfChargeObjects data element
              * @see     ISO 17575-1:2016 Clause 7.6.8 listOfChargeObjects and DetectedChargeObject
              */
-            template ChargeReport mw_chargeReport_listOfChargeObjects_not_present
-            modifies mw_chargeReport_any := {
+            template ChargeReport<Container> mw_chargeReport_listOfChargeObjects_not_present<Container>
+            modifies mw_chargeReport_any<Container> := {
                 usageStatementList := superset( // match if listOfChargeObjects is present in all elements of usageStatementList
                     {
-                        usageStatement                 := mw_usageStatement_listOfChargeObjects_not_present,
-                        authenticatedUsageStatement    := *
+                        usageStatement                 := mw_usageStatement_listOfChargeObjects_not_present
                     } ifpresent
                 ) // superset
             } // End of template mw_chargeReport_listOfChargeObjects_not_present
@@ -1687,28 +1694,27 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
              * @desc    Receive template for UsageStatement/listOfDSRCUsageData present
              * @see     ISO 17575-1:2016 Clause 7.6.13 ListOfDSRCUsageData
              */
-            template (present) UsageStatement mw_usageStatement_listOfDSRCUsageData_present 
-            modifies mw_usageStatement_default := {
+            template (present) UsageStatement<Container> mw_usageStatement_listOfDSRCUsageData_present<Container> 
+            modifies mw_usageStatement_default<Container> := {
                 listOfDSRCUsageData := ?
             }
             /**
              * @desc    Receive template for UsageStatement/listOfDSRCUsageData not present
              * @see     ISO 17575-1:2016 Clause 7.6.13 ListOfDSRCUsageData
              */
-            template UsageStatement mw_usageStatement_listOfDSRCUsageData_not_present 
-            modifies mw_usageStatement_default := {
+            template UsageStatement<Container> mw_usageStatement_listOfDSRCUsageData_not_present<Container> 
+            modifies mw_usageStatement_default<Container> := {
                 listOfDSRCUsageData := complement(?)
             }
             /**
              * @desc    Template used to verify the presence of listOfDSRCUsageData data element
              * @see     ISO 17575-1:2016 Clause 7.6.13 ListOfDSRCUsageData
              */
-            template ChargeReport mw_chargeReport_listOfDSRCUsageData_present
-            modifies mw_chargeReport_any := {
+            template ChargeReport<Container> mw_chargeReport_listOfDSRCUsageData_present<Container>
+            modifies mw_chargeReport_any<Container> := {
                 usageStatementList := superset( // match if listOfDSRCUsageData is present in all elements of usageStatementList
                     {
-                        usageStatement                 := mw_usageStatement_listOfDSRCUsageData_present,
-                        authenticatedUsageStatement    := *
+                        usageStatement                 := mw_usageStatement_listOfDSRCUsageData_present
                     } ifpresent
                 ) // superset
             } // End of template mw_chargeReport_listOfDSRCUsageData_present
@@ -1716,12 +1722,11 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
              * @desc    Template used to verify the absence of listOfDSRCUsageData data element
              * @see     ISO 17575-1:2016 Clause 7.6.13 ListOfDSRCUsageData
              */
-            template ChargeReport mw_chargeReport_listOfDSRCUsageData_not_present
-            modifies mw_chargeReport_any := {
+            template ChargeReport<Container> mw_chargeReport_listOfDSRCUsageData_not_present<Container>
+            modifies mw_chargeReport_any<Container> := {
                 usageStatementList := superset( // match if listOfDSRCUsageData is present in all elements of usageStatementList
                     {
-                        usageStatement                 := mw_usageStatement_listOfDSRCUsageData_not_present,
-                        authenticatedUsageStatement    := *
+                        usageStatement                 := mw_usageStatement_listOfDSRCUsageData_not_present
                     } ifpresent
                 ) // superset
             } // End of template mw_chargeReport_listOfDSRCUsageData_not_present
@@ -1755,28 +1760,27 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
              * @desc    Receive template for UsageStatement/listOfRawUsageData present
              * @see     ISO 17575-1:2016 Clause 7.6.10 ListOfRawUsageData, measuredRawData
              */
-            template (present) UsageStatement mw_usageStatement_listOfRawUsageData_present 
-            modifies mw_usageStatement_default := {
+            template (present) UsageStatement<Container> mw_usageStatement_listOfRawUsageData_present<Container> 
+            modifies mw_usageStatement_default<Container> := {
                 listOfRawUsageData := ?
             }
             /**
              * @desc    Receive template for UsageStatement/listOfRawUsageData not present
              * @see     ISO 17575-1:2016 Clause 7.6.10 ListOfRawUsageData, measuredRawData
              */
-            template UsageStatement mw_usageStatement_listOfRawUsageData_not_present 
-            modifies mw_usageStatement_default := {
+            template UsageStatement<Container> mw_usageStatement_listOfRawUsageData_not_present<Container> 
+            modifies mw_usageStatement_default<Container> := {
                 listOfRawUsageData := complement(?)
             }
             /**
              * @desc    Template used to verify the presence of listOfRawUsageData data element
              * @see     ISO 17575-1:2016 Clause 7.6.10 ListOfRawUsageData, measuredRawData
              */
-            template ChargeReport mw_chargeReport_listOfRawUsageData_present
-            modifies mw_chargeReport_any := {
+            template ChargeReport<Container> mw_chargeReport_listOfRawUsageData_present<Container>
+            modifies mw_chargeReport_any<Container> := {
                 usageStatementList := superset( // match if listOfRawUsageData is present in all elements of usageStatementList
                     {
-                        usageStatement                 := mw_usageStatement_listOfRawUsageData_present,
-                        authenticatedUsageStatement    := *
+                        usageStatement                 := mw_usageStatement_listOfRawUsageData_present
                     } ifpresent
                 ) // superset
             } // End of template mw_chargeReport_listOfRawUsageData_present
@@ -1784,12 +1788,11 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
              * @desc    Template used to verify the absence of listOfRawUsageData data element
              * @see     ISO 17575-1:2016 Clause 7.6.10 ListOfRawUsageData, measuredRawData
              */
-            template ChargeReport mw_chargeReport_listOfRawUsageData_not_present
-            modifies mw_chargeReport_any := {
+            template ChargeReport<Container> mw_chargeReport_listOfRawUsageData_not_present<Container>
+            modifies mw_chargeReport_any<Container> := {
                 usageStatementList := superset( // match if listOfRawUsageData is present in all elements of usageStatementList
                     {
-                        usageStatement                 := mw_usageStatement_listOfRawUsageData_not_present,
-                        authenticatedUsageStatement    := *
+                        usageStatement                 := mw_usageStatement_listOfRawUsageData_not_present
                     } ifpresent
                 ) // superset
             } // End of template mw_chargeReport_listOfRawUsageData_not_present
@@ -1823,28 +1826,27 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
              * @desc    Receive template for UsageStatement/noUsage present
              * @see     ISO 17575-1:2016 Clause 7.6.2 UsageStatement
              */
-            template (present) UsageStatement mw_usageStatement_noUsage_present 
-            modifies mw_usageStatement_default := {
+            template (present) UsageStatement<Container> mw_usageStatement_noUsage_present<Container> 
+            modifies mw_usageStatement_default<Container> := {
                 noUsage := ?
             }
             /**
              * @desc    Receive template for UsageStatement/noUsage not present
              * @see     ISO 17575-1:2016 Clause 7.6.2 UsageStatement
              */
-            template UsageStatement mw_usageStatement_noUsage_not_present 
-            modifies mw_usageStatement_default := {
+            template UsageStatement<Container> mw_usageStatement_noUsage_not_present<Container> 
+            modifies mw_usageStatement_default<Container> := {
                 noUsage := complement(?)
             }
             /**
              * @desc    Template used to verify the presence of noUsage data element
              * @see     ISO 17575-1:2016 Clause 7.6.2 UsageStatement
              */
-            template ChargeReport mw_chargeReport_noUsage_present
-            modifies mw_chargeReport_any := {
+            template ChargeReport<Container> mw_chargeReport_noUsage_present<Container>
+            modifies mw_chargeReport_any<Container> := {
                 usageStatementList := superset( // match if noUsage is present in all elements of usageStatementList
                     {
-                        usageStatement                 := mw_usageStatement_noUsage_present,
-                        authenticatedUsageStatement    := *
+                        usageStatement                 := mw_usageStatement_noUsage_present
                     } ifpresent
                 ) // superset
             } // End of template mw_chargeReport_noUsage_present
@@ -1852,12 +1854,11 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
              * @desc    Template used to verify the absence of noUsage data element
              * @see     ISO 17575-1:2016 Clause 7.6.2 UsageStatement
              */
-            template ChargeReport mw_chargeReport_noUsage_not_present
-            modifies mw_chargeReport_any := {
+            template ChargeReport<Container> mw_chargeReport_noUsage_not_present<Container>
+            modifies mw_chargeReport_any<Container> := {
                 usageStatementList := superset( // match if noUsage is present in all elements of usageStatementList
                     {
-                        usageStatement                 := mw_usageStatement_noUsage_not_present,
-                        authenticatedUsageStatement    := *
+                        usageStatement                 := mw_usageStatement_noUsage_not_present
                     } ifpresent
                 ) // superset
             } // End of template mw_chargeReport_noUsage_not_present
@@ -1891,28 +1892,27 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
              * @desc    Receive template for UsageStatement/additionalUsageInformation present
              * @see     ISO 17575-1:2016 Clause 7.6.14 additionalUsageInformation
              */
-            template (present) UsageStatement mw_usageStatement_additionalUsageInformation_present 
-            modifies mw_usageStatement_default := {
+            template (present) UsageStatement<Container> mw_usageStatement_additionalUsageInformation_present<Container> 
+            modifies mw_usageStatement_default<Container> := {
                 additionalUsageInformation := ?
             }
             /**
              * @desc    Receive template for UsageStatement/additionalUsageInformation not present
              * @see     ISO 17575-1:2016 Clause 7.6.14 additionalUsageInformation
              */
-            template UsageStatement mw_usageStatement_additionalUsageInformation_not_present 
-            modifies mw_usageStatement_default := {
+            template UsageStatement<Container> mw_usageStatement_additionalUsageInformation_not_present<Container> 
+            modifies mw_usageStatement_default<Container> := {
                 additionalUsageInformation := complement(?)
             }
             /**
              * @desc    Template used to verify the presence of additionalUsageInformation data element
              * @see     ISO 17575-1:2016 Clause 7.6.14 additionalUsageInformation
              */
-            template ChargeReport mw_chargeReport_additionalUsageInformation_present
-            modifies mw_chargeReport_any := {
+            template ChargeReport<Container> mw_chargeReport_additionalUsageInformation_present<Container>
+            modifies mw_chargeReport_any<Container> := {
                 usageStatementList := superset( // match if additionalUsageInformation is present in all elements of usageStatementList
                     {
-                        usageStatement                 := mw_usageStatement_additionalUsageInformation_present,
-                        authenticatedUsageStatement    := *
+                        usageStatement                 := mw_usageStatement_additionalUsageInformation_present
                     } ifpresent
                 ) // superset
             } // End of template mw_chargeReport_additionalUsageInformation_present
@@ -1920,12 +1920,11 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
              * @desc    Template used to verify the absence of additionalUsageInformation data element
              * @see     ISO 17575-1:2016 Clause 7.6.14 additionalUsageInformation
              */
-            template ChargeReport mw_chargeReport_additionalUsageInformation_not_present
-            modifies mw_chargeReport_any := {
+            template ChargeReport<Container> mw_chargeReport_additionalUsageInformation_not_present<Container>
+            modifies mw_chargeReport_any<Container> := {
                 usageStatementList := superset( // match if additionalUsageInformation is present in all elements of usageStatementList
                     {
-                        usageStatement                 := mw_usageStatement_additionalUsageInformation_not_present,
-                        authenticatedUsageStatement    := *
+                        usageStatement                 := mw_usageStatement_additionalUsageInformation_not_present
                     } ifpresent
                 ) // superset
             } // End of template mw_chargeReport_additionalUsageInformation_not_present
@@ -2096,7 +2095,7 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
         modifies mw_Iso17575_3Adu_TollCharger_ContextId_default := {
             aduBody := {
                 tollContextOverview := {
-                    tollCharger := ?,
+                    tollContext := ?,
                     tollContext := ?,
                     tollSchemeName := *,
                     tollSchemeType := TollSchemeType.roadSectionPricing,
