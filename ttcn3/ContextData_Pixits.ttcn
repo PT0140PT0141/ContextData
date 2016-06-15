@@ -65,4 +65,10 @@ module ContextData_Pixits {
         countryCode := '0011000011'B, // See EN ISO 3166-1 - Fehler! Kein Text mit angegebener Formatvorlage im Dokument./TC Fehler! Kein Text mit angegebener Formatvorlage im Dokument. - ClauseB.4.2.4 Initialisation response (VST)
         providerIdentifier := 2 // See EN ISO 3166-1 - Fehler! Kein Text mit angegebener Formatvorlage im Dokument./TC Fehler! Kein Text mit angegebener Formatvorlage im Dokument. - ClauseB.4.2.4 Initialisation response (VST)
     };
+    /**
+     * @desc    Contains the integer number of detected/measured/consumed charge units
+     * @see     [TS 17575-3], Clause 8.5.3.7 The fee calculation algorithm
+     */
+    modulepar float PX_UNIT_USED := 100.6;
+    
 } // End of module ContextData_Pixits

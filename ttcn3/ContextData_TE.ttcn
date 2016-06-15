@@ -23,7 +23,6 @@ module ContextData_TE {
          * - single ADU consisting of all necessary attributes to activate the context, and/or
          * - several consecutive ADUs consisting of all necessary attributes to activate the context.
          */
-         if (ContextData_PICS_FE.PIC_iso175752CommunicationServicesSupported == true) { // TODO Remove commented TCs
 //            /**
 //             * @desc    TC_CH_FE_BV_01: Verify that DUT activates toll context – toll charger attribute check
 //             * @remark  [TS 17575-3]
@@ -49,7 +48,6 @@ module ContextData_TE {
 //             * @remark  [TS 17575-3], Clause 8.1 Rules with respect to support of context data
 //             */
 //            execute(TC_CH_FE_BV_08(), PX_GUARD);
-         }
         /**
          * @desc    These Test Purposes apply to  ChargeReportConfiguration as claimed in [TS 17575-3] clause B.5.4.3/9
          * Test subgroup objective:
@@ -59,221 +57,202 @@ module ContextData_TE {
          * - single ADU consisting of all necessary attributes;
          * - several consecutive ADUs consisting of all necessary attributes to activate the context
          */
-            /**
-             * @desc    TC_CR_FE_BV_01: Verify the presence of obeID data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
-             */
-            execute(TC_CR_FE_BV_01(), PX_GUARD);
-            /**
-             * @desc    TC_CR_FE_BV_02: Verify the absence of obeID data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
-             */
-            execute(TC_CR_FE_BV_02(), PX_GUARD);
-            /**
-             * @desc    TC_CR_FE_BV_03: Verify the presence of paymentMeans data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
-             */
-            execute(TC_CR_FE_BV_03(), PX_GUARD);
-            /**
-             * @desc    TC_CR_FE_BV_04: Verify the absence of paymentMeans data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
-             */
-            execute(TC_CR_FE_BV_04(), PX_GUARD);
-            /**
-             * @desc    TC_CR_FE_BV_05: Verify the presence of tollCharger data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
-             */
-            execute(TC_CR_FE_BV_05(), PX_GUARD);
-            /**
-             * @desc    TC_CR_FE_BV_06: Verify the absence of tollCharger data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
-             */
-            execute(TC_CR_FE_BV_06(), PX_GUARD);
-            /**
-             * @desc    TC_CR_FE_BV_07: Verify the presence of versionInfo data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
-             */
-            execute(TC_CR_FE_BV_07(), PX_GUARD);
-            /**
-             * @desc    TC_CR_FE_BV_08: Verify the absence of versionInfo data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
-             */
-            execute(TC_CR_FE_BV_08(), PX_GUARD);
-            /**
-             * @desc    TC_CR_FE_BV_09: Verify the presence of vatForThisSession data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
-             */
-            execute(TC_CR_FE_BV_09(), PX_GUARD);
-            /**
-             * @desc    TC_CR_FE_BV_10: Verify the absence of vatForThisSession data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
-             */
-            execute(TC_CR_FE_BV_10(), PX_GUARD);
-            /**
-             * @desc    TC_CR_FE_BV_11: Verify the presence of accountStatus data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
-             */
-            execute(TC_CR_FE_BV_11(), PX_GUARD);
-            /**
-             * @desc    TC_CR_FE_BV_12: Verify the absence of accountStatus data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
-             */
-            execute(TC_CR_FE_BV_12(), PX_GUARD);
-            /**
-             * @desc    TC_CR_FE_BV_13: Verify the presence of transactionCounter data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
-             */
-            execute(TC_CR_FE_BV_13(), PX_GUARD);
-            /**
-             * @desc    TC_CR_FE_BV_14: Verify the absence of transactionCounter data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
-             */
-            execute(TC_CR_FE_BV_14(), PX_GUARD);
-            /**
-             * @desc    TC_CR_FE_BV_15: Verify the presence of mileage data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
-             */
-            execute(TC_CR_FE_BV_15(), PX_GUARD);
-            /**
-             * @desc    TC_CR_FE_BV_16: Verify the absence of mileage data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
-             */
-            execute(TC_CR_FE_BV_16(), PX_GUARD);
-            /**
-             * @desc    TC_CR_FE_BV_17: Verify the presence of listOfCCCAttributes data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
-             */
-            execute(TC_CR_FE_BV_17(), PX_GUARD);
-            /**
-             * @desc    TC_CR_FE_BV_18: Verify the absence of listOfCCCAttributes data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
-             */
-            execute(TC_CR_FE_BV_18(), PX_GUARD);
-            /**
-             * @desc    TC_CR_FE_BV_19: Verify the presence of authenticator data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
-             */
-            execute(TC_CR_FE_BV_19(), PX_GUARD);
-            /**
-             * @desc    TC_CR_FE_BV_20: Verify the absence of authenticator data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
-             */
-            execute(TC_CR_FE_BV_20(), PX_GUARD);
-            /**
-             * @desc    TC_CR_FE_BV_21: Verify the presence of usageStatementID data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
-             */
-            execute(TC_CR_FE_BV_21(), PX_GUARD);
-            /**
-             * @desc    TC_CR_FE_BV_22: Verify the absence of usageStatementID data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
-             */
-            execute(TC_CR_FE_BV_22(), PX_GUARD);
-            /**
-             * @desc    TC_CR_FE_BV_23: Verify the presence of regimeID data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
-             */
-            execute(TC_CR_FE_BV_23(), PX_GUARD);
-            /**
-             * @desc    TC_CR_FE_BV_24: Verify the absence of regimeID data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
-             */
-            execute(TC_CR_FE_BV_24(), PX_GUARD);
-            /**
-             * @desc    TC_CR_FE_BV_25: Verify the presence of aggregatedFee data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
-             */
-            execute(TC_CR_FE_BV_25(), PX_GUARD);
-            /**
-             * @desc    TC_CR_FE_BV_26: Verify the absence of aggregatedFee data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
-             */
-            execute(TC_CR_FE_BV_26(), PX_GUARD);
-            /**
-             * @desc    TC_CR_FE_BV_27: Verify the presence of aggregatedSingleTariffClassSession data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
-             */
-            execute(TC_CR_FE_BV_27(), PX_GUARD);
-            /**
-             * @desc    TC_CR_FE_BV_28: Verify the absence of aggregatedSingleTariffClassSession data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
-             */
-            execute(TC_CR_FE_BV_28(), PX_GUARD);
-            /**
-             * @desc    TC_CR_FE_BV_29: Verify the presence of listOfChargeObjects data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
-             */
-            execute(TC_CR_FE_BV_29(), PX_GUARD);
-            /**
-             * @desc    TC_CR_FE_BV_30: Verify the absence of listOfChargeObjects data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
-             */
-            execute(TC_CR_FE_BV_30(), PX_GUARD);
-            /**
-             * @desc    TC_CR_FE_BV_31: Verify the presence of listOfDSRCUsageData data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
-             */
-            execute(TC_CR_FE_BV_31(), PX_GUARD);
-            /**
-             * @desc    TC_CR_FE_BV_32: Verify the absence of listOfDSRCUsageData data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
-             */
-            execute(TC_CR_FE_BV_32(), PX_GUARD);
-            /**
-             * @desc    TC_CR_FE_BV_33: Verify the presence of listOfRawUsageData data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
-             */
-            execute(TC_CR_FE_BV_33(), PX_GUARD);
-            /**
-             * @desc    TC_CR_FE_BV_34: Verify the absence of listOfRawUsageData data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
-             */
-            execute(TC_CR_FE_BV_34(), PX_GUARD);
-            /**
-             * @desc    TC_CR_FE_BV_35: Verify the presence of noUsage data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
-             */
-            execute(TC_CR_FE_BV_35(), PX_GUARD);
-            /**
-             * @desc    TC_CR_FE_BV_36: Verify the absence of noUsage data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
-             */
-            execute(TC_CR_FE_BV_36(), PX_GUARD);
-            /**
-             * @desc    TC_CR_FE_BV_37: Verify the presence of usageAuthenticator data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
-             */
-            execute(TC_CR_FE_BV_37(), PX_GUARD);
-            /**
-             * @desc    TC_CR_FE_BV_36: Verify the absence of noUsage data element in Charge Report
-             * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
-             */
-            execute(TC_CR_FE_BV_38(), PX_GUARD);
-            /**
-             * @desc    TC_CH_FE_BV_39: Verify that DUT reports data elements requested by Context Data (sent in many ADUs)
-             * @remark  [TS 17575-3], Clause 8.1 Rules with respect to support of context data
-             */
-            execute(TC_CR_FE_BV_39(), PX_GUARD);
         /**
-         * @desc    These Test Purposes apply to Communication services support as claimed in [TS 17575-3] clause B.6.4.2/1, and EFC Attributes as claimed in [TS 17575-3] clause B.6.4.3/1-9
-         * Test subgroup objective:
-         * - to test the usage of communication services
-         * - to test the behaviour of the DUT in relation to handling versions
-         * @remark  2 TCs
-         * @see     Electronic fee collection (EFC) — Conformity evaluation of Front End and Back End equipment to ISO 17575-3 — Part 1: Test suite structure and test purpose - Clause B.2 Procedural test purposes
+         * @desc    TC_CR_FE_BV_01: Verify the presence of obeID data element in Charge Report
+         * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
          */
-         if (ContextData_PICS_BE.PIC_iso175752CommunicationServicesSupported == true) {
-//            /**
-//             * @desc    TC_PRO_BE_BV_01: Verify the usage of communication services
-//             * @remark  [TS 17575-3], Clause 6.1 Communication services
-//             */
-//            execute(TC_PRO_BE_BV_01(), PX_GUARD);
-            /**
-             * @desc    TC_PRO_BE_BV_02: Verify version and validity handling
-             * @remark  [TS 17575-3], Clause 6.2 Version and validity handling
-             */
-            execute(TC_PRO_BE_BV_02(), PX_GUARD);
-         }
+        execute(TC_CR_FE_BV_01(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_02: Verify the absence of obeID data element in Charge Report
+         * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
+         */
+        execute(TC_CR_FE_BV_02(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_03: Verify the presence of paymentMeans data element in Charge Report
+         * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
+         */
+        execute(TC_CR_FE_BV_03(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_04: Verify the absence of paymentMeans data element in Charge Report
+         * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
+         */
+        execute(TC_CR_FE_BV_04(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_05: Verify the presence of tollCharger data element in Charge Report
+         * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
+         */
+        execute(TC_CR_FE_BV_05(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_06: Verify the absence of tollCharger data element in Charge Report
+         * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
+         */
+        execute(TC_CR_FE_BV_06(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_07: Verify the presence of versionInfo data element in Charge Report
+         * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
+         */
+        execute(TC_CR_FE_BV_07(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_08: Verify the absence of versionInfo data element in Charge Report
+         * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
+         */
+        execute(TC_CR_FE_BV_08(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_09: Verify the presence of vatForThisSession data element in Charge Report
+         * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
+         */
+        execute(TC_CR_FE_BV_09(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_10: Verify the absence of vatForThisSession data element in Charge Report
+         * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
+         */
+        execute(TC_CR_FE_BV_10(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_11: Verify the presence of accountStatus data element in Charge Report
+         * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
+         */
+        execute(TC_CR_FE_BV_11(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_12: Verify the absence of accountStatus data element in Charge Report
+         * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
+         */
+        execute(TC_CR_FE_BV_12(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_13: Verify the presence of transactionCounter data element in Charge Report
+         * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
+         */
+        execute(TC_CR_FE_BV_13(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_14: Verify the absence of transactionCounter data element in Charge Report
+         * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
+         */
+        execute(TC_CR_FE_BV_14(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_15: Verify the presence of mileage data element in Charge Report
+         * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
+         */
+        execute(TC_CR_FE_BV_15(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_16: Verify the absence of mileage data element in Charge Report
+         * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
+         */
+        execute(TC_CR_FE_BV_16(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_17: Verify the presence of listOfCCCAttributes data element in Charge Report
+         * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
+         */
+        execute(TC_CR_FE_BV_17(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_18: Verify the absence of listOfCCCAttributes data element in Charge Report
+         * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
+         */
+        execute(TC_CR_FE_BV_18(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_19: Verify the presence of authenticator data element in Charge Report
+         * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
+         */
+        execute(TC_CR_FE_BV_19(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_20: Verify the absence of authenticator data element in Charge Report
+         * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
+         */
+        execute(TC_CR_FE_BV_20(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_21: Verify the presence of usageStatementID data element in Charge Report
+         * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
+         */
+        execute(TC_CR_FE_BV_21(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_22: Verify the absence of usageStatementID data element in Charge Report
+         * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
+         */
+        execute(TC_CR_FE_BV_22(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_23: Verify the presence of regimeID data element in Charge Report
+         * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
+         */
+        execute(TC_CR_FE_BV_23(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_24: Verify the absence of regimeID data element in Charge Report
+         * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
+         */
+        execute(TC_CR_FE_BV_24(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_25: Verify the presence of aggregatedFee data element in Charge Report
+         * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
+         */
+        execute(TC_CR_FE_BV_25(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_26: Verify the absence of aggregatedFee data element in Charge Report
+         * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
+         */
+        execute(TC_CR_FE_BV_26(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_27: Verify the presence of aggregatedSingleTariffClassSession data element in Charge Report
+         * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
+         */
+        execute(TC_CR_FE_BV_27(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_28: Verify the absence of aggregatedSingleTariffClassSession data element in Charge Report
+         * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
+         */
+        execute(TC_CR_FE_BV_28(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_29: Verify the presence of listOfChargeObjects data element in Charge Report
+         * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
+         */
+        execute(TC_CR_FE_BV_29(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_30: Verify the absence of listOfChargeObjects data element in Charge Report
+         * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
+         */
+        execute(TC_CR_FE_BV_30(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_31: Verify the presence of listOfDSRCUsageData data element in Charge Report
+         * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
+         */
+        execute(TC_CR_FE_BV_31(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_32: Verify the absence of listOfDSRCUsageData data element in Charge Report
+         * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
+         */
+        execute(TC_CR_FE_BV_32(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_33: Verify the presence of listOfRawUsageData data element in Charge Report
+         * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
+         */
+        execute(TC_CR_FE_BV_33(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_34: Verify the absence of listOfRawUsageData data element in Charge Report
+         * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
+         */
+        execute(TC_CR_FE_BV_34(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_35: Verify the presence of noUsage data element in Charge Report
+         * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
+         */
+        execute(TC_CR_FE_BV_35(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_36: Verify the absence of noUsage data element in Charge Report
+         * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
+         */
+        execute(TC_CR_FE_BV_36(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_37: Verify the presence of usageAuthenticator data element in Charge Report
+         * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
+         */
+        execute(TC_CR_FE_BV_37(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_36: Verify the absence of noUsage data element in Charge Report
+         * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
+         */
+        execute(TC_CR_FE_BV_38(), PX_GUARD);
+        /**
+         * @desc    TC_CH_FE_BV_39: Verify that DUT reports data elements requested by Context Data (sent in many ADUs)
+         * @remark  [TS 17575-3], Clause 8.1 Rules with respect to support of context data
+         */
+        execute(TC_CR_FE_BV_39(), PX_GUARD);
+        // TODO Add missing TCs
         /**
          * @desc    These Test Purposes apply to  Iso17575-3Adu as claimed in [TS 17575-3] clause B.6.4.1/1
          * Test subgroup objective:
@@ -308,7 +287,7 @@ module ContextData_TE {
              * @desc    TC_ADUB_BE_BV_11: Verify the availability of Context Data attributes to allow the Front End to operate in a toll regime
              * @remark  [TS 17575-3], Clause 8.2 Attributes and data groups
              */
-            execute(TC_ADUB_BE_BV_11(), PX_GUARD);
+            execute(TC_ADUB_BE_BV_01(), PX_GUARD);
         }
         /**
          * @desc    These Test Purposes apply to TollContextOverview as claimed in [TS 17575-3] clause B.6.4.3/1 and OperationalStatus as claimed in [TS 17575-3] clause B.6.4.6
@@ -323,13 +302,13 @@ module ContextData_TE {
              * @remark  [TS 17575-3], Clause 8.3.2 Data group "Regime Overview"
              * @see     Table 3 – EFC attribute TollContextOverview
              */
-            execute(TC_ATTR_11_BE_BV_02(), PX_GUARD);
+            execute(TC_TC_BE_BV_02(), PX_GUARD);
             /**
-             * @desc    TC_ATTR_11_BE_BV_03: Verify whether Stops Operation At is not earlier than Starts Operation At in Operational Status
+             * @desc    TC_TC_BE_BV_02: Verify whether Stops Operation At is not earlier than Starts Operation At in Operational Status
              * @remark  [TS 17575-3], Clause 8.3.2 Data group "Regime Overview"
              * @see     Table 3 – EFC attribute TollContextOverview
              */
-            execute(TC_ATTR_11_BE_BV_03(), PX_GUARD);
+            execute(TC_TC_BE_BV_03(), PX_GUARD);
         }
         /**
          * @desc    These Test Purposes apply to TariffTable as claimed in [TS 17575-3] clause B.6.4.3/2, Toll Scheme Types as claimed in [TS 17575-3] clause B.6.4.5.
@@ -340,18 +319,18 @@ module ContextData_TE {
          */
         if (ContextData_PICS_BE.PIC_tariffTable == true) {
             /**
-             * @desc    TC_ATTR_21_BE_BV_02
+             * @desc    TC_TT_BE_BV_02
              * @see     B.6.1 BV test purposes: Verify that type of Charge Unit is compliant to Toll Scheme Type
              * @remark  [TS 17575-3], Clause 8.3.3.2.2. EFC attribute TariffTable
              * @see     Table 4 – EFC attribute TariffTable
              */
-            execute(TC_ATTR_21_BE_BV_02(), PX_GUARD);
+            execute(TC_TT_BE_BV_02(), PX_GUARD);
             /**
-             * @desc    TC_ATTR_21_BE_BV_03: Verify that Tariff Class ID is unique within one toll context
+             * @desc    TC_TT_BE_BV_03: Verify that Tariff Class ID is unique within one toll context
              * @remark  [TS 17575-3], Clause 8.3.3.2.2. Data type Tariff
              * @see     Table 4 – EFC attribute TariffTable
              */
-            execute(TC_ATTR_21_BE_BV_03(), PX_GUARD);
+            execute(TC_TT_BE_BV_03(), PX_GUARD);
         }
         /**
          * @desc    These Test Purposes apply to TariffClassDefinition as claimed in [TS 17575-3] clause B.6.4.3/3 and B.6.4.8.
@@ -360,17 +339,17 @@ module ContextData_TE {
          */
         if(ContextData_PICS_BE.PIC_tariffClassDefinition) {
             /**
-             * @desc    TC_ATTR_22_BE_BV_01: Verify that each combination of vehicle, time, location and user class leads to one and only one Tariff Class
+             * @desc    TC_TACD_BE_BV_01: Verify that each combination of vehicle, time, location and user class leads to one and only one Tariff Class
              * @remark  [TS 17575-3], Clause 8.3.3.3. Tariff class definition
              * @see     Table 7 – Data type TariffClass, Figure 9 — Principle of creation of tariff classes
              */
-            execute(TC_ATTR_22_BE_BV_01(), PX_GUARD);
+            execute(TC_TACD_BE_BV_01(), PX_GUARD);
             /**
-             * @desc    TC_ATTR_22_BE_BV_02: Verify that Tariff Class ID is unique within one toll context within TariffClassDefinition attribute
+             * @desc    TC_TACD_BE_BV_02: Verify that Tariff Class ID is unique within one toll context within TariffClassDefinition attribute
              * @remark  [TS 17575-3], Clause 8.3.3.3.2. Data type TariffClass
              * @see     Table 7 – Data type TariffClass, Figure 9 — Principle of creation of tariff classes
              */
-            execute(TC_ATTR_22_BE_BV_02(), PX_GUARD);
+            execute(TC_TACD_BE_BV_02(), PX_GUARD);
         }
         /**
          * @desc    These Test Purposes apply to  LocalVehicleClassDefinition as claimed in [TS 17575-3] clause B.6.4.3/4.
@@ -379,17 +358,17 @@ module ContextData_TE {
          */
         if (ContextData_PICS_BE.PIC_localVehicleClassDefinition == true) {
             /**
-             * @desc    TC_ATTR_23_BE_BV_01: Verify that Local Vehicle Class ID is unique
+             * @desc    TP_LVCD_BE_BV_01: Verify that Local Vehicle Class ID is unique
              * @remark  [TS 17575-3], Clause 8.3.3.4.1. Data type LocalVehicleClass
              * @see     Table 9 – Data type LocalVehicleClass
              */
-            execute(TC_ATTR_23_BE_BV_01(), PX_GUARD);
+            execute(TP_LVCD_BE_BV_01(), PX_GUARD);
             /**
-             * @desc    TC_ATTR_23_BE_BV_02: Verify that Priority Level is different for overlapping Vehicle Classes
+             * @desc    TP_LVCD_BE_BV_02: Verify that Priority Level is different for overlapping Vehicle Classes
              * @remark  [TS 17575-3], Clause 8.3.3.4.1. Data type LocalVehicleClass
              * @see     Table 9 – Data type LocalVehicleClass
              */
-            execute(TC_ATTR_23_BE_BV_02(), PX_GUARD);
+            execute(TP_LVCD_BE_BV_02(), PX_GUARD);
         }
         /**
          * @desc    Test subgroup objective:

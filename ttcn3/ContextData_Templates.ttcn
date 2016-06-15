@@ -516,7 +516,7 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
         } // End of group ContextData21
         
         /**
-         * @desc    Group of Context Date describes in Annex C.2: Data structure - Table C.8
+         * @desc    Group of Context Date describes in Annex C.2: Data structure - Table C.4
          * @see     Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 1: Charging for data element descriptions
          */
         group ContextData22 {
@@ -547,6 +547,105 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
                 )
             } // End of template mw_chargeReport_ContextData22
         } // End of group ContextData22
+        
+        /**
+         * @desc    Group of Context Date describes in Annex C.2: Data structure - Table C.5
+         * @see     Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 1: Charging for data element descriptions
+         */
+        group ContextData23 {
+            /**
+             * @desc    Main template for ContextData23
+             * @param   p_tollContextPartitionId The identifier of the respective toll context partition for which the overview information is provided
+             * @see     ISO 17575-3:2316 Clause 7.3 Application data unit structure (data type Iso17575-3Adu)
+             * @see     ISO 17575-3:2316 Figure 4 — Structure of an ISO 17575-3 ADU
+             */
+            template (value) Iso17575_3AduBody m_ContextData23(in TollContextPartitionId p_tollContextPartitionId)
+            modifies m_ContextData_default := {
+                tollContextPartitionOverview := {
+                    m_tollContextPartitionOverview_default(p_tollContextPartitionId)
+                }
+            } // End of template m_ContextData23
+            
+            /**
+             * @desc ChargeReport template compliant with Context Data #23
+             */
+            template ChargeReport<Container> mw_chargeReport_ContextData23<Container>(
+                                                                                      in template (present) Provider p_tollContext := ?
+            ) modifies mw_chargeReport_default<Container> := {
+                obeId := ?,
+                usageStatementList := superset(
+                    {
+                        usageStatement := mw_usageStatement_tollContext(p_tollContext)
+                    }
+                )
+            } // End of template mw_chargeReport_ContextData23
+        } // End of group ContextData23
+        
+        /**
+         * @desc    Group of Context Date describes in Annex C.2: Data structure - Table C.5
+         * @see     Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 1: Charging for data element descriptions
+         */
+        group ContextData24 {
+            /**
+             * @desc    Main template for ContextData24
+             * @param   p_tollContextPartitionId The identifier of the respective toll context partition for which the overview information is provided
+             * @see     ISO 17575-3:2416 Clause 7.3 Application data unit structure (data type Iso17575-3Adu)
+             * @see     ISO 17575-3:2416 Figure 4 — Structure of an ISO 17575-3 ADU
+             */
+            template (value) Iso17575_3AduBody m_ContextData24(in TollContextPartitionId p_tollContextPartitionId)
+            modifies m_ContextData_default := {
+                tollContextPartitionOverview := {
+                    m_tollContextPartitionOverview_default(p_tollContextPartitionId)
+                }
+            } // End of template m_ContextData24
+            
+            /**
+             * @desc ChargeReport template compliant with Context Data #24
+             */
+            template ChargeReport<Container> mw_chargeReport_ContextData24<Container>(
+                                                                                      in template (present) Provider p_tollContext := ?
+            ) modifies mw_chargeReport_default<Container> := {
+                obeId := ?,
+                usageStatementList := superset(
+                    {
+                        usageStatement := mw_usageStatement_tollContext(p_tollContext)
+                    }
+                )
+            } // End of template mw_chargeReport_ContextData24
+        } // End of group ContextData24
+        
+        /**
+         * @desc    Group of Context Date describes in Annex C.2: Data structure - Table C.5
+         * @see     Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 1: Charging for data element descriptions
+         */
+        group ContextData25 {
+            /**
+             * @desc    Main template for ContextData25
+             * @param   p_tollContextPartitionId The identifier of the respective toll context partition for which the overview information is provided
+             * @see     ISO 17575-3:2516 Clause 7.3 Application data unit structure (data type Iso17575-3Adu)
+             * @see     ISO 17575-3:2516 Figure 4 — Structure of an ISO 17575-3 ADU
+             */
+            template (value) Iso17575_3AduBody m_ContextData25(in TollContextPartitionId p_tollContextPartitionId)
+            modifies m_ContextData_default := {
+                tollContextPartitionOverview := {
+                    m_tollContextPartitionOverview_default(p_tollContextPartitionId)
+                }
+            } // End of template m_ContextData25
+            
+            /**
+             * @desc ChargeReport template compliant with Context Data #25
+             */
+            template ChargeReport<Container> mw_chargeReport_ContextData25<Container>(
+                                                                                      in template (present) Provider p_tollContext := ?
+            ) modifies mw_chargeReport_default<Container> := {
+                obeId := ?,
+                usageStatementList := superset(
+                    {
+                        usageStatement := mw_usageStatement_tollContext(p_tollContext)
+                    }
+                )
+            } // End of template mw_chargeReport_ContextData25
+        } // End of group ContextData25
         
         /**
          * @desc    This Context Data templates are used by TC_CR_FE_BE_xx TCs
@@ -1940,54 +2039,66 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
         /**
          * @desc    Check that TollContextOverview is present
          * @param   p_tollCharger Provider value to match
-         * @param   p_contextId ContextId value to match
          */
-        template Iso17575_3Adu mw_Iso17575_3Adu_tollContextOverview_TollCharger_ContextId(in template Provider p_tollCharger, in template ContextId p_contextId)
-        modifies mw_Iso17575_3Adu_TollCharger_ContextId := {
+        template Iso17575_3Adu mw_Iso17575_3Adu_tollContextOverview_TollCharger(
+                                                                                in template Provider p_tollCharger
+        ) modifies mw_Iso17575_3Adu_TollContext := {
             aduBody := {
                 tollContextOverview := ?
             }
-        } // End of template mw_Iso17575_3Adu_tollContextOverview_TollCharger_ContextId
+        } // End of template mw_Iso17575_3Adu_tollContextOverview_TollCharger
+        /**
+         * @desc    Check that TollContextOverview, tariffTable and tollContextPartitionOverview are present
+         * @param   p_tollCharger Provider value to match
+         */
+        template Iso17575_3Adu mw_Iso17575_3Adu_tariffTable_tollContextPartitionOverview_TollCharger(
+                                                                                                     in template Provider p_tollCharger
+        ) modifies mw_Iso17575_3Adu_tollContextOverview_TollCharger := {
+            aduBody := {
+                tollContextPartitionOverview    := ?,
+                tariffTable                     := ?
+            }
+        } // End of template mw_Iso17575_3Adu_tollContextOverview_TollCharger
         /**
          * @desc    Check that tariffTable is present
          * @param   p_tollCharger Provider value to match
-         * @param   p_contextId ContextId value to match
          */
-        template Iso17575_3Adu mw_Iso17575_3Adu_tariffTable_TollCharger_ContextId(in template Provider p_tollCharger, in template ContextId p_contextId)
-        modifies mw_Iso17575_3Adu_TollCharger_ContextId := {
+        template Iso17575_3Adu mw_Iso17575_3Adu_tariffTable_TollCharger(
+                                                                        in template Provider p_tollCharger
+        ) modifies mw_Iso17575_3Adu_TollContext := {
             aduBody := {
                 tariffTable := ?
             }
-        } // End of template mw_Iso17575_3Adu_tariffTable_TollCharger_ContextId
+        } // End of template mw_Iso17575_3Adu_tariffTable_TollCharger
         /**
          * @desc    Check that tariffClassDefinition is present
          * @param   p_tollCharger Provider value to match
-         * @param   p_contextId ContextId value to match
          */
-        template Iso17575_3Adu mw_Iso17575_3Adu_tariffClassDefinition_TollCharger_ContextId(in template Provider p_tollCharger, in template ContextId p_contextId)
-        modifies mw_Iso17575_3Adu_TollCharger_ContextId := {
+        template Iso17575_3Adu mw_Iso17575_3Adu_tariffClassDefinition_TollCharger(
+                                                                                  in template Provider p_tollCharger
+        ) modifies mw_Iso17575_3Adu_TollContext := {
             aduBody := {
                 tariffClassDefinition := ?
             }
-        } // End of template mw_Iso17575_3Adu_tariffClassDefinition_TollCharger_ContextId
+        } // End of template mw_Iso17575_3Adu_tariffClassDefinition_TollCharger
         /**
          * @desc    Check that localVehicleClassDefinition is present
          * @param   p_tollCharger Provider value to match
-         * @param   p_contextId ContextId value to match
          */
-        template Iso17575_3Adu mw_Iso17575_3Adu_localVehicleClassDefinition_TollCharger_ContextId(in template Provider p_tollCharger, in template ContextId p_contextId)
-        modifies mw_Iso17575_3Adu_TollCharger_ContextId := {
+        template Iso17575_3Adu mw_Iso17575_3Adu_localVehicleClassDefinition_TollCharger(
+                                                                                        in template Provider p_tollCharger
+        ) modifies mw_Iso17575_3Adu_TollContext := {
             aduBody := {
                 localVehicleClassDefinition := ?
             }
-        } // End of template mw_Iso17575_3Adu_localVehicleClassDefinition_TollCharger_ContextId
+        } // End of template mw_Iso17575_3Adu_localVehicleClassDefinition_TollCharger
         /**
          * @desc    Check that timeClassDefinition is present
          * @param   p_tollCharger Provider value to match
-         * @param   p_contextId ContextId value to match
          */
-        template Iso17575_3Adu mw_Iso17575_3Adu_timeclassdef_TollCharger_ContextId(in template Provider p_tollCharger, in template ContextId p_contextId)
-        modifies mw_Iso17575_3Adu_TollCharger_ContextId := {
+        template Iso17575_3Adu mw_Iso17575_3Adu_timeclassdef_TollCharger_ContextId(
+                                                                                   in template Provider p_tollCharger
+        ) modifies mw_Iso17575_3Adu_TollContext := {
             aduBody := {
                 timeClassDefinition := ?
             }
@@ -1995,10 +2106,10 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
         /**
          * @desc    Check that userClassDefinition is present
          * @param   p_tollCharger Provider value to match
-         * @param   p_contextId ContextId value to match
          */
-        template Iso17575_3Adu mw_Iso17575_3Adu_userclassdef_TollCharger_ContextId(in template Provider p_tollCharger, in template ContextId p_contextId)
-        modifies mw_Iso17575_3Adu_TollCharger_ContextId := {
+        template Iso17575_3Adu mw_Iso17575_3Adu_userclassdef_TollCharger_ContextId(
+                                                                                   in template Provider p_tollCharger
+        ) modifies mw_Iso17575_3Adu_TollContext := {
             aduBody := {
                 userClassDefinition := ?
             }
@@ -2006,21 +2117,21 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
         /**
          * @desc    Check that tollContextLayout is present
          * @param   p_tollCharger Provider value to match
-         * @param   p_contextId ContextId value to match
          */
-        template Iso17575_3Adu mw_Iso17575_3Adu_tollContextLayout_TollCharger_ContextId(in template Provider p_tollCharger, in template ContextId p_contextId)
-        modifies mw_Iso17575_3Adu_TollCharger_ContextId := {
+        template Iso17575_3Adu mw_Iso17575_3Adu_tollContextLayout_TollCharger(
+                                                                              in template Provider p_tollCharger
+        ) modifies mw_Iso17575_3Adu_TollContext := {
             aduBody := {
                 tollContextLayout := ?
             }
-        } // End of template mw_Iso17575_3Adu_tollContextLayout_TollCharger_ContextId
+        } // End of template mw_Iso17575_3Adu_tollContextLayout_TollCharger
         /**
          * @desc    Check that TollContextLayout.sectionPricingLayout is present
          * @param   p_tollCharger Provider value to match
-         * @param   p_contextId ContextId value to match
          */
-        template Iso17575_3Adu mw_Iso17575_3Adu_tollcontextlayout_sectionPricingLayout_TollCharger_ContextId(in template Provider p_tollCharger, in template ContextId p_contextId)
-        modifies mw_Iso17575_3Adu_TollCharger_ContextId := {
+        template Iso17575_3Adu mw_Iso17575_3Adu_tollcontextlayout_sectionPricingLayout_TollCharger_ContextId(
+                                                                                                             in template Provider p_tollCharger
+        ) modifies mw_Iso17575_3Adu_TollContext := {
             aduBody := {
                 tollContextLayout := {
                     layoutDescription := {
@@ -2069,44 +2180,39 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
          * @param   p_tollCharger Provider value to match
          * @param   p_contextId ContextId value to match
          */
-        template Iso17575_3Adu mw_Iso17575_3Adu_chargeReportingEvents_TollCharger_ContextId(in template Provider p_tollCharger, in template ContextId p_contextId)
-        modifies mw_Iso17575_3Adu_TollCharger_ContextId := {
+        template Iso17575_3Adu mw_Iso17575_3Adu_chargeReportingEvents_TollCharger(in template Provider p_tollCharger, in template ContextId p_contextId)
+        modifies mw_Iso17575_3Adu_TollContext := {
             aduBody := {
                 chargeReportingEvents := ?
             }
-        } // End of template mw_Iso17575_3Adu_chargeReportingEvents_TollCharger_ContextId
+        } // End of template mw_Iso17575_3Adu_chargeReportingEvents_TollCharger
         /**
          * @desc    Check that chargeReportConfiguration is present
          * @param   p_tollCharger Provider value to match
          * @param   p_contextId ContextId value to match
          */
-        template Iso17575_3Adu mw_Iso17575_3Adu_chargeReportConfiguration_TollCharger_ContextId(in template Provider p_tollCharger, in template ContextId p_contextId)
-        modifies mw_Iso17575_3Adu_TollCharger_ContextId := {
+        template Iso17575_3Adu mw_Iso17575_3Adu_chargeReportConfiguration_TollCharger(in template Provider p_tollCharger, in template ContextId p_contextId)
+        modifies mw_Iso17575_3Adu_TollContext := {
             aduBody := {
                 chargeReportConfiguration := ?
             }
-        } // End of template mw_Iso17575_3Adu_chargeReportConfiguration_TollCharger_ContextId
+        } // End of template mw_Iso17575_3Adu_chargeReportConfiguration_TollCharger
         /**
          * @desc    Check TollContextOverview
          * @param   p_tollCharger Provider value to match
          * @param   p_contextId ContextId value to match
          */
-        template Iso17575_3Adu mw_Iso17575_3Adu_TollContextOverview_TollCharger_ContextID(in template Provider p_tollCharger, in template ContextId p_contextId)
-        modifies mw_Iso17575_3Adu_TollCharger_ContextId_default := {
+        template Iso17575_3Adu mw_Iso17575_3Adu_TollContextOverview_TollContext(
+                                                                                in template Provider p_tollCharger
+        ) modifies mw_Iso17575_3Adu_TollContext_default := {
             aduBody := {
                 tollContextOverview := {
                     tollContext := ?,
-                    tollContext := ?,
-                    tollSchemeName := *,
-                    tollSchemeType := TollSchemeType.roadSectionPricing,
-                    operationalStatus := ?,
-                    timeZone := ?,
-                    tollContextBoundingBoxes := *,
-                    tollContextOverviewVersion := ?,
-                    tollContextOverviewAuthenticator := *
-                }
+                    tollContextPartitions := ?
+                },
+                tollContextPartitionOverview := ?
             }
-        } // End of template mw_Iso17575_3Adu_TollContextOverview_TollCharger_ContextID
+        } // End of template mw_Iso17575_3Adu_TollContextOverview_TollCharger
 
     } // End of group ADU_Attribute
 

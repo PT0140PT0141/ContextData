@@ -27,8 +27,9 @@ module ContextData_Functions {
     import from Common_LibUpperTester all;
     import from Common_Defaults all;
     import from Common_Pics all;
-
+    
     import from ContextData_TypesAndValues all;
+    import from ContextData_Pixits all;
 
     /**
      * @desc    Preambule functions:
@@ -100,37 +101,41 @@ module ContextData_Functions {
          * @param   p_tarifftable TariffTable value
          * @return  true on success, false otherwise
          */
-        function f_check_compliancy_ChargeUnit_TollSchemeType(
-                                                              in template (value) TollContextOverview p_tollcontextoverview,
-                                                              in template (value) TariffTable p_tarifftable
+        function f_check_compliancy_ChargeUnit_TollContextPartitionType(
+                                                                        in template (value) TollContextPartitionOverviews p_tollContextPartitionOverviews,
+                                                                        in template (value) TariffTable p_tarifftable
         ) runs on EutComp return boolean {
             // p_tarifftable shall not be omit
 
-            if (p_tollcontextoverview.tollSchemeType == TollSchemeType.roadSectionPricing) {
-                // Parse Tariffs list
-                for (var integer v_idx := 0; v_idx < sizeof(p_tarifftable.tariffs); v_idx := v_idx + 1) {
-                    if (ischosen(p_tarifftable.tariffs[v_idx].chargeUnit.time)) {
-                        return false; // Error
-                    } // else continue
-                } // End of 'for' statement
-            } else if ((p_tollcontextoverview.tollSchemeType == TollSchemeType.areaPricingDistance) or (p_tollcontextoverview.tollSchemeType == TollSchemeType.areaPricingTime)){
-                // Parse Tariffs list
-                for (var integer v_idx := 0; v_idx < sizeof(p_tarifftable.tariffs); v_idx := v_idx + 1) {
-                    if (ischosen(p_tarifftable.tariffs[v_idx].chargeUnit.event)) {
-                        return false; // Error
-                    } // else continue
-                } // End of 'for' statement
-            } else if (p_tollcontextoverview.tollSchemeType == TollSchemeType.cordonPricing) {
-                // Parse Tariffs list
-                for (var integer v_idx := 0; v_idx < sizeof(p_tarifftable.tariffs); v_idx := v_idx + 1) {
-                    if (not ischosen(p_tarifftable.tariffs[v_idx].chargeUnit.event)) {
-                        return false; // Error
-                    } // else continue
-                } // End of 'for' statement
-            }
-
+            for (var integer v_idx := 0; v_idx < sizeof(p_tollContextPartitionOverviews); v_idx := v_idx + 1) {
+                var TollContextPartitionOverview v_tollContextPartitionOverview := valueof(p_tollContextPartitionOverviews[v_idx]);
+                
+                if (v_tollContextPartitionOverview.tollContextPartitionType  == TollSchemeType.roadSectionPricing) {
+                    // Parse Tariffs list
+                    for (var integer v_jdx := 0; v_jdx < sizeof(p_tarifftable.tariffs); v_jdx := v_jdx + 1) {
+                        if (ischosen(p_tarifftable.tariffs[v_jdx].chargeUnit.time)) {
+                            return false; // Error
+                        } // else continue
+                    } // End of 'for' statement
+                } else if ((v_tollContextPartitionOverview.tollContextPartitionType == TollSchemeType.areaPricingDistance) or (v_tollContextPartitionOverview.tollContextPartitionType == TollSchemeType.areaPricingTime)){
+                    // Parse Tariffs list
+                    for (var integer v_jdx := 0; v_jdx < sizeof(p_tarifftable.tariffs); v_jdx := v_jdx + 1) {
+                        if (ischosen(p_tarifftable.tariffs[v_jdx].chargeUnit.event)) {
+                            return false; // Error
+                        } // else continue
+                    } // End of 'for' statement
+                } else if (v_tollContextPartitionOverview.tollContextPartitionType == TollSchemeType.cordonPricing) {
+                    // Parse Tariffs list
+                    for (var integer v_jdx := 0; v_jdx < sizeof(p_tarifftable.tariffs); v_jdx := v_jdx + 1) {
+                        if (not ischosen(p_tarifftable.tariffs[v_jdx].chargeUnit.event)) {
+                            return false; // Error
+                        } // else continue
+                    } // End of 'for' statement
+                }
+            } // End of 'for' statement
+            
             return true;
-        } // End of function f_check_compliancy_ChargeUnit_TollSchemeType
+        } // End of function f_check_compliancy_ChargeUnit_TollContextPartitionType
 
         /**
          * @desc    This function verifies the uniqueness tariffClass of Tariff class list
@@ -138,8 +143,9 @@ module ContextData_Functions {
          * @return  true on success, false otherwise
          * @verdict unchanged
          */
-        function f_check_uniqueness_TariffClassID(in TariffTable.tariffs p_tariffsList) runs on EutComp
-        return boolean {
+        function f_check_uniqueness_TariffClassID(
+                                                  in TariffTable.tariffs p_tariffsList
+        ) runs on EutComp return boolean {
             // p_tariffTable shall not be omit
 
             var charstring v_tariffClassIdFound := ";"; // Used to build the list of the tariffClassId already processed
@@ -159,6 +165,84 @@ module ContextData_Functions {
             
             return true;
         } // End of function f_check_uniqueness_TariffClassID
+        
+        function f_roundingRules(
+                                 in template (value) TariffTable p_tariffTable,
+                                 in float p_curencyUnit
+        ) runs on EutComp return float {
+            if (p_tariffTable[0].tariff.roundingRuleForChargeUnitsUsed == RoundingRule.no) { // no rounding
+                return p_curencyUnit;
+            } else if (p_tariffTable[0].tariff.roundingRuleForChargeUnitsUsed == RoundingRule.up) { // always rounding up to next larger value of the minor curency unit
+                return p_curencyUnit;
+            } else if (p_tariffTable[0].tariff.roundingRuleForChargeUnitsUsed == RoundingRule.down) { // always rounding down to next lower value of the minor currency unit
+                return p_curencyUnit;
+            } // else, default is rounding according to accounting rules (as e.g. defined in DIN 1333)
+            
+            return p_curencyUnit;
+        }
+        
+        function f_check_compliancy_TariffClass <in type Container>(
+                                                                    in template (value) UsageStatementList p_usageStatementList, 
+                                                                    in template (value) TariffTable p_tariffTable,
+                                                                    in boolean p_applyRounding := false
+        ) runs on EutComp return boolean {
+            // p_usageStatementList shall not be omit
+            var float v_sum1 := 0.0;
+            var float v_sum2 := 0.0;
+            var float v_N := 0.0;
+
+            // Parse UsageStatement list
+            for (var integer v_idx := 0; v_idx < sizeof(p_usageStatementList); v_idx := v_idx + 1) {
+                // Check if aggregatedFee and aggregatedSingleTariffClassSession fields are present
+                if (
+                    (ispresent(p_usageStatementList[v_idx].usageStatement.aggregatedSingleTariffClassSession) == false) 
+                ) {
+                    if (ispresent(p_usageStatementList[v_idx].usageStatement.aggregatedFee) == true) {
+                        if (
+                            match(
+                                oct2int(p_usageStatementList[v_idx].usageStatement.aggregatedFee.feeExclVat.paymentFeeUnit), 
+                                p_tariffTable.tariffs[0].standardCurrency
+                            )
+                        ) { // AND usageStatementList[i].aggregatedFee is expressed in Currency1
+                            v_sum2 := v_sum2 + int2float(p_usageStatementList[v_idx].usageStatement.aggregatedFee.feeExclVat.paymentFeeAmount);
+                        }
+                    } else {
+                        continue;
+                    }
+                } else {
+                    // Check 
+                    if (
+                        match(
+                            p_tariffTable.tariffs[0].tariffClass,
+                            p_usageStatementList[v_idx].usageStatement.aggregatedSingleTavriffClassSession.currentTariffClass.tariffClassId
+                        ) == true
+                    ) { // ASTC.currentTariffClass equals to Tariff1 
+                        if (ispresent(p_usageStatementList[v_idx].usageStatement.aggregatedSingleTariffClassSession.feeExclVat)) {
+                            if (
+                                match(
+                                    oct2int(p_usageStatementList[v_idx].usageStatement.aggregatedSingleTariffClassSession.feeExclVat.paymentFeeUnit), 
+                                    p_tariffTable.tariffs[0].standardCurrency
+                                )
+                            ) { // AND all ASTC.feeExclVat are expressed in Currency1
+                                v_sum1 := v_sum1 + int2float(p_usageStatementList[v_idx].usageStatement.aggregatedSingleTariffClassSession.feeExclVat.paymentFeeAmount);
+                            }
+                        }
+                    } // else continue
+                }
+            } // End of 'for' loop
+            if (p_applyRounding) {
+                    v_N := f_roundingRules(p_tariffTable, PX_UNIT_USED);
+            } else {
+                v_N := PX_UNIT_USED;
+            }
+            if (match(v_sum1, int2float(v_N * p_tariffTable.tariffs[0].basicFeePerChargeUnit))) { // AND sum of all ASTC.feeExclVat equals to N * conversionRate1 * BFPCU1 
+                return true;
+            } else if (match(v_sum2, int2float(v_N * p_tariffTable.tariffs[0].basicFeePerChargeUnit))) { // AND sum of all usageStatementList[i].aggregatedFee = NxBFPCU1
+                return true;
+            }
+            
+            return false;
+        } // End of function f_check_compliancy_TariffClass
 
         /**
          * @desc    This function verifies whether each combination of time, vehicle, location and user class leads to exactly one Tariff Class in A22.tariffClasses[i]
@@ -166,8 +250,9 @@ module ContextData_Functions {
          * @return  true on success, false otherwise
          * @verdict unchanged
          */
-        function f_check_uniqueness_TariffClasses(in TariffClassDefinition.tariffClasses p_tariffClasses) runs on EutComp
-        return boolean {
+        function f_check_uniqueness_TariffClasses(
+                                                  in TariffClassDefinition.tariffClasses p_tariffClasses
+        ) runs on EutComp return boolean {
             // p_tariffClasses shall not be omit
 
             var charstring v_tariffClassSetFound := ";"; // Used to build the list of the tariff class {t, v, u, l} already processed
@@ -225,8 +310,9 @@ module ContextData_Functions {
          * @return  true on success, false otherwise
          * @verdict unchanged
          */
-        function f_check_uniqueness_TariffClassID_1(in TariffClassDefinition.tariffClasses p_tariffClasses) runs on EutComp
-        return boolean {
+        function f_check_uniqueness_TariffClassID_1(
+                                                    in TariffClassDefinition.tariffClasses p_tariffClasses
+        ) runs on EutComp return boolean {
             // p_tariffClasses shall not be omit
 
             var charstring v_tariffClassIdFound := ";"; // Used to build the list of the tariffClassId already processed
@@ -253,8 +339,9 @@ module ContextData_Functions {
          * @return  true on success, false otherwise
          * @verdict unchanged
          */
-        function f_check_uniqueness_LocalVehicleClassId(in LocalVehicleClassDefinition.localVehicleClasses p_locvehclassList) runs on EutComp
-        return boolean {
+        function f_check_uniqueness_LocalVehicleClassId(
+                                                        in LocalVehicleClassDefinition.localVehicleClasses p_locvehclassList
+        ) runs on EutComp return boolean {
             // p_locvehclassList shall not be omit
 
             var charstring v_localVehicleClassIdFound := ";"; // Used to build the list of the localVehicleClassId already processed
@@ -281,8 +368,9 @@ module ContextData_Functions {
          * @return  true on success, false otherwise
          * @verdict unchanged
          */
-        function f_check_uniqueness_PriorityValue_by_group_LocalVehicleClass(in LocalVehicleClassDefinition.localVehicleClasses p_locvehclassList) runs on EutComp
-        return boolean {
+        function f_check_uniqueness_PriorityValue_by_group_LocalVehicleClass(
+                                                                             in LocalVehicleClassDefinition.localVehicleClasses p_locvehclassList
+        ) runs on EutComp return boolean {
             // p_locvehclassList shall not be omit
 
             var charstring v_priorityValueFound := ";"; // Used to build the list of the priorityValue already processed
@@ -1483,7 +1571,19 @@ module ContextData_Functions {
             return 0;
         } // End of function f_compareTime
     } // End of group Comparition
-
+    
+    group External_functions {
+        
+        /**
+         * @desc    This function verifies that polygon points are defined in a way that the connections between the points do not intersect
+         * @param   p_polygon The polygon to check
+         * @return  true on success, false otherwise
+         * @verdict unchanged on success, fail on priocessing error
+         */
+        external function fx_isPolygonPointsIntersect(in Polygon p_polygon) return boolean;
+        
+    } // End of group External_functions
+    
     group Internal_functions {
         /**
          * @desc    This function builds the overlapped groups based on at least one criterion
@@ -1491,8 +1591,9 @@ module ContextData_Functions {
          * @return  The built group
          * @verdict unchanged
          */
-        function f_Build_LocalVehicleClass_groups(in LocalVehicleClassDefinition.localVehicleClasses p_locvehclassList) runs on EutComp
-        return LocalVehicleClassesGroups {
+        function f_Build_LocalVehicleClass_groups(
+                                                  in LocalVehicleClassDefinition.localVehicleClasses p_locvehclassList
+        ) runs on EutComp return LocalVehicleClassesGroups {
             var LocalVehicleClassesGroups v_groups := { }; // Group localVehicleClasses that overlap at least with one criterion
             var boolean v_createNewGroup; // Used to indicate if a new group shall be created
 
@@ -1899,8 +2000,9 @@ module ContextData_Functions {
          * @return  true on success, false otherwise
          * @verdict unchanged
          */
-        function f_check_uniqueness_LocalVehicleClassId_1(in TariffClass.localVehicleClasses p_localVehicleClassIds) runs on EutComp
-        return boolean {
+        function f_check_uniqueness_LocalVehicleClassId_1(
+                                                          in TariffClass.localVehicleClasses p_localVehicleClassIds
+        ) runs on EutComp return boolean {
             // p_localVehicleClassIds shall not be omit
 
             var charstring v_localVehicleClassIdFound := ";"; // Used to build the list of the localVehicleClassId already processed
@@ -1955,8 +2057,9 @@ module ContextData_Functions {
          * @return  true on success, false otherwise
          * @verdict unchanged
          */
-        function f_check_uniqueness_UserClassId_1(in TariffClass.userClasses p_userClassIds) runs on EutComp
-        return boolean {
+        function f_check_uniqueness_UserClassId_1(
+                                                  in TariffClass.userClasses p_userClassIds
+        ) runs on EutComp return boolean {
             // p_userClassIds shall not be omit
 
             var charstring v_userClassIdFound := ";"; // Used to build the list of the userClassId already processed
@@ -2022,10 +2125,10 @@ module ContextData_Functions {
             }
         } // End of function f_pco_send_Iso17575_3Adu
         
-        altstep a_pco_recv_Iso17575_3Adu(
-                                         template ChargeReport p_chargeReportValueExpected,
-                                         out template (value) ChargeReport p_chargeReportValue,
-                                         out template (value) boolean p_result
+        altstep a_pco_recv_Iso17575_3Adu_ChargeReport(
+                                                      template ChargeReport p_chargeReportValueExpected,
+                                                      out template (value) ChargeReport p_chargeReportValue,
+                                                      out template (value) boolean p_result
         ) runs on EutComp {
             var AuthenticatedChargeReport v_authenticatedChargeReport;
             
@@ -2035,6 +2138,29 @@ module ContextData_Functions {
             [PICS_SECURED_MODE == true] pco.receive(AuthenticatedChargeReport:?) -> value v_authenticatedChargeReport {
                 if (f_extract_ChargeReport<integer>(v_authenticatedChargeReport, p_chargeReportValue) == true) {
                     p_result := match(p_chargeReportValueExpected, p_chargeReportValue);
+                } else {
+                    p_result := false;
+                }
+            }
+            [] pco.receive {
+                p_result := false;
+            }
+        } // End of function a_pco_recv_Iso17575_3Adu_ChargeReport
+        
+        altstep a_pco_recv_Iso17575_3Adu(
+                                         template Iso17575_3Adu p_iso17575_3AduValueExpected,
+                                         out template (value) Iso17575_3Adu p_iso17575_3AduValue,
+                                         out template (value) boolean p_result
+        ) runs on EutComp {
+            var Iso17575_3InformationContent v_iso17575_3InformationContent;
+            
+            [PICS_SECURED_MODE == false] pco.receive(mw_Iso17575_3InformationContent_unsecured(p_iso17575_3AduValueExpected)) -> value v_iso17575_3InformationContent {
+                p_iso17575_3AduValue := v_iso17575_3InformationContent.notAuthenticatedIso17575_3Adu;
+                p_result := true;
+            }
+            [PICS_SECURED_MODE == true] pco.receive(Iso17575_3InformationContent:?) -> value v_iso17575_3InformationContent {
+                if (f_extract_Iso17575(v_iso17575_3InformationContent.authenticatedIso1575_3Adu, p_iso17575_3AduValue) == true) {
+                    p_result := match(p_iso17575_3AduValueExpected, p_iso17575_3AduValue);
                 } else {
                     p_result := false;
                 }
@@ -2118,10 +2244,38 @@ module ContextData_Functions {
                 "", ""
             };
             /**
+             * @desc    Event defined in ContextData23 occurred
+             */
+            const ParameterList raiseContext23Event := {
+                "raiseEvent", "Context23",
+                "", ""
+            };
+            /**
+             * @desc    Event defined in ContextData24 occurred
+             */
+            const ParameterList raiseContext24Event := {
+                "raiseEvent", "Context24",
+                "", ""
+            };
+            /**
+             * @desc    Event defined in ContextData25 occurred
+             */
+            const ParameterList raiseContext25Event := {
+                "raiseEvent", "Context25",
+                "", ""
+            };
+            /**
              * @desc    Request the DUT to send an Iso1117575Adu message
              */
             const ParameterList raiseADU := {
                 "raiseADU", "",
+                "", ""
+            };
+            /**
+             * @desc    Request the DUT to send an Iso1117575Adu message
+             */
+            const ParameterList raiseADUs_TollContext := {
+                "raiseADUs_TollContext", "",
                 "", ""
             };
             /**

@@ -133,16 +133,6 @@
          } // End of PICS_Identification_of_standard
          /**
           * @desc
-          * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.6.4.2. Communication services support
-          */
-         group PICS_Communication_services_support {
-             /**
-              * @desc    Does the EUT support Iso17575-2 Communication services supported?
-              */
-             modulepar boolean PIC_iso175752CommunicationServicesSupported := true;
-         } // End of PICS_Communication_services_support
-         /**
-          * @desc
           * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.6.4.3. EFC Attributes
           */
          group PICS_EFC_Attributes {
