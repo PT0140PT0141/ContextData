@@ -376,17 +376,17 @@ module ContextData_TE {
          */
         if (ContextData_PICS_BE.PIC_timeClassDefinition == true) {
             /**
-             * @desc    TC_ATTR_24_BE_BV_01: Verify that Time Class ID is unique
+             * @desc    TC_TICD_BE_BV_01: Verify that Time Class ID is unique
              * @remark  [TS 17575-3], Clause 8.3.3.5.1. Date type TimeClass
              * @see     Table 11 – Data type TimeClass
              */
-            execute(TC_ATTR_24_BE_BV_01(), PX_GUARD);
+            execute(TC_TICD_BE_BV_01(), PX_GUARD);
             /**
-             * @desc    TC_ATTR_24_BE_BV_02: Verify that Priority Level is different for overlapping Time Classes
+             * @desc    TC_TICD_BE_BV_02: Verify that Priority Level is different for overlapping Time Classes
              * @remark  [TS 17575-3], 8.3.3.5.1. Date type TimeClass
              * @see     Table 9 – Data type LocalVehicleClass
              */
-            execute(TC_ATTR_24_BE_BV_02(), PX_GUARD);
+            execute(TC_TICD_BE_BV_02(), PX_GUARD);
         }
         /**
          * @desc    These Test Purposes apply to  UserClassDefinition as claimed in [TS 17575-3] clause B.6.4.3/6.
@@ -395,17 +395,17 @@ module ContextData_TE {
          */
         if (ContextData_PICS_BE.PIC_userClassDefinition == true) {
             /**
-             * @desc    TC_ATTR_25_BE_BV_01: Verify that User Class ID is unique
+             * @desc    TC_USCD_BE_BV_01: Verify that User Class ID is unique
              * @remark  [TS 17575-3], Clause 8.3.3.6.1. Data type UserClass
              * @see     Table 13 – Data type UserClass
              */
-            execute(TC_ATTR_25_BE_BV_01(), PX_GUARD);
+            execute(TC_USCD_BE_BV_01(), PX_GUARD);
             /**
              * @desc    TC_ATTR_25_BE_BV_0: Verify that User Classes do not overlap2
              * @remark  [TS 17575-3], Clause 8.3.3.6.1. Data type UserClass
              * @see     Table 13 – Data type UserClass
              */
-            execute(TC_ATTR_25_BE_BV_02(), PX_GUARD);
+            execute(TC_USCD_BE_BV_02(), PX_GUARD);
         }
         /**
          * @desc    These Test Purposes apply to:
@@ -423,11 +423,11 @@ module ContextData_TE {
         if ((ContextData_PICS_BE.PIC_tollContextLayout == true)  and (ContextData_PICS_BE.PIC_sectionPricingLayout)) {
             if (ContextData_PICS_BE.PIC_roadSectionPricing == true) {
                 /**
-                 * @desc    TC_ATTR_31_BE_BV_01: Verify that Layout Description is compliant to Toll Scheme Type
+                 * @desc    TC_TCL_BE_BV_01: Verify that Layout Description is compliant to Toll Scheme Type
                  * @remark  [TS 17575-3], Clause 8.3.4. Data group 'Context Layout'
                  * @see     Table 14 – EFC attribute TollContextLayout
                  */
-                execute(TC_ATTR_31_BE_BV_01(), PX_GUARD);
+                execute(TC_TCL_BE_BV_01(), PX_GUARD);
                 /**
                  * @desc    TC_ATTR_31S_BE_BV_01: Toll Context Layout test purposes for Section pricing scheme
                  * @remark  [TS 17575-3], Clause 8.3.4.1. Data element sectionLayout / Data type SectionLayout

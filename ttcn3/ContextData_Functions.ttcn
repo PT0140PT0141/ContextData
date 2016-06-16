@@ -407,8 +407,9 @@ module ContextData_Functions {
          * @return  true on success, false otherwise
          * @verdict unchanged
          */
-        function f_check_uniqueness_TimeClassId(in TimeClassDefinition.timeClasses p_timeclassList) runs on EutComp
-        return boolean {
+        function f_check_uniqueness_TimeClassId(
+                                                in TimeClassDefinition.timeClasses p_timeclassList
+        ) runs on EutComp return boolean {
             // p_timeclassList shall not be omit
 
             var charstring v_timeClassIdFound := ";"; // Used to build the list of the timeClassId already processed
@@ -470,8 +471,9 @@ module ContextData_Functions {
          * @return  true on success, false otherwise
          * @verdict unchanged
          */
-        function f_check_uniqueness_UserClassId(in UserClassDefinition.userClasses p_userclassList) runs on EutComp
-        return boolean {
+        function f_check_uniqueness_UserClassId(
+                                                in UserClassDefinition.userClasses p_userclassList
+        ) runs on EutComp return boolean {
             // p_userclassList shall not be omit
 
             var charstring v_userClassIdFound := ";"; // Used to build the list of the userClassId already processed
@@ -498,8 +500,9 @@ module ContextData_Functions {
          * @return  true on success, false otherwise
          * @verdict unchanged
          */
-        function f_check_uniqueness_PriorityValue_by_group_UserClass(in UserClassDefinition.userClasses p_usertclassList) runs on EutComp
-        return boolean {
+        function f_check_uniqueness_PriorityValue_by_group_UserClass(
+                                                                     in UserClassDefinition.userClasses p_usertclassList
+        ) runs on EutComp return boolean {
             // p_usertclassList shall not be omit
 
             var UserClassesGroups v_groups := f_Build_UserClass_groups(p_usertclassList);
