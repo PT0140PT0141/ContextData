@@ -23,31 +23,11 @@ module ContextData_TE {
          * - single ADU consisting of all necessary attributes to activate the context, and/or
          * - several consecutive ADUs consisting of all necessary attributes to activate the context.
          */
-//            /**
-//             * @desc    TC_CH_FE_BV_01: Verify that DUT activates toll context – toll charger attribute check
-//             * @remark  [TS 17575-3]
-//             */
-//            execute(TC_CH_FE_BV_01(), PX_GUARD);
-//            /**
-//             * @desc    TC_CH_FE_BV_03: Verify that DUT activates toll context (sent in many ADUs) – toll charger attribute check
-//             * @remark  [TS 17575-3], Clause 8.1 Rules with respect to support of context data
-//             */
-//            execute(TC_CH_FE_BV_03(), PX_GUARD);
-//            /**
-//             * @desc    TC_CH_FE_BV_06: Verify that DUT handles contexts of different Toll Chargers
-//             * @remark  [TS 17575-3], Clause 8.1 Rules with respect to support of context data
-//             */
-//            execute(TC_CH_FE_BV_06(), PX_GUARD);
             /**
              * @desc    TC_CH_FE_BV_01: Verify that DUT updates its Context Data
              * @remark  [TS 17575-3], Clause 8.1 Rules with respect to support of context data
              */
             execute(TC_CH_FE_BV_01(), PX_GUARD);
-//            /**
-//             * @desc    TC_CH_FE_BV_08: Verify that DUT updates its Context Data
-//             * @remark  [TS 17575-3], Clause 8.1 Rules with respect to support of context data
-//             */
-//            execute(TC_CH_FE_BV_08(), PX_GUARD);
         /**
          * @desc    These Test Purposes apply to  ChargeReportConfiguration as claimed in [TS 17575-3] clause B.5.4.3/9
          * Test subgroup objective:
@@ -253,6 +233,19 @@ module ContextData_TE {
          */
         execute(TC_CR_FE_BV_39(), PX_GUARD);
         // TODO Add missing TCs
+        
+        if (ContextData_PICS_BE.PIC_iso17575_3Adu == true) {
+            /**
+             * @desc    TC_PRO_BE_BV_01: Verify version and validity handling
+             * @remark  [TS 17575-3], Clause 6.3.1 Protocol versioning
+             */
+            execute(TC_PRO_BE_BV_01(), PX_GUARD);
+            /**
+             * @desc    TC_PRO_BE_BV_02: Verify that Back End sends authenticated ISO17575-3Adu
+             * @remark  [TS 17575-3], Clause 7.2 Message authentication (data type Iso17575-3-InformationContent)
+             */
+            execute(TC_PRO_BE_BV_02(), PX_GUARD);
+        }
         /**
          * @desc    These Test Purposes apply to  Iso17575-3Adu as claimed in [TS 17575-3] clause B.6.4.1/1
          * Test subgroup objective:
@@ -264,12 +257,14 @@ module ContextData_TE {
         if (ContextData_PICS_BE.PIC_iso17575_3Adu == true) {
             /**
              * @desc    TC_ADUH_BE_BV_01: Uniqueness of Context ID within the Toll Charger
-             * @remark  [TS 17575-3], Clause 7.2 ADU header
+             * @remark  [TS 17575-3], Clause 7.5 Application data unit body (data type ISO 17575-3AduBody)
+             * @remark  [TS 17575-3], Clause 8.2 Rules with respect to support of context data
+             * @remark  [TS 17575-3], Clause 8.5.2.2 Toll context overview
              */
             execute(TC_ADUH_BE_BV_01(), PX_GUARD);
             /**
              * @desc    TC_ADUH_BE_BV_02: Verify handling of aduSequenceNumber
-             * @remark  [TS 17575-3], Clause 7.2 ADU header
+             * @remark  [TS 17575-3], Clause 7.4 Application data unit header (data type ISO 17575-3AduHeader)
              */
             execute(TC_ADUH_BE_BV_02(), PX_GUARD);
         }
@@ -429,107 +424,113 @@ module ContextData_TE {
                  */
                 execute(TC_TCL_BE_BV_01(), PX_GUARD);
                 /**
-                 * @desc    TC_ATTR_31S_BE_BV_01: Toll Context Layout test purposes for Section pricing scheme
+                 * @desc    TC_TCL_BE_BV_01: Verify that one toll context shall have one or more toll context partition layout descriptions, one per defined toll context partition
+                 * @remark  [TS 17575-3], Clause 8.3.4. Data group 'Context Layout'
+                 * @see     Table 14 – EFC attribute TollContextLayout
+                 */
+                execute(TC_TCL_BE_BV_02(), PX_GUARD);
+                /**
+                 * @desc    TP_TCL_S_BE_BV_01: Toll Context Layout test purposes for Section pricing scheme
                  * @remark  [TS 17575-3], Clause 8.3.4.1. Data element sectionLayout / Data type SectionLayout
                  * @see     Table 15 – Data type SectionLayout
                  */
-                execute(TC_ATTR_31S_BE_BV_01(), PX_GUARD);
+                execute(TP_TCL_S_BE_BV_01(), PX_GUARD);
                 /**
-                 * @desc    TC_ATTR_31S_BE_BV_02: Verify that Point ID is unique
+                 * @desc    TP_TCL_S_BE_BV_02: Verify that Point ID is unique
                  * @remark  [TS 17575-3], Clause 8.3.4.1. Data element sectionLayout / Data type SectionLayout
                  * @see     Table 15 – Data type SectionLayout
                  */
-                execute(TC_ATTR_31S_BE_BV_02(), PX_GUARD);
+                execute(TP_TCL_S_BE_BV_02(), PX_GUARD);
                 /**
-                 * @desc    TC_ATTR_31S_BE_BV_03: Verify that Link ID is unique
+                 * @desc    TP_TCL_S_BE_BV_03: Verify that Link ID is unique
                  * @remark  [TS 17575-3], Clause 8.3.4.1.1. Data type Link
                  * @see     Table 15 – Data type SectionLayout
                  */
-                execute(TC_ATTR_31S_BE_BV_03(), PX_GUARD);
+                execute(TP_TCL_S_BE_BV_03(), PX_GUARD);
                 /**
-                 * @desc    TC_ATTR_31S_BE_BV_06
+                 * @desc    TP_TCL_S_BE_BV_06
                  * @see     B.11.1.1 BV test purposes: Verify that Point identified by Point ID in Link has been defined in Network Points
                  * @remark  [TS 17575-3], Clause 8.3.4.1.1. Data type Link
                  * @see     Table 15 – Data type SectionLayout
                  */
-                execute(TC_ATTR_31S_BE_BV_06(), PX_GUARD);
+                execute(TP_TCL_S_BE_BV_06(), PX_GUARD);
                 /**
-                 * @desc    TC_ATTR_31S_BE_BV_08: Verify that Point identified by Point ID in Liability Rules has been defined in Network Points
+                 * @desc    TP_TCL_S_BE_BV_08: Verify that Point identified by Point ID in Liability Rules has been defined in Network Points
                  * @remark  [TS 17575-3], Clause 8.3.4.1.2. Data type LiabilityRules
                  * @see     Table 16 – Use of the data elements in data type LiabilityRules
                  */
-                execute(TC_ATTR_31S_BE_BV_08(), PX_GUARD);
+                execute(TP_TCL_S_BE_BV_08(), PX_GUARD);
                 /**
-                 * @desc    TC_ATTR_31S_BE_BV_10: Verify that Point identified by Point ID in Supporting Information has been defined in Network Points
+                 * @desc    TP_TCL_S_BE_BV_10: Verify that Point identified by Point ID in Supporting Information has been defined in Network Points
                  * @remark  [TS 17575-3], Clause 8.3.4.1.3. Data type SupportingPoints
                  */
-                execute(TC_ATTR_31S_BE_BV_10(), PX_GUARD);
+                execute(TP_TCL_S_BE_BV_10(), PX_GUARD);
                 /**
-                 * @desc    TC_ATTR_31S_BE_BV_11: Verify that Applicable Time Classes for Section Layout are present in Time Class Definition
+                 * @desc    TP_TCL_S_BE_BV_11: Verify that Applicable Time Classes for Section Layout are present in Time Class Definition
                  * @remark  [TS 17575-3], Clause 8.3.4.1. Data element sectionLayout / Data type SectionLayout
                  * @see     Table 15 – Data type SectionLayout
                  */
-                execute(TC_ATTR_31S_BE_BV_11(), PX_GUARD);
+                execute(TP_TCL_S_BE_BV_11(), PX_GUARD);
             }
             if (((ContextData_PICS_BE.PIC_areaPricingDistance == true) or (ContextData_PICS_BE.PIC_areaPricingTime == true)) and (ContextData_PICS_BE.PIC_areaPricingLayout)) {
                 /**
-                 * @desc    TC_ATTR_31A_BE_BV_01: Verify that Area ID is unique
+                 * @desc    TP_TCL_A_BE_BV_01: Verify that Area ID is unique
                  * @remark  [TS 17575-3], Clause 8.3.4.2. Data element areaLayout
                  * @see     Table 17 – Data type AreaLayout
                  */
-                execute(TC_ATTR_31A_BE_BV_01(), PX_GUARD);
+                execute(TP_TCL_A_BE_BV_01(), PX_GUARD);
                 /**
-                 * @desc    TC_ATTR_31A_BE_BV_02: Verify that Charge Object ID is unique
+                 * @desc    TP_TCL_A_BE_BV_02: Verify that Charge Object ID is unique
                  * @remark  [TS 17575-3], Clause 8.3.4.2. Data element areaLayout
                  * @see     Table 17 – Data type AreaLayout
                  */
-                execute(TC_ATTR_31A_BE_BV_02(), PX_GUARD);
+                execute(TP_TCL_A_BE_BV_02(), PX_GUARD);
                 /**
-                 * @desc    TC_ATTR_31A_BE_BV_03: Verify that Point ID is unique
+                 * @desc    TP_TCL_A_BE_BV_03: Verify that Point ID is unique
                  * @remark  [TS 17575-3], Clause 8.3.4.2. Data element areaLayout
                  * @see     Table 17 – Data type AreaLayout
                  */
-                execute(TC_ATTR_31A_BE_BV_03(), PX_GUARD);
+                execute(TP_TCL_A_BE_BV_03(), PX_GUARD);
                 /**
-                 * @desc    TC_ATTR_31A_BE_BV_04: Verify that Link ID is unique
+                 * @desc    TP_TCL_A_BE_BV_04: Verify that Link ID is unique
                  * @remark  [TS 17575-3], Clause 8.3.4.2. Data element areaLayout
                  * @see     Table 17 – Data type AreaLayout
                  */
-                execute(TC_ATTR_31A_BE_BV_04(), PX_GUARD);
+                execute(TP_TCL_A_BE_BV_04(), PX_GUARD);
                 /**
-                 * @desc    TC_ATTR_31A_BE_BV_06: Verify that Point identified by Point ID in Link has been defined in Network Points
+                 * @desc    TP_TCL_A_BE_BV_06: Verify that Point identified by Point ID in Link has been defined in Network Points
                  * @remark  [TS 17575-3], Clause 8.3.4.2. Data element areaLayout
                  * @see     Table 17 – Data type AreaLayout
                  */
-                execute(TC_ATTR_31A_BE_BV_06(), PX_GUARD);
+                execute(TP_TCL_A_BE_BV_06(), PX_GUARD);
                 /**
-                 * @desc    TC_ATTR_31A_BE_BV_08: Verify that Point identified by Point ID in Supporting Information has been defined in Network Points
+                 * @desc    TP_TCL_A_BE_BV_08: Verify that Point identified by Point ID in Supporting Information has been defined in Network Points
                  * @remark  [TS 17575-3], Clause 8.3.4.1.3. Data type SupportingPoints
                  */
-                execute(TC_ATTR_31A_BE_BV_08(), PX_GUARD);
+                execute(TP_TCL_A_BE_BV_08(), PX_GUARD);
             }
             if ((ContextData_PICS_BE.PIC_cordonPricing == true) and (ContextData_PICS_BE.PIC_cordonPricingLayout)) {
                 /**
-                 * @desc    TC_ATTR_31C_BE_BV_01: Verify that Cordon ID is unique
+                 * @desc    TP_TCL_C_BE_BV_01: Verify that Cordon ID is unique
                  * @remark  [TS 17575-3], Clause 8.3.4.3. Data element cordonLayout
                  * @see     Table 18 – Data type CordonLayout
                  */
-                execute(TC_ATTR_31C_BE_BV_01(), PX_GUARD);
+                execute(TP_TCL_C_BE_BV_01(), PX_GUARD);
                 /**
-                 * @desc    TC_ATTR_31C_BE_BV_02: Verify that Applicable Time Classes for Cordon Layout are present in Time Class Definition (Cordon Entry Locations)
+                 * @desc    TP_TCL_C_BE_BV_02: Verify that Applicable Time Classes for Cordon Layout are present in Time Class Definition (Cordon Entry Locations)
                  * @remark  [TS 17575-3], Clause 8.3.4.3.1. Data type CordonEntryLocation
                  */
-                execute(TC_ATTR_31C_BE_BV_02(), PX_GUARD);
+                execute(TP_TCL_C_BE_BV_02(), PX_GUARD);
                 /**
-                 * @desc    TC_ATTR_31C_BE_BV_03: Verify that Applicable Time Classes for Cordon Layout are present in Time Class Definition (Cordon Exit Locations)
+                 * @desc    TP_TCL_C_BE_BV_03: Verify that Applicable Time Classes for Cordon Layout are present in Time Class Definition (Cordon Exit Locations)
                  * @remark  [TS 17575-3], Clause 8.3.4.3.1. Data type CordonEntryLocation
                  */
-                execute(TC_ATTR_31C_BE_BV_03(), PX_GUARD);
+                execute(TP_TCL_C_BE_BV_03(), PX_GUARD);
                 /**
-                 * @desc    TC_ATTR_31C_BE_BV_04: Verify that Cordon Segment ID is unique
+                 * @desc    TP_TCL_C_BE_BV_04: Verify that Cordon Segment ID is unique
                  * @remark  [TS 17575-3], Clause 8.3.4.3.1. Data type CordonEntryLocation
                  */
-                execute(TC_ATTR_31C_BE_BV_04(), PX_GUARD);
+                execute(TP_TCL_C_BE_BV_04(), PX_GUARD);
             }
         }
     } // End of control

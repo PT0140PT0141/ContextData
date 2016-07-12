@@ -51,197 +51,14 @@ module ContextData_TCs {
         /**
          * @desc    Group of the TCs based on TPs described in clause A.2.1 BV test purposes: Verify the usage of communication services
          * Test subgroup objective:
-         * - to test the behaviour of the DUT in relation to the context activation;
-         * - to test the behaviour of the DUT in relation to handling of multiple contexts;
-         * - to test usage of communication services by DUT,
-         * by means of the syntactically and contextual correct ADUs:
-         * - single ADU consisting of all necessary attributes to activate the context, and/or
-         * - several consecutive ADUs consisting of all necessary attributes to activate the context.
+         * - To test the behaviour of the DUT in relation to the context activation
+         * - To To test the behaviour of the DUT in relation to handling of multiple contexts
          */
-        group Valid_Behaviour { // TODO Remove commented TCs
+        group Valid_Behaviour { 
             
-//            /**
-//             * @desc    TC_CH_FE_BV_01: Verify that DUT activates toll context – toll charger attribute check
-//             * @remark  [TS 17575-3], Clause 8.2 Rules with respect to support of context data
-//             */
-//            testcase TC_CH_FE_BV_01() runs on EutComp system TestAdapter {
-//                var boolean v_result;
-//                var ChargeReport v_chargeReport;
-//                
-//                // Preamble
-//                f_ContextData_Preambule();
-//                // Front End is initialized and can accept Context Data - Assume it's true
-//                // OBU belonging to the Front End is located within geographic borders defined in Context Data - Assume it's true
-//                // Version of any data element of context data is known for the Front End - Assume it's true
-//                // No authentication is required by the Front End
-//                // Preamble done
-//    
-//                // Test body start
-//                // Step1: Send ContextData1
-//                f_pco_send_Iso17575_3Adu(
-//                    m_Iso17575_3Adu(
-//                        m_aduHeader, 
-//                        m_ContextData1(
-//                            valueof(m_aduHeader.contextId)
-//                )));
-//                // Step2: Event defined in ContextData1 occurred
-//                f_userActions(cmdTrigger, raiseContext1Event);
-//                // Step3: Wait for ChargeReport message
-//                t_ac.start;
-//                alt { // Step3: Check if tollContext in ChargeReport equals to tollContextOverview.tollContext in ContextData1
-//                    [] a_pco_recv_Iso17575_3Adu_ChargeReport(
-//                        mw_chargeReport_tollCharger(
-//                            valueof(
-//                                m_ContextData1(
-//                                    valueof(m_aduHeader.contextId)).tollContextOverview.tollContext
-//                        )),
-//                        v_chargeReport,
-//                        v_result
-//                    ) {
-//                        // Stop timer
-//                        t_ac.stop;
-//                        // Step4: Set verdict pass
-//                        if (v_result == true) {
-//                            setverdict(pass);
-//                        } else {
-//                            setverdict(fail);
-//                        }
-//                    }
-////                    [] pco.receive(
-////                        mw_chargeReport_tollCharger(
-////                            valueof(
-////                                m_ContextData1(
-////                                    valueof(m_aduHeader.contextId)).tollContextOverview.tollContext
-////                    ))) {
-////                        // Stop timer
-////                        t_ac.stop;
-////                        // Step4: Set verdict pass
-////                        setverdict(pass);
-////                    } // pco.receive(mw_chargeReport_tollCharger
-//                } // End of 'alt' statement
-//                // Test body done
-//    
-//                // Postamble
-//                f_ContextData_Postambule();
-//            } // End of TC TC_CH_FE_BV_01
-//
-//            /**
-//             * @desc    TC_CH_FE_BV_03: Verify that DUT activates toll context (sent in many ADUs) – toll charger attribute check
-//             * @remark  [TS 17575-3], Clause 8.2 Rules with respect to support of context data
-//             */
-//            testcase TC_CH_FE_BV_03() runs on EutComp system TestAdapter 
-//            {
-//                // Preamble
-//                f_ContextData_Preambule();
-//                // Front End is initialized and can accept Context Data - Assume it's true
-//                // OBU belonging to the Front End is located within geographic borders defined in Context Data - Assume it's true
-//                // Version of any data element of context data is known for the Front End - Assume it's true
-//                // No authentication is required by the Front End
-//                // Preamble done
-//    
-//                // Test body start
-//                // Step1: Send ContextData2
-//                f_pco_send_Iso17575_3Adu(m_Iso17575_3Adu(m_aduHeader_Table9, m_ContextData2(valueof(m_aduHeader_Table9.contextId), valueof(m_aduHeader.tollContext))));
-//                // Step2: Send ContextData3
-//                f_pco_send_Iso17575_3Adu(m_Iso17575_3Adu(m_aduHeader_Table9, m_ContextData3(valueof(m_aduHeader_Table9.contextId))));
-//                // Step3: Send ContextData4
-//                f_pco_send_Iso17575_3Adu(m_Iso17575_3Adu(m_aduHeader_Table9, m_ContextData4(valueof(m_aduHeader_Table9.contextId))));
-//                // Step4: Send ContextData5
-//                f_pco_send_Iso17575_3Adu(m_Iso17575_3Adu(m_aduHeader_Table9, m_ContextData5(valueof(m_aduHeader_Table9.contextId))));
-//                // Step5: Send ContextData6
-//                f_pco_send_Iso17575_3Adu(m_Iso17575_3Adu(m_aduHeader_Table9, m_ContextData6(valueof(m_aduHeader_Table9.contextId))));
-//                // Step6: Send ContextData7
-//                f_pco_send_Iso17575_3Adu(m_Iso17575_3Adu(m_aduHeader_Table9, m_ContextData7(valueof(m_aduHeader_Table9.contextId))));
-//                // Step7: Send ContextData8
-//                f_pco_send_Iso17575_3Adu(m_Iso17575_3Adu(m_aduHeader_Table9, m_ContextData8(valueof(m_aduHeader_Table9.contextId))));
-//                // Step8: Send ContextData9
-//                f_pco_send_Iso17575_3Adu(m_Iso17575_3Adu(m_aduHeader_Table9, m_ContextData9(valueof(m_aduHeader_Table9.contextId))));
-//                // Step9: Send ContextData10
-//                f_pco_send_Iso17575_3Adu(m_Iso17575_3Adu(m_aduHeader_Table9, m_ContextData10(valueof(m_aduHeader_Table9.contextId))));
-//                // Step 10: Event defined in ContextData9 occurred
-//                f_userActions(cmdTrigger, raiseContext9Event);
-//                // Step11: Wait for ChargeReport message
-//                t_ac.start;
-//                alt { // Step12: Check if tollContext in ChargeReport equals to tollContextOverview.tollContext in ContextData2
-//                    [] pco.receive(mw_chargeReport_tollCharger(valueof(m_ContextData2(valueof(m_aduHeader_Table9.contextId), valueof(m_aduHeader.tollContext)).tollContextOverview.tollContext))) {
-//                        // Stop timer
-//                        t_ac.stop;
-//                        // Step12 : pass
-//                        setverdict(pass);
-//                    } // pco.receive(mw_chargeReport_tollCharger
-//                } // End of 'alt' statement
-//                // Test body done
-//    
-//                // Postamble
-//                f_ContextData_Postambule();
-//            } // End of TC TC_CH_FE_BV_03
-//
-//            /**
-//             * @desc    TC_CH_FE_BV_06: Verify that DUT handles contexts of different Toll Chargers
-//             * @remark  [TS 17575-3], Clause 8.1 Rules with respect to support of context data
-//             */
-//            testcase TC_CH_FE_BV_06() runs on EutComp system TestAdapter 
-//            {
-//                var ChargeReport v_chargeReport := null;
-//
-//                // Preamble
-//                f_ContextData_Preambule();
-//                // Front End is initialized and can accept Context Data - Assume it's true
-//                // OBU belonging to the Front End is located within geographic borders defined in Context Data - Assume it's true
-//                // Version of any data element of context data is known for the Front End - Assume it's true
-//                // No authentication is required by the Front End
-//                // Preamble done
-//    
-//                // Test body start
-//                // Step1: Send ContextData1
-//                f_pco_send_Iso17575_3Adu(m_Iso17575_3Adu(m_aduHeader, m_ContextData1(valueof(m_aduHeader.contextId))));
-//                // Step2: Send ContextData12
-//                f_pco_send_Iso17575_3Adu(m_Iso17575_3Adu(m_aduHeader_ContextData12, m_ContextData12(valueof(m_aduHeader_ContextData12.contextId))));
-//                // Step3: At least one UsageStatement for ContextData1 can be reported by Front End and Event defined in ContextData1 occurred
-//                f_userActions(cmdTrigger, raiseContext1Event);
-//                // Step4: Wait for ChargeReport message
-//                t_ac.start;
-//                alt {
-//                    [] pco.receive(mw_chargeReport_any) -> value v_chargeReport {
-//                        // Stop timer
-//                        t_ac.stop;
-//                        // Step5: Check if tollContext in ChargeReport NOT equal to tollContextOverview.tollContext in ContextData1
-//                        if (v_chargeReport.tollContext == valueof(m_ContextData1(valueof(m_aduHeader.contextId)).tollContextOverview.tollContext)) {
-//                            // Step5: fail
-//                            setverdict(fail);
-//                         } else {
-//                            // Step5: pass
-//
-//                            // Step6: Event defined in ContextData12 occurred
-//                            f_userActions(cmdTrigger, raiseContext12Event);
-//                            // Step7: Wait for ChargeReport message
-//                            t_ac.start;
-//                            alt {
-//                                [] pco.receive(mw_chargeReport_any) -> value v_chargeReport {
-//                                    // Stop timer
-//                                    t_ac.stop;
-//                                    // Step8: Check if tollContext in ChargeReport NOT equal to tollContextOverview.tollContext in ContextData12
-//                                    if (v_chargeReport.tollContext == valueof(m_ContextData12(valueof(m_aduHeader.contextId)).tollContextOverview.tollContext)) {
-//                                        // Step8: fail
-//                                        setverdict(fail);
-//                                     } else {
-//                                        // Step8: pass
-//                                        setverdict(pass);
-//                                    } // End of 'if' statement
-//                                } // pco.receive(mw_chargeReport_any)
-//                            } // End of 'alt' statement
-//                         } // End of 'if' statement
-//                    } // pco.receive(mw_chargeReport_any)
-//                } // End of 'alt' statement
-//                // Test body done
-//    
-//                // Postamble
-//                f_ContextData_Postambule();
-//            } // End of TC TC_CH_FE_BV_06
-//
             /**
              * @desc    TC_CH_FE_BV_01: Verify that DUT updates its Context Data
-             * @remark  [TS 17575-3], Clause 8.2 Rules with respect to support of context data
+             * @remark  [TS 17575-3], Clause 8.3 Attributes and data sets
              */
             testcase TC_CH_FE_BV_01() runs on EutComp system TestAdapter {
                 
@@ -285,42 +102,6 @@ module ContextData_TCs {
                 f_ContextData_Postambule();
             } // End of TC TC_CH_FE_BV_01
             
-//            /**
-//             * @desc    TC_CH_FE_BV_08: Verify that DUT updates its Context Data
-//             * @remark  [TS 17575-3], Clause 8.1 Rules with respect to support of context data
-//             */
-//            testcase TC_CH_FE_BV_08() runs on EutComp system TestAdapter 
-//            {
-//                // Preamble
-//                f_ContextData_Preambule();
-//                // Front End is initialized and can accept Context Data - Assume it's true
-//                // OBU belonging to the Front End is located within geographic borders defined in Context Data - Assume it's true
-//                // Version of any data element of context data is known for the Front End - Assume it's true
-//                // No authentication is required by the Front End
-//                // Preamble done
-//    
-//                // Test body start
-//                // Step1: Send ContextData1
-//                f_pco_send_Iso17575_3Adu(m_Iso17575_3Adu(m_aduHeader, m_ContextData1(valueof(m_aduHeader.contextId))));
-//                // Step2: Event defined in ContextData1 occurred
-//                f_userActions(cmdTrigger, raiseContext1Event);
-//                // Step3: Wait for ChargeReport message
-//                t_ac.start;
-//                alt {
-//                    [] pco.receive(mw_chargeReport_default) {
-//                        // Stop timer
-//                        t_ac.stop;
-//                        // Step4: Set verdict pass
-//                        f_userActions(cmdCheck, checkCommunicationSystem);
-//                        setverdict(pass);
-//                    } // mw_chargeReport_default
-//                } // End of 'alt' statement
-//                // Test body done
-//    
-//                // Postamble
-//                f_ContextData_Postambule();
-//            } // End of TC TC_CH_FE_BV_08
-//
         } // End of group Valid_Behaviour
         
         /**
@@ -334,6 +115,13 @@ module ContextData_TCs {
     
     /**
      * @desc    These Test Purposes apply to ChargeReportConfiguration as claimed in [TS 17575-3] clause B.5.4.3/9
+     * - Charge Report Configuration as claimed in ISO 17575-3 Clause B.4.3 Table B.8/11
+     * - Precedence Level as claimed in ISO 17575-3 Clause B.4.3 Table B.11/9
+     * - Send Charge Report If Entering as claimed in ISO 17575-3 Clause B.4.3 Table B.11/8
+     * - Tariffs as claimed in ISO 17575-3 Clause B.4.3 Table B.16
+     * - Rounding Rules for fee as claimed in ISO 17575-3 Clause B.4.3 Table B.19/1-3
+     * - Supported Charge Units as claimed in ISO 17575-3 Clause B.4.3 Table B.17
+     * - Currency Conversion Table as claimed in ISO 17575-3 Clause B.4.3 Table B.23
      */
     group Charge_Report {
         
@@ -341,15 +129,15 @@ module ContextData_TCs {
          * @desc    Test subgroup objective:
          * - to test the presence of particular data elements in Charge Report sent by DUT in relation to Charge Report Configuration;
          * - to test the absence of particular data elements in Charge Report sent by DUT in relation to Charge Report Configuration;
-         * by means of the syntactically and contextual correct ADUs:
-         * - single ADU consisting of all necessary attributes;
-         * - several consecutive ADUs consisting of all necessary attributes to activate the context
+         * - to test the handling of precedence level for overlapping partitions
+         * - to test the correctness of implementation of a fee calculation including rounding rules
+         * - to test the usage of Authenticated Charge Report
          * @remark  59 TCs
          */
         group Valid_Behaviour {
             
             /**
-             * @desc    TC_CR_FE_BV_01: Verify the presence of obeID data element in Charge Report
+             * @desc    TC_CR_FE_BV_01: Verify the presence of obeId data element in Charge Report
              * @remark  [TS 17575-3], Clause 8.5.5.3.2 Data type ChargeReportContent
              */
             testcase TC_CR_FE_BV_01() runs on EutComp system TestAdapter {
@@ -393,7 +181,7 @@ module ContextData_TCs {
             } // End of TC TC_CR_FE_BV_01
             
             /**
-             * @desc    TC_CR_FE_BV_02: Verify the absence of obeID data element in Charge Report
+             * @desc    TC_CR_FE_BV_02: Verify the absence of obeId data element in Charge Report
              * @remark  [TS 17575-3], Clause 8.5.5.3.2 Data type ChargeReportContent
              */
             testcase TC_CR_FE_BV_02() runs on EutComp system TestAdapter {
@@ -3138,14 +2926,14 @@ module ContextData_TCs {
 
         /**
          * @desc    Test subgroup objective:
-         * - to test the usage of communication services
-         * - to test the behaviour of the DUT in relation to handling versions
+         * - to test the behaviour of the DUT in relation to protocol version handling
+         * - to test the behaviour of the DUT in relation to authenticated ISO17575-3Adu
          * @remark  2 TCs
          */
         group Valid_Behaviour {
             
             /**
-             * @desc    TC_PRO_BE_BV_01: Verify version and validity handling
+             * @desc    TC_PRO_BE_BV_01: Protocol version handling
              * @remark  [TS 17575-3], Clause 6.3.1 Protocol versioning
              */
             testcase TC_PRO_BE_BV_01() runs on EutComp system TestAdapter {
@@ -3202,6 +2990,75 @@ module ContextData_TCs {
                 // Postamble
                 f_ContextData_Postambule();
             } // End of TC TC_PRO_BE_BV_01
+            
+            /**
+             * @desc    TC_PRO_BE_BV_02: Verify that Back End sends authenticated ISO17575-3Adu
+             * @remark  [TS 17575-3], 7.2 Message authentication (data type Iso17575-3-InformationContent)
+             */
+            testcase TC_PRO_BE_BV_02() runs on EutComp system TestAdapter {
+                
+                // Local variables
+                var Iso17575_3Adu adu1 := null; // Used to retrieve data elements list
+                var Iso17575_3Adu adu2 := null; // Used to retrieve data elements list
+                var template Provider v_tollContext := ?; // Used for tollContext/contextId matching uniqueness
+                var template ContextId v_contextId := ?; // Used for tollContext/contextId matching uniqueness
+                var boolean v_result := false;
+                
+                // Test control
+                if (not(PICS_SECURED_MODE)) {
+                    log("*** " & testcasename() & ": PICS_SECURED_MODE required for executing the TC ***");
+                    setverdict(inconc);
+                    stop;
+                }
+                
+                // Preamble
+                f_ContextData_Preambule();
+                // Back End is initialized and can send Context Data
+                // Preamble done
+    
+                // Test body start
+                // Step1: Trigger one ISO17575-3ADU message
+                f_userActions(cmdTrigger, raiseADU);
+                // Step1: Wait for ISO17575-3ADU message
+                t_ac.start;
+                alt {
+                    [] a_pco_recv_Iso17575_3Adu_ChargeReport(mw_Iso17575_3Adu_TollContext(v_tollContext), adu1, v_result) { // Step2: Verify structure of sent Iso17575-3Adu(s), taking presence and absence of optional data elements into account and verify allowed values of present data elements according to Table C.6 - : General Structure of Context Data
+                        // Stop timer
+                        t_ac.stop;
+                        if (v_result == false) {
+                            setverdict(fail);
+                            break; // Exit loop message
+                        }
+                        // Step3: Toll Regime properties changed. DUT needs to provision up-to-date context data
+                        f_userActions(cmdInc, incTollRegime);
+                        // Step4: Wait for the second ISO17575-3ADU message
+                        t_ac.start;
+                        alt {
+                            [] a_pco_recv_Iso17575_3Adu_ChargeReport(mw_Iso17575_3Adu_TollContext(adu1.aduHeader.tollContext), adu2, v_result) { // Step5: Verify structure of sent Iso17575-3Adu(s), taking presence and absence of optional data elements into account and verify allowed values of present data elements according to Table C.6 - : General Structure of Context Data
+                                // Stop timer
+                                t_ac.stop;
+                                if (v_result == false) {
+                                    setverdict(fail);
+                                    break; // Exit loop message
+                                }
+                                // Step7: Compare the corresponding data elements in A1 and A2 consisting of Version information indicator (data type: VersionAndValidity)
+                                if (f_compareDataElements(adu1.aduBody, adu2.aduBody) == false) {
+                                    // Step7: fail
+                                    setverdict(fail);
+                                } else {
+                                    // Step7: pass
+                                    setverdict(pass);
+                                }
+                            }
+                        }
+                    }
+                }
+                // Test body done
+
+                // Postamble
+                f_ContextData_Postambule();
+            } // End of TC TC_PRO_BE_BV_02
+            
         } // End of group Valid_Behaviour
 
         /**
@@ -3221,16 +3078,17 @@ module ContextData_TCs {
 
         /**
          * @desc    Test subgroup objective:
-         * - to test the uniqueness of Context ID within the Toll Charger;
-         * - to test the behaviour of the DUT in relation to ADU Sequence Number
+         * - To test the usage of single tollContext within an ADU
+         * - To test the behaviour of the DUT in relation to ADU Sequence Number.
          */
         group Valid_Behaviour {
             /**
              * @desc    TC_ADUH_BE_BV_01: Use of single tollContext per ADU
-             * @remark  [TS 17575-3], Clause 7.2 ADU header
+             * @remark  [TS 17575-3], Clause 7.5 Application data unit body (data type ISO 17575-3AduBody)
+             * @remark  [TS 17575-3], Clause 8.2 Rules with respect to support of context data
+             * @remark  [TS 17575-3], Clause 8.5.2.2 Toll context overview
              */
-            testcase TC_ADUH_BE_BV_01() runs on EutComp system TestAdapter 
-            {
+            testcase TC_ADUH_BE_BV_01() runs on EutComp system TestAdapter {
                 // Local variables
                 var Iso17575_3Adu v_adu; // Used to retrieve contextId value
                 var charstring v_uniquenessOfContextIDFound := ";"; // List of the Context ID already received
@@ -3288,10 +3146,9 @@ module ContextData_TCs {
 
             /**
              * @desc    TC_ADUH_BE_BV_02: Verify handling of aduSequenceNumber
-             * @remark  [TS 17575-3], Clause 7.2 ADU header
+             * @remark  [TS 17575-3], Clause 7.4 Application data unit header (data type ISO 17575-3AduHeader)
              */
-            testcase TC_ADUH_BE_BV_02() runs on EutComp system TestAdapter 
-            {
+            testcase TC_ADUH_BE_BV_02() runs on EutComp system TestAdapter {
                 // Local variables
                 var Iso17575_3Adu adu1 := null; // Used to retrieve aduSequenceNumber value #1
                 var Iso17575_3Adu adu2 := null; // Used to retrieve aduSequenceNumber value #2
@@ -3355,19 +3212,18 @@ module ContextData_TCs {
     /**
      * @desc    These Test Purposes apply to EFCAttributes as claimed in [TS 17575-3] clause B.6.4.3/1-9
      * @see     Electronic fee collection (EFC) — Conformity evaluation of Front End and Back End equipment to ISO 17575-3 — Part 1: Test suite structure and test purpose - Clause B.4 Attribute general test purposes
-     * @remark  12 TCs
      */
     group ADU_Attribute {
 
         /**
          * @desc    Test subgroup objective:
-         * - to test the availability of all mandatory attributes;
+         * - to test the availability of all mandatory attributes
          */
         group Valid_Behaviour {
 
             /**
              * @desc    TC_ADUB_BE_BV_01: Verify that each toll context shall be described using one or more EFC attributes
-             * @remark  [TS 17575-3], Clause 8.5.3.2.2 Data type Tariff
+             * @remark  [TS 17575-3], Clause 8.3 Attributes and data sets
              */
             testcase TC_ADUB_BE_BV_01() runs on EutComp system TestAdapter {
                 // Local variables
@@ -3456,7 +3312,7 @@ module ContextData_TCs {
 
         /**
          * @desc    Test subgroup objective:
-         * - to test the behaviour of the DUT in relation to Toll Context Overview attribute
+         * - To test the behaviour of the DUT in relation to Toll Context Overview and Toll Context Partition Overview attribute
          */
         group Valid_Behaviour {
 
@@ -3465,8 +3321,7 @@ module ContextData_TCs {
              * @remark  [TS 17575-3], Clause 8.5.2.2 Toll context overview
              * @see     [TS 17575-3], Table 3 — EFC attribute TollContextOverview (informative)
              */
-            testcase TC_TC_BE_BV_01() runs on EutComp system TestAdapter 
-            {
+            testcase TC_TC_BE_BV_01() runs on EutComp system TestAdapter {
                 // Local variables
                 var Iso17575_3Adu v_adu := null; // Used to retrieve data elements list
                 timer t_runningDuration := PX_TEST_BODY_DURATION; // Used to repeat test body sequence during 30.0 seconds
@@ -3529,8 +3384,7 @@ module ContextData_TCs {
              * @remark  [TS 17575-3], Clause 8.5.2.2 Toll context overview
              * @see     [TS 17575-3], Table 3 — EFC attribute TollContextOverview (informative)
              */
-            testcase TC_TC_BE_BV_02() runs on EutComp system TestAdapter 
-            {
+            testcase TC_TC_BE_BV_02() runs on EutComp system TestAdapter {
                 // Local variables
                 var Iso17575_3Adu v_adu := null; // Used to retrieve operationalStatus field
                 timer t_runningDuration := PX_TEST_BODY_DURATION; // Used to repeat test body sequence during 30.0 seconds
@@ -3800,8 +3654,7 @@ module ContextData_TCs {
              * @remark  [TS 17575-3], Clause 8.5.3.3.1 General principle
              * @see     [TS 17575-3], Table 9 — Data type TariffClass (informative), Figure 6 — Principle of creation of tariff classes
              */
-            testcase TC_TACD_BE_BV_01() runs on EutComp system TestAdapter 
-            {
+            testcase TC_TACD_BE_BV_01() runs on EutComp system TestAdapter {
                 // Local variables
                 var Iso17575_3Adu v_adu := null; // Used to retrieve data elements list
                 timer t_runningDuration := PX_TEST_BODY_DURATION; // Used to repeat test body sequence during 30.0 seconds
@@ -3933,8 +3786,7 @@ module ContextData_TCs {
              * @remark  [TS 17575-3], Clause 8.5.3.4.2 Data type LocalVehicleClass
              * @see     [TS 17575-3], Table 11 — Data type LocalVehicleClass (informative)
              */
-            testcase TP_LVCD_BE_BV_01() runs on EutComp system TestAdapter 
-            {
+            testcase TP_LVCD_BE_BV_01() runs on EutComp system TestAdapter {
                 var Iso17575_3Adu v_adu := null; // Used to retrieve data elements list
                 timer t_runningDuration := PX_TEST_BODY_DURATION; // Used to repeat test body sequence during 30.0 seconds
                 var template Provider v_tollContext := ?; // Used for tollContext/v_contextId matching uniqueness
@@ -3976,13 +3828,12 @@ module ContextData_TCs {
             } // End of TC TP_LVCD_BE_BV_01
 
             /**
-             * @desc    TP_LVCD_BE_BV_02: Verify that Priority Level is different for overlapping Vehicle Classes
+             * @desc    TP_LVCD_BE_BV_02: Verify that Priority Value is different for overlapping Vehicle Classes
              * @remark  [TS 17575-3], Clause 8.5.3.4.2 Data type LocalVehicleClass
              * @see     [TS 17575-3], Table 11 — Data type LocalVehicleClass (informative)
-             * EXAMPLE 5    Vehicle class 45 is defined as all trucks having an overall length of 6,50 m to 12,50 m. Priority level for this class is set to 8. Vehicle class 46 is defined as all trucks having an overall length of 8,00 m to 15,00 m. Priority level for this class is set to 5. In case a vehicle would fall into both classes as it has a length of 10,65 m it has to be grouped into vehicle class 45 as the priority level of class 45 is higher
+             * EXAMPLE 4    Vehicle class 45 is defined as all trucks having an overall length of 6,50 m to 12,50 m. Priority level for this class is set to 8. Vehicle class 46 is defined as all trucks having an overall length of 8,00 m to 15,00 m. Priority level for this class is set to 5. In case a vehicle would fall into both classes as it has a length of 10,65 m it has to be grouped into vehicle class 45 as the priority level of class 45 is higher
              */
-            testcase TP_LVCD_BE_BV_02() runs on EutComp system TestAdapter 
-            {
+            testcase TP_LVCD_BE_BV_02() runs on EutComp system TestAdapter {
                 var Iso17575_3Adu v_adu := null; // Used to retrieve data elements list
                 timer t_runningDuration := PX_TEST_BODY_DURATION; // Used to repeat test body sequence during 30.0 seconds
                 var template Provider v_tollContext := ?; // Used for tollContext/v_contextId matching uniqueness
@@ -4045,12 +3896,11 @@ module ContextData_TCs {
          */
         group Valid_Behaviour {
             /**
-             * @desc    TC_TICD_BE_BV_01: Verify that Time Class ID is unique
+             * @desc    TC_TICD_BE_BV_01: Verify that Time Class Id is unique
              * @remark  [TS 17575-3], 8.5.3.5.2 Date type TimeClass
              * @see     [TS 17575-3], Table 13 — Data type TimeClass (informative)
              */
-            testcase TC_TICD_BE_BV_01() runs on EutComp system TestAdapter 
-            {
+            testcase TC_TICD_BE_BV_01() runs on EutComp system TestAdapter {
                 var Iso17575_3Adu v_adu := null; // Used to retrieve data elements list
                 timer t_runningDuration := PX_TEST_BODY_DURATION; // Used to repeat test body sequence during 30.0 seconds
                 var template Provider v_tollContext := ?; // Used for tollContext/v_contextId matching uniqueness
@@ -4096,8 +3946,7 @@ module ContextData_TCs {
              * @remark  [TS 17575-3], 8.5.3.5.2 Date type TimeClass
              * @see     [TS 17575-3], Table 13 — Data type TimeClass (informative)
              */
-            testcase TC_TICD_BE_BV_02() runs on EutComp system TestAdapter 
-            {
+            testcase TC_TICD_BE_BV_02() runs on EutComp system TestAdapter {
                 var Iso17575_3Adu v_adu := null; // Used to retrieve data elements list
                 timer t_runningDuration := PX_TEST_BODY_DURATION; // Used to repeat test body sequence during 30.0 seconds
                 var template Provider v_tollContext := ?; // Used for tollContext/v_contextId matching uniqueness
@@ -4160,12 +4009,11 @@ module ContextData_TCs {
          */
         group Valid_Behaviour {
             /**
-             * @desc    TC_USCD_BE_BV_01: Verify that User Class ID is unique
+             * @desc    TC_USCD_BE_BV_01: Verify that User Class Id is unique
              * @remark  [TS 17575-3], Clause 8.5.3.6.2 Data type UserClass
              * @see     [TS 17575-3], Table 15 — Data type UserClass (informative)
              */
-            testcase TC_USCD_BE_BV_01() runs on EutComp system TestAdapter 
-            {
+            testcase TC_USCD_BE_BV_01() runs on EutComp system TestAdapter {
                 var Iso17575_3Adu v_adu := null; // Used to retrieve data elements list
                 timer t_runningDuration := PX_TEST_BODY_DURATION; // Used to repeat test body sequence during 30.0 seconds
                 var template Provider v_tollContext := ?; // Used for tollContext/v_contextId matching uniqueness
@@ -4208,11 +4056,10 @@ module ContextData_TCs {
 
             /**
              * @desc    TC_USCD_BE_BV_02: Verify that Priority Value is different for overlapping User Classes
-             * @remark  [TS 17575-3], Clause 8.3.3.6.1. Data type UserClass
-             * @see     [TS 17575-3], Table 13 – Data type UserClass
+             * @remark  [TS 17575-3], Clause 8.5.3.6.2 Data type UserClass
+             * @see     [TS 17575-3], Table 15 — Data type UserClass (informative)
              */
-            testcase TC_USCD_BE_BV_02() runs on EutComp system TestAdapter 
-            {
+            testcase TC_USCD_BE_BV_02() runs on EutComp system TestAdapter {
                 var Iso17575_3Adu v_adu := null; // Used to retrieve data elements list
                 timer t_runningDuration := PX_TEST_BODY_DURATION; // Used to repeat test body sequence during 30.0 seconds
                 var template Provider v_tollContext := ?; // Used for tollContext/v_contextId matching uniqueness
@@ -4264,16 +4111,15 @@ module ContextData_TCs {
     } // End of group User_Class_Definition
     /**
      * @desc    These Test Purposes apply to:
-     * - TollContextLayout as claimed in [TS 17575-3] clause B.6.4.3/7;
-     * - Layout Description Type as claimed in [TS 17575-3] B.6.4.17;
-     * - Section Pricing Layout Description as claimed in [TS 17575-3] B.6.4.18 (ATTR-31S);
-     * - Area Pricing Layout Description as claimed in [TS 17575-3] B.6.4.19 (ATTR-31A);
-     * - Road Network object as claimed in [TS 17575-3] B.6.4.23 (ATTR-31A);
-     * - Cordon Pricing Layout Description  as claimed in [TS 17575-3] B.6.4.24 (ATTR-31A);
-     * - Cordon Entry Location Description  as claimed in [TS 17575-3] B.6.4.25 (ATTR-31A);
-     * - Cordon Exit Location Description  as claimed in [TS 17575-3] B.6.4.26 (ATTR-31A).
+     * - Toll Context Partition Layout as claimed in ISO 17575-3 Clause B.5.3 Table B.122,
+     * - Supported layout types as claimed in ISO 17575-3 Clause B.5.3 Table B.122,
+     * - Section Layout Description as claimed in ISO 17575-3 Clause B.5.3 Table B.124 (TCL-S),
+     * - Area Layout Description as claimed in ISO 17575-3 Clause B.5.3 Table B.138 (TCL-A),
+     * - Road Network object as claimed in ISO 17575-3 Clause B.5.3 Table B.139 (TCL-A),
+     * - Cordon Layout Description as claimed in ISO 17575-3 Clause B.5.3 Table B.142 (TCL-C),
+     * - Cordon Entry Location Description as claimed in ISO 17575-3 B.5.3 Table B.145 (TCL-C),
+     * - Cordon Exit Location Description as claimed in ISO 17575-3 B.5.3 Table B.145 (TCL-C).
      * @see     Electronic fee collection (EFC) — Conformity evaluation of Front End and Back End equipment to ISO 17575-3 — Part 1: Test suite structure and test purpose - Clause B.4 Attribute general test purposes
-     * @remark  32 TCs
      */
     group Toll_Context_Layout {
 
@@ -4282,13 +4128,13 @@ module ContextData_TCs {
          * - to test the behaviour of the DUT in relation to Toll Context Layout attribute for section layout description (ATTR-31S), Section List for section layout description (ATTR-31L), area layout description (ATTR-31A), and cordon  layout description (ATTR-31C).
          */
         group Valid_Behaviour {
+            
             /**
              * @desc    TC_TCL_BE_BV_01: Verify that Layout Description is compliant to Toll Context Partition Type
              * @remark  [TS 17575-3], Clause 8.5.4 Requirements with regards to context layout
              * @see     [TS 17575-3], Table 16 — Data type TollContextPartitionLayout (informative)
              */
-            testcase TC_TCL_BE_BV_01() runs on EutComp system TestAdapter 
-            {
+            testcase TC_TCL_BE_BV_01() runs on EutComp system TestAdapter {
                 var Iso17575_3Adu v_adu := null; // Used to retrieve data elements list
                 timer t_runningDuration := PX_TEST_BODY_DURATION; // Used to repeat test body sequence during 30.0 seconds
                 var template Provider v_tollContext := ?; // Used for tollContext/v_contextId matching uniqueness
@@ -4333,17 +4179,49 @@ module ContextData_TCs {
             } // End of TC TC_TCL_BE_BV_01
 
             /**
+             * @desc    TC_TCL_BE_BV_02: Verify that one toll context shall have one or more toll context partition layout descriptions, one per defined toll context partition
+             * @remark  [TS 17575-3], Clause 8.5.4.1 General rules
+             * @see     [TS 17575-3], Table 16 — Data type TollContextPartitionLayout (informative)
+             */
+            testcase TC_TCL_BE_BV_02() runs on EutComp system TestAdapter 
+            {
+                var Iso17575_3Adu v_adu := null; // Used to retrieve data elements list
+                
+                // Preamble
+                f_ContextData_Preambule();
+                // Back End is initialized and can send Context Data
+                // Preamble done
+    
+                // Test body start
+                // Step 1: Trigger several ISO17575-3ADU messages
+                f_userActions(cmdTrigger, raiseADUs); // Back End sends Context Data for each Toll Context
+                // Step2
+                t_ac.start;
+                alt {
+                    [] pco.receive(mw_Iso17575_3Adu_tollcontextlayout_sectionPricingLayout_TollCharger_ContextId(?)) -> value v_adu { // Step3
+                        // Stop timer
+                        t_ac.stop;
+                        // Step4
+                        setverdict(pass);
+                    }
+                } // End of alt statement
+                // Test body done
+
+                // Postamble
+                f_ContextData_Postambule();
+            } // End of TC TC_TCL_BE_BV_02
+
+            /**
              * @desc    Toll Context Layout test purposes for Section pricing scheme
              * @see     B.11.1.1. Toll Context Layout test purposes for Section pricing scheme
              */
             group Toll_Context_Layout_Section_Pricing {
                 /**
-                 * @desc    TC_ATTR_31S_BE_BV_01: Verify that Charge Object ID is unique
-                 * @remark  [TS 17575-3], Clause 8.3.4.1. Data element sectionLayout / Data type SectionLayout
-                 * @see     [TS 17575-3], Table 15 – Data type SectionLayout
+                 * @desc    TP_TCL_S_BE_BV_01: Verify that Charge Object Id is unique
+                 * @remark  [TS 17575-3], Clause 8.5.4.2 Requirements for section based layout
+                 * @see     [TS 17575-3], Table 17 — Data type SectionLayout (informative)
                  */
-                testcase TC_ATTR_31S_BE_BV_01() runs on EutComp system TestAdapter 
-                {
+                testcase TP_TCL_S_BE_BV_01() runs on EutComp system TestAdapter {
                     var Iso17575_3Adu v_adu := null; // Used to retrieve data elements list
                     timer t_runningDuration := PX_TEST_BODY_DURATION; // Used to repeat test body sequence during 30.0 seconds
                     var template Provider v_tollContext := ?; // Used for tollContext/v_contextId matching uniqueness
@@ -4382,15 +4260,14 @@ module ContextData_TCs {
     
                     // Postamble
                     f_ContextData_Postambule();
-                } // End of TC TC_ATTR_31S_BE_BV_01
+                } // End of TC TP_TCL_S_BE_BV_01
     
                 /**
-                 * @desc    TC_ATTR_31S_BE_BV_02: Verify that Point ID is unique
-                 * @remark  [TS 17575-3], Clause 8.3.4.1. Data element sectionLayout / Data type SectionLayout
-                 * @see     [TS 17575-3], Table 15 – Data type SectionLayout
+                 * @desc    TP_TCL_S_BE_BV_02: Verify that Point Identifier is unique
+                 * @remark  [TS 17575-3], Clause 8.5.4.2 Requirements for section based layout
+                 * @see     [TS 17575-3], Table 17 — Data type SectionLayout (informative)
                  */
-                testcase TC_ATTR_31S_BE_BV_02() runs on EutComp system TestAdapter 
-                {
+                testcase TP_TCL_S_BE_BV_02() runs on EutComp system TestAdapter {
                     var Iso17575_3Adu v_adu := null; // Used to retrieve data elements list
                     timer t_runningDuration := PX_TEST_BODY_DURATION; // Used to repeat test body sequence during 30.0 seconds
                     var template Provider v_tollContext := ?; // Used for tollContext/v_contextId matching uniqueness
@@ -4429,15 +4306,13 @@ module ContextData_TCs {
     
                     // Postamble
                     f_ContextData_Postambule();
-                } // End of TC TC_ATTR_31S_BE_BV_02
+                } // End of TC TP_TCL_S_BE_BV_02
     
                 /**
-                 * @desc    TC_ATTR_31S_BE_BV_03: Verify that Link ID is unique
-                 * @remark  [TS 17575-3], Clause 8.3.4.1.1. Data type Link
-                 * @see     [TS 17575-3], Table 15 – Data type SectionLayout
+                 * @desc    TP_TCL_S_BE_BV_03: Verify the Link Id is unique
+                 * @remark  [TS 17575-3], Clause 8.5.4.2.3 Data type Link
                  */
-                testcase TC_ATTR_31S_BE_BV_03() runs on EutComp system TestAdapter 
-                {
+                testcase TP_TCL_S_BE_BV_03() runs on EutComp system TestAdapter {
                     var Iso17575_3Adu v_adu := null; // Used to retrieve data elements list
                     timer t_runningDuration := PX_TEST_BODY_DURATION; // Used to repeat test body sequence during 30.0 seconds
                     var template Provider v_tollContext := ?; // Used for tollContext/v_contextId matching uniqueness
@@ -4476,15 +4351,13 @@ module ContextData_TCs {
     
                     // Postamble
                     f_ContextData_Postambule();
-                } // End of TC TC_ATTR_31S_BE_BV_03
+                } // End of TC TP_TCL_S_BE_BV_03
     
                 /**
-                 * @desc    TC_ATTR_31S_BE_BV_06: Verify that Point identified by Point ID in Link has been defined in Network Points
-                 * @remark  [TS 17575-3], Clause 8.3.4.1.1. Data type Link
-                 * @see     [TS 17575-3], Table 15 – Data type SectionLayout
+                 * @desc    TP_TCL_S_BE_BV_06: Verify that Point identified by Point Identifier in Link has been defined in Network Points
+                 * @remark  [TS 17575-3], Clause 8.5.4.2.3 Data type Link
                  */
-                testcase TC_ATTR_31S_BE_BV_06() runs on EutComp system TestAdapter 
-                {
+                testcase TP_TCL_S_BE_BV_06() runs on EutComp system TestAdapter {
                     var Iso17575_3Adu v_adu := null; // Used to retrieve data elements list
                     timer t_runningDuration := PX_TEST_BODY_DURATION; // Used to repeat test body sequence during 30.0 seconds
                     var template Provider v_tollContext := ?; // Used for tollContext/v_contextId matching uniqueness
@@ -4523,15 +4396,14 @@ module ContextData_TCs {
     
                     // Postamble
                     f_ContextData_Postambule();
-                } // End of TC TC_ATTR_31S_BE_BV_06
+                } // End of TC TP_TCL_S_BE_BV_06
     
                 /**
-                 * @desc    TC_ATTR_31S_BE_BV_08: Verify that Point identified by Point ID in Liability Rules has been defined in Network Points
-                 * @remark  [TS 17575-3], Clause 8.3.4.1.2. Data type LiabilityRules
-                 * @see     [TS 17575-3], Table 16 – Use of the data elements in data type LiabilityRules
+                 * @desc    TP_TCL_S_BE_BV_08: Verify that Point identified by Point Identifier in Liability Rules has been defined in Network Points
+                 * @remark  [TS 17575-3], Clause 8.5.4.2.4 Data type LiabilityRules
+                 * @see     [TS 17575-3], Table 18 — Use of the data elements in data type LiabilityRules
                  */
-                testcase TC_ATTR_31S_BE_BV_08() runs on EutComp system TestAdapter 
-                {
+                testcase TP_TCL_S_BE_BV_08() runs on EutComp system TestAdapter {
                     var Iso17575_3Adu v_adu := null; // Used to retrieve data elements list
                     timer t_runningDuration := PX_TEST_BODY_DURATION; // Used to repeat test body sequence during 30.0 seconds
                     var template Provider v_tollContext := ?; // Used for tollContext/v_contextId matching uniqueness
@@ -4570,14 +4442,13 @@ module ContextData_TCs {
     
                     // Postamble
                     f_ContextData_Postambule();
-                } // End of TC TC_ATTR_31S_BE_BV_08
+                } // End of TC TP_TCL_S_BE_BV_08
     
                 /**
-                 * @desc    TC_ATTR_31S_BE_BV_10: Verify that Point identified by Point ID in Supporting Information has been defined in Network Points
-                 * @remark  [TS 17575-3], Clause 8.3.4.1.3. Data type SupportingPoints
+                 * @desc    TP_TCL_S_BE_BV_10: Verify that Point identified by Point Identifier in Supporting Information has been defined in Network Points
+                 * @remark  [TS 17575-3], Clause 8.5.4.2.5 Data type SupportingPoints
                  */
-                testcase TC_ATTR_31S_BE_BV_10() runs on EutComp system TestAdapter 
-                {
+                testcase TP_TCL_S_BE_BV_10() runs on EutComp system TestAdapter {
                     var Iso17575_3Adu v_adu := null; // Used to retrieve data elements list
                     timer t_runningDuration := PX_TEST_BODY_DURATION; // Used to repeat test body sequence during 30.0 seconds
                     var template Provider v_tollContext := ?; // Used for tollContext/v_contextId matching uniqueness
@@ -4616,15 +4487,14 @@ module ContextData_TCs {
 
                     // Postamble
                     f_ContextData_Postambule();
-                } // End of TC TC_ATTR_31S_BE_BV_10
+                } // End of TC TP_TCL_S_BE_BV_10
  
                 /**
-                 * @desc    TC_ATTR_31S_BE_BV_11: Verify that Applicable Time Classes for Section Layout are present in Time Class Definition
-                 * @remark  [TS 17575-3], Clause 8.3.4.1. Data element sectionLayout / Data type SectionLayout
-                 * @see     [TS 17575-3], Table 15 – Data type SectionLayout
+                 * @desc    TP_TCL_S_BE_BV_11: Verify that Applicable Time Classes for Section Layout are present in Time Class Definition
+                 * @remark  [TS 17575-3], Clause 8.5.4.2.2 Data element sectionLayout/Data type SectionLayout
+                 * @see     [TS 17575-3], Table 17 — Data type SectionLayout (informative)
                  */
-                testcase TC_ATTR_31S_BE_BV_11() runs on EutComp system TestAdapter 
-                {
+                testcase TP_TCL_S_BE_BV_11() runs on EutComp system TestAdapter {
                     var Iso17575_3Adu v_adu := null; // Used to retrieve data elements list
                     timer t_runningDuration := PX_TEST_BODY_DURATION; // Used to repeat test body sequence during 30.0 seconds
                     var template Provider v_tollContext := ?; // Used for tollContext/v_contextId matching uniqueness
@@ -4663,7 +4533,7 @@ module ContextData_TCs {
 
                     // Postamble
                     f_ContextData_Postambule();
-                } // End of TC TC_ATTR_31S_BE_BV_11
+                } // End of TC TP_TCL_S_BE_BV_11
 
             } // End of group Toll_Context_Layout_Section_Pricing
 
@@ -4673,12 +4543,11 @@ module ContextData_TCs {
              */
             group Toll_Context_Layout_Area_Pricing {
                 /**
-                 * @desc    TC_ATTR_31A_BE_BV_01: Verify that Area ID is unique
-                 * @remark  [TS 17575-3], Clause 8.3.4.2. Data element areaLayout
-                 * @see     [TS 17575-3], Table 17 – Data type AreaLayout
+                 * @desc    TP_TCL_A_BE_BV_01: Verify that Area Id is unique
+                 * @remark  [TS 17575-3], Clause 8.5.4.3 Requirements for area based layouts
+                 * @see     [TS 17575-3], Table 19 — Data type AreaLayout (informative)
                  */
-                testcase TC_ATTR_31A_BE_BV_01() runs on EutComp system TestAdapter 
-                {
+                testcase TP_TCL_A_BE_BV_01() runs on EutComp system TestAdapter {
                     var Iso17575_3Adu v_adu := null; // Used to retrieve data elements list
                     timer t_runningDuration := PX_TEST_BODY_DURATION; // Used to repeat test body sequence during 30.0 seconds
                     var template Provider v_tollContext := ?; // Used for tollContext/v_contextId matching uniqueness
@@ -4717,15 +4586,14 @@ module ContextData_TCs {
     
                     // Postamble
                     f_ContextData_Postambule();
-                } // End of TC TC_ATTR_31A_BE_BV_01
+                } // End of TC TP_TCL_A_BE_BV_01
 
                 /**
-                 * @desc    TC_ATTR_31A_BE_BV_02: Verify that Charge Object ID is unique
-                 * @remark  [TS 17575-3], Clause 8.3.4.2. Data element areaLayout
-                 * @see     [TS 17575-3], Table 17 – Data type AreaLayout
+                 * @desc    TP_TCL_A_BE_BV_02: Verify that Charge Object Id is unique
+                 * @remark  [TS 17575-3], Clause 8.5.4.3 Requirements for area based layouts
+                 * @see     [TS 17575-3], Table 19 — Data type AreaLayout (informative)
                  */
-                testcase TC_ATTR_31A_BE_BV_02() runs on EutComp system TestAdapter 
-                {
+                testcase TP_TCL_A_BE_BV_02() runs on EutComp system TestAdapter {
                     var Iso17575_3Adu v_adu := null; // Used to retrieve data elements list
                     timer t_runningDuration := PX_TEST_BODY_DURATION; // Used to repeat test body sequence during 30.0 seconds
                     var template Provider v_tollContext := ?; // Used for tollContext/v_contextId matching uniqueness
@@ -4764,15 +4632,14 @@ module ContextData_TCs {
     
                     // Postamble
                     f_ContextData_Postambule();
-                } // End of TC TC_ATTR_31A_BE_BV_02
+                } // End of TC TP_TCL_A_BE_BV_02
 
                 /**
-                 * @desc    TC_ATTR_31A_BE_BV_03: Verify that Point ID is unique
-                 * @remark  [TS 17575-3], Clause 8.3.4.2. Data element areaLayout
-                 * @see     [TS 17575-3], Table 17 – Data type AreaLayout
+                 * @desc    TP_TCL_A_BE_BV_03: Verify that Point Identifier is unique
+                 * @remark  [TS 17575-3], Clause 8.5.4.3 Requirements for area based layouts
+                 * @see     [TS 17575-3], Table 19 — Data type AreaLayout (informative)
                  */
-                testcase TC_ATTR_31A_BE_BV_03() runs on EutComp system TestAdapter 
-                {
+                testcase TP_TCL_A_BE_BV_03() runs on EutComp system TestAdapter {
                     var Iso17575_3Adu v_adu := null; // Used to retrieve data elements list
                     timer t_runningDuration := PX_TEST_BODY_DURATION; // Used to repeat test body sequence during 30.0 seconds
                     var template Provider v_tollContext := ?; // Used for tollContext/v_contextId matching uniqueness
@@ -4811,15 +4678,14 @@ module ContextData_TCs {
     
                     // Postamble
                     f_ContextData_Postambule();
-                } // End of TC TC_ATTR_31A_BE_BV_03
+                } // End of TC TP_TCL_A_BE_BV_03
 
                 /**
-                 * @desc    TC_ATTR_31A_BE_BV_04: Verify that Link ID is unique
-                 * @remark  [TS 17575-3], Clause 8.3.4.2. Data element areaLayout
-                 * @see     [TS 17575-3], Table 17 – Data type AreaLayout
+                 * @desc    TP_TCL_A_BE_BV_04: Verify that Link Id is unique
+                 * @remark  [TS 17575-3], Clause 8.5.4.3 Requirements for area based layouts
+                 * @see     [TS 17575-3], Table 19 — Data type AreaLayout (informative)
                  */
-                testcase TC_ATTR_31A_BE_BV_04() runs on EutComp system TestAdapter 
-                {
+                testcase TP_TCL_A_BE_BV_04() runs on EutComp system TestAdapter {
                     var Iso17575_3Adu v_adu := null; // Used to retrieve data elements list
                     timer t_runningDuration := PX_TEST_BODY_DURATION; // Used to repeat test body sequence during 30.0 seconds
                     var template Provider v_tollContext := ?; // Used for tollContext/v_contextId matching uniqueness
@@ -4858,15 +4724,14 @@ module ContextData_TCs {
 
                     // Postamble
                     f_ContextData_Postambule();
-                } // End of TC TC_ATTR_31A_BE_BV_04
+                } // End of TC TP_TCL_A_BE_BV_04
 
                 /**
-                 * @desc    TC_ATTR_31A_BE_BV_06: Verify that Point identified by Point ID in Link has been defined in Network Points
-                 * @remark  [TS 17575-3], Clause 8.3.4.2. Data element areaLayout
-                 * @see     [TS 17575-3], Table 17 – Data type AreaLayout
+                 * @desc    TP_TCL_A_BE_BV_06: Verify that Point is identified by Point Identifier within Link
+                 * @remark  [TS 17575-3], Clause 8.5.4.3 Requirements for area based layouts
+                 * @see     [TS 17575-3], Table 19 — Data type AreaLayout (informative)
                  */
-                testcase TC_ATTR_31A_BE_BV_06() runs on EutComp system TestAdapter 
-                {
+                testcase TP_TCL_A_BE_BV_06() runs on EutComp system TestAdapter {
                     var Iso17575_3Adu v_adu := null; // Used to retrieve data elements list
                     timer t_runningDuration := PX_TEST_BODY_DURATION; // Used to repeat test body sequence during 30.0 seconds
                     var template Provider v_tollContext := ?; // Used for tollContext/v_contextId matching uniqueness
@@ -4905,14 +4770,14 @@ module ContextData_TCs {
     
                     // Postamble
                     f_ContextData_Postambule();
-                } // End of TC TC_ATTR_31A_BE_BV_06
+                } // End of TC TP_TCL_A_BE_BV_06
 
                 /**
-                 * @desc    TC_ATTR_31A_BE_BV_08: Verify that Point identified by Point ID in Supporting Information has been defined in Network Points
-                 * @remark  [TS 17575-3], Clause 8.3.4.1.3. Data type SupportingPoints
+                 * @desc    TP_TCL_A_BE_BV_08: Verify that Point identified by Point Identifier in Supporting Information has been defined in Network Points
+                 * @remark  [TS 17575-3], Clause 8.5.4.3 Requirements for area based layouts
+                 * @see     [TS 17575-3], Table 19 — Data type AreaLayout (informative)
                  */
-                testcase TC_ATTR_31A_BE_BV_08() runs on EutComp system TestAdapter 
-                {
+                testcase TP_TCL_A_BE_BV_08() runs on EutComp system TestAdapter {
                     var Iso17575_3Adu v_adu := null; // Used to retrieve data elements list
                     timer t_runningDuration := PX_TEST_BODY_DURATION; // Used to repeat test body sequence during 30.0 seconds
                     var template Provider v_tollContext := ?; // Used for tollContext/v_contextId matching uniqueness
@@ -4951,7 +4816,7 @@ module ContextData_TCs {
 
                     // Postamble
                     f_ContextData_Postambule();
-                } // End of TC TC_ATTR_31A_BE_BV_08
+                } // End of TC TP_TCL_A_BE_BV_08
 
             } // End of group Toll_Context_Layout_Area_Pricing
 
@@ -4961,12 +4826,11 @@ module ContextData_TCs {
              */
             group Toll_Context_Layout_Cordon_Pricing {
                 /**
-                 * @desc    TC_ATTR_31C_BE_BV_01: Verify that Cordon ID is unique
-                 * @remark  [TS 17575-3], Clause 8.3.4.3. Data element cordonLayout
-                 * @see     [TS 17575-3], Table 18 – Data type CordonLayout
+                 * @desc    TP_TCL_C_BE_BV_01: Verify that Cordon Id is unique
+                 * @remark  [TS 17575-3], Clause 8.5.4.4.1 Data element cordonLayout
+                 * @see     [TS 17575-3], Table 20 — Data type CordonLayout (informative)
                  */
-                testcase TC_ATTR_31C_BE_BV_01() runs on EutComp system TestAdapter 
-                {
+                testcase TP_TCL_C_BE_BV_01() runs on EutComp system TestAdapter {
                     var Iso17575_3Adu v_adu := null; // Used to retrieve data elements list
                     timer t_runningDuration := PX_TEST_BODY_DURATION; // Used to repeat test body sequence during 30.0 seconds
                     var template Provider v_tollContext := ?; // Used for tollContext/v_contextId matching uniqueness
@@ -5005,14 +4869,13 @@ module ContextData_TCs {
     
                     // Postamble
                     f_ContextData_Postambule();
-                } // End of TC TC_ATTR_31C_BE_BV_01
+                } // End of TC TP_TCL_C_BE_BV_01
 
                 /**
-                 * @desc    TC_ATTR_31C_BE_BV_02: Verify that Applicable Time Classes for Cordon Layout are present in Time Class Definition (Cordon Entry Locations)
-                 * @remark  [TS 17575-3], Clause 8.3.4.3.1. Data type CordonEntryLocation
+                 * @desc    TP_TCL_C_BE_BV_02: Verify that Applicable Time Classes for Cordon Layout are present in Time Class Definition (Cordon Entry Locations)
+                 * @remark  [TS 17575-3], Clause 8.5.4.4.2 Data type CordonBorderPolygon
                  */
-                testcase TC_ATTR_31C_BE_BV_02() runs on EutComp system TestAdapter 
-                {
+                testcase TP_TCL_C_BE_BV_02() runs on EutComp system TestAdapter {
                     var Iso17575_3Adu v_adu := null; // Used to retrieve data elements list
                     var TimeClassDefinition.timeClasses v_timeClasses := null;
                     timer t_runningDuration := PX_TEST_BODY_DURATION; // Used to repeat test body sequence during 30.0 seconds
@@ -5055,14 +4918,13 @@ module ContextData_TCs {
     
                     // Postamble
                     f_ContextData_Postambule();
-                } // End of TC TC_ATTR_31C_BE_BV_02
+                } // End of TC TP_TCL_C_BE_BV_02
 
                 /**
-                 * @desc    TC_ATTR_31C_BE_BV_03: Verify that Applicable Time Classes for Cordon Layout are present in Time Class Definition (Cordon Exit Locations)
-                 * @remark  [TS 17575-3], Clause 8.3.4.3.1. Data type CordonEntryLocation
+                 * @desc    TP_TCL_C_BE_BV_03: Verify that Applicable Time Classes for Cordon Layout are present in Time Class Definition (Cordon Exit Locations)
+                 * @remark  [TS 17575-3], Clause 8.5.4.4.2 Data type CordonBorderPolygon
                  */
-                testcase TC_ATTR_31C_BE_BV_03() runs on EutComp system TestAdapter 
-                {
+                testcase TP_TCL_C_BE_BV_03() runs on EutComp system TestAdapter {
                     var Iso17575_3Adu v_adu := null; // Used to retrieve data elements list
                     var TimeClassDefinition.timeClasses v_timeClasses := null;
                     timer t_runningDuration := PX_TEST_BODY_DURATION; // Used to repeat test body sequence during 30.0 seconds
@@ -5105,14 +4967,13 @@ module ContextData_TCs {
     
                     // Postamble
                     f_ContextData_Postambule();
-                } // End of TC TC_ATTR_31C_BE_BV_03
+                } // End of TC TP_TCL_C_BE_BV_03
 
                 /**
-                 * @desc    TC_ATTR_31C_BE_BV_04: Verify that Cordon Segment ID is unique
-                 * @remark  [TS 17575-3], Clause 8.3.4.3.1. Data type CordonEntryLocation
+                 * @desc    TP_TCL_C_BE_BV_04: Verify the Cordon Segment Id is unique
+                 * @remark  [TS 17575-3], Clause 8.5.4.4.2 Data type CordonBorderPolygon
                  */
-                testcase TC_ATTR_31C_BE_BV_04() runs on EutComp system TestAdapter 
-                {
+                testcase TP_TCL_C_BE_BV_04() runs on EutComp system TestAdapter {
                     var Iso17575_3Adu v_adu := null; // Used to retrieve data elements list
                     timer t_runningDuration := PX_TEST_BODY_DURATION; // Used to repeat test body sequence during 30.0 seconds
                     var template Provider v_tollContext := ?; // Used for tollContext/v_contextId matching uniqueness
@@ -5151,7 +5012,7 @@ module ContextData_TCs {
     
                     // Postamble
                     f_ContextData_Postambule();
-                } // End of TC TC_ATTR_31C_BE_BV_04
+                } // End of TC TP_TCL_C_BE_BV_04
 
             } // End of group Toll_Context_Layout_Cordon_Pricing
 

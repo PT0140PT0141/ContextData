@@ -380,7 +380,7 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
              * @see     Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Clause 8.3.5.2   EFC attribute ChargeReportConfiguration
              */
             template (value) VersionAndValidity m_chargeReportConfigurationVersion_ContextData13 := {
-                version := '00000105'O,
+                version := PX_VERSION_ID,
                 validFrom := {
                     timeDate := {
                         year := 2010,
@@ -1419,7 +1419,7 @@ module ContextData_Templates language "TTCN-3:2010 Advanced Parameterization" {
             modifies mw_chargeReport_any<Container> := {
                 usageStatementList := superset ( // match if tollContext is present in all elements of usageStatementList
                     {
-                        usageStatement                 := mw_usageStatement_tollContext
+                        usageStatement                 := mw_usageStatement_tollContext // Use default value '''?
                     } ifpresent
                 ) // superset
             } // End of template mw_chargeReport_usageStatementTollContext_present
