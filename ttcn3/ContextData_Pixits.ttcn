@@ -1,10 +1,10 @@
 /**
- * @author	PT28/PT0141 
- * @desc 	This module describes the common parameters for TCs execution
- * @version	$id$
+ * @author    PT28/PT0141 
+ * @desc     This module describes the common parameters for TCs execution
+ * @version    $id$
  */
 module ContextData_Pixits {
-
+    
     /**
      * @desc    Road transport and traffic telematics — Electronic fee collection — Application interface definition for electronic fee collection (EFC) based on Global Navigation Satellite Systems and Cellular Network (GNSS/CN)
      * @see     Annex A (normative) EFC data type specifications
@@ -20,10 +20,11 @@ module ContextData_Pixits {
      * @see     A.2 Data specifications
      */
     import from EfcAutonomousContextData language "ASN.1:1997" all; 
+    import from EfcDsrcApplication language "ASN.1:1997" all;
     /**
-     * @desc    Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 4: Roaming
+     * @desc    TTCN-3 does not support ASN.1 parameterization (ETSI ES 201 873-7 V4.5.1 Clause 10)
+     *          Common_Parameterised_Asn1_Data TTCN-3 module is a workaround
      */
-//    import from EfcModule language "ASN.1:1997" all; 
     import from Common_Parameterised_Asn1_Data all;
     
     /**
@@ -35,40 +36,72 @@ module ContextData_Pixits {
      * @see     Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 1: Charging - Clause 4.12 OBE On-board equipment
      */
     modulepar ObeId PX_OBID := {
-        manufacturerId := 1234,
-        equipmentOBUId := '001AA0E8C10B'O // MAC address
+        manufacturerId := 123,
+        equipmentObuId := '001AA0E8C10B'O // MAC address
     };
-    /**
-     * @desc    Describe a default provider for contextId used in DataContext11
-     * @see     Annex C.1.1: General structure of Context Data - Table C1
-     * @see     Annex C.2.1: Context Data - Table 18: ContextData11
+    /**Provider     * @desc    Describe a default provider for contextId used in DataContext13
+     * @see     [16410-1:2016], Table C. —  ContextData13
      */
-    modulepar ContextId PX_CONTEXT_ID_11 := {
-        countryCode := '0011000011'B, // See EN ISO 3166-1 - Fehler! Kein Text mit angegebener Formatvorlage im Dokument./TC Fehler! Kein Text mit angegebener Formatvorlage im Dokument. - ClauseB.4.2.4 Initialisation response (VST)
-        providerIdentifier := 2 // See EN ISO 3166-1 - Fehler! Kein Text mit angegebener Formatvorlage im Dokument./TC Fehler! Kein Text mit angegebener Formatvorlage im Dokument. - ClauseB.4.2.4 Initialisation response (VST)
+    modulepar Provider PX_TOLL_CONTEXT_ID_13 := {
+        countryCode         := '0011111010'B,
+        providerIdentifier  := 13
     };
-    /**
-     * @desc    Describe a default provider for contextId used in DataContext12
-     * @see     Annex C.1.1: General structure of Context Data - Table C1
-     * @see     Annex C.2.1: Context Data - Table 18: ContextData11
+    /**Provider     * @desc    Describe a default provider for contextId used in DataContext20
+     * @see     [16410-1:2016], Table C.6 —  ContextData20
      */
-    modulepar ContextId PX_CONTEXT_ID_12 := {
-        countryCode := '0011000011'B, // See EN ISO 3166-1 - Fehler! Kein Text mit angegebener Formatvorlage im Dokument./TC Fehler! Kein Text mit angegebener Formatvorlage im Dokument. - ClauseB.4.2.4 Initialisation response (VST)
-        providerIdentifier := 2 // See EN ISO 3166-1 - Fehler! Kein Text mit angegebener Formatvorlage im Dokument./TC Fehler! Kein Text mit angegebener Formatvorlage im Dokument. - ClauseB.4.2.4 Initialisation response (VST)
+    modulepar Provider PX_TOLL_CONTEXT_ID_20 := {
+        countryCode         := '0011111010'B,
+        providerIdentifier  := 20
     };
-    /**
-     * @desc    Describe a default provider for contextId used in DataContext13
-     * @see     Annex C.1.1: General structure of Context Data - Table C1
-     * @see     Annex C.2.1: Context Data - Table 18: ContextData11
+    /**Provider     * @desc    Describe a default provider for contextId used in DataContext21
+     * @see     [16410-1:2016], Table C.7 —  ContextData21
      */
-    modulepar ContextId PX_CONTEXT_ID_13 := {
-        countryCode := '0011000011'B, // See EN ISO 3166-1 - Fehler! Kein Text mit angegebener Formatvorlage im Dokument./TC Fehler! Kein Text mit angegebener Formatvorlage im Dokument. - ClauseB.4.2.4 Initialisation response (VST)
-        providerIdentifier := 2 // See EN ISO 3166-1 - Fehler! Kein Text mit angegebener Formatvorlage im Dokument./TC Fehler! Kein Text mit angegebener Formatvorlage im Dokument. - ClauseB.4.2.4 Initialisation response (VST)
+    modulepar Provider PX_TOLL_CONTEXT_ID_21 := {
+        countryCode         := '0011111010'B,
+        providerIdentifier  := 21
+    };
+    /**Provider     * @desc    Describe a default provider for contextId used in DataContext22
+     * @see     [16410-1:2016], Table C.8 —  ContextData22
+     */
+    modulepar Provider PX_TOLL_CONTEXT_ID_22 := {
+        countryCode         := '0011111010'B,
+        providerIdentifier  := 22
+    };
+    /**Provider     * @desc    Describe a default provider for contextId used in DataContext23
+     * @see     [16410-1:2016], Table C.9 —  ContextData23
+     */
+    modulepar Provider PX_TOLL_CONTEXT_ID_23 := {
+        countryCode         := '0011111010'B,
+        providerIdentifier  := 23
+    };
+    /**Provider     * @desc    Describe a default provider for contextId used in DataContext24
+     * @see     [16410-1:2016], Table C.10 —  ContextData24
+     */
+    modulepar Provider PX_TOLL_CONTEXT_ID_24 := {
+        countryCode         := '0011111010'B,
+        providerIdentifier  := 24
+    };
+    /**Provider     * @desc    Describe a default provider for contextId used in DataContext25
+     * @see     [16410-1:2016], Table C.11 —  ContextData25
+     */
+    modulepar Provider PX_TOLL_CONTEXT_ID_25 := {
+        countryCode         := '0011111010'B,
+        providerIdentifier  := 25
     };
     /**
      * @desc    Contains the integer number of detected/measured/consumed charge units
      * @see     [TS 17575-3], Clause 8.5.3.7 The fee calculation algorithm
      */
     modulepar float PX_UNIT_USED := 100.6;
+    /**
+     * @desc    Currency value
+     * @see     ISO 14906:2011/Amd1:2015.
+     */
+    modulepar PayUnit PX_PAY_UNIT := '0000'O;
+    /**
+     * @desc    Toll context identifier
+     * @see     [TS 17575-3], 8.5.3.2.1 EFC attribute TariffTable
+     */
+    modulepar TollContextPartitionId PX_APPLICABLE_PARTITION_ID := 1;
     
 } // End of module ContextData_Pixits

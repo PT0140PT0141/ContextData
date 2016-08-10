@@ -9,12 +9,12 @@
      * - to generate the corresponding operation parameters (either automatically or because the end user requires that capability explicitly);
      * - to interpret, handle and when required make available to the end user the corresponding error or result.
      * A protocol element is said to be supported for a sending implementation if it is able to generate it under some circumstances (either automatically or because the end user requires relevant services explicitly).
-     * @see     Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.5 PICS proforma for the Front End
+     * @see     [17575-3:2016], Context data - Annex B.5 PICS proforma for the Front End
      */
      group PICS_Front_End {
         /**
          * @desc
-         * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.5.1.1. Identification of PICS
+         * @see [17575-3:2016], Context data - Annex B.5.1.1. Identification of PICS
          */
         group PICS_Implementation_Id_FrontEnd {
             /**
@@ -33,7 +33,7 @@
         } // End of PICS_Implementation_Id_FrontEnd
         /**
          * @desc
-         * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.5.1.2. Identification of the implementation and/or system
+         * @see [17575-3:2016], Context data - Annex B.5.1.2. Identification of the implementation and/or system
          */
         group PICS_Identification_of_implementation_system {
             /**
@@ -55,7 +55,7 @@
         } // End of PICS_Identification_of_implementation_system
         /**
          * @desc
-         * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.5.1.3. Identification of the Front End supplier
+         * @see [17575-3:2016], Context data - Annex B.5.1.3. Identification of the Front End supplier
          */
         group PICS_Identification_of_FE_supplier {
             /**
@@ -85,7 +85,7 @@
         } // End of PICS_Identification_of_FE_supplier
         /**
          * @desc
-         * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.5.1.4. Identification of the Front End
+         * @see [17575-3:2016], Context data - Annex B.5.1.4. Identification of the Front End
          */
         group PICS_Identification_of_FE {
             /**
@@ -115,7 +115,7 @@
         } // End of PICS_Identification_of_FE
         /**
          * @desc
-         * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.5.4.1. ADU Header and body
+         * @see [17575-3:2016], Context data - Annex B.5.4.1. ADU Header and body
          */
         group PICS_ADU_Header_and_body {
             /**
@@ -137,7 +137,7 @@
         } // End of PICS_Identification_of_standard
         /**
          * @desc
-         * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.5.4.3. EFC Attributes
+         * @see [17575-3:2016], Context data - Annex B.5.4.3. EFC Attributes
          */
         group PICS_EFC_Attributes {
             /**
@@ -179,7 +179,7 @@
         } // End of PICS_EFC_Attributes
         /**
          * @desc
-         * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.5.4.4. Regime overview
+         * @see [17575-3:2016], Context data - Annex B.5.4.4. Regime overview
          */
         group PICS_Regime_Overview {
             /**
@@ -197,7 +197,7 @@
         } // End of PICS_Regime_Overview
         /**
          * @desc
-         * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.5.4.5. Toll Scheme types
+         * @see [17575-3:2016], Context data - Annex B.5.4.5. Toll Scheme types
          */
         group PICS_Toll_Scheme_types {
             /**
@@ -219,7 +219,7 @@
         } // End of PICS_Toll_Scheme_types
         /**
          * @desc
-         * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.5.4.6. Operational status
+         * @see [17575-3:2016], Context data - Annex B.5.4.6. Operational status
          */
         group PICS_Operational_status {
             /**
@@ -229,7 +229,7 @@
         } // End of PICS_Operational_status
         /**
          * @desc
-         * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.5.4.7. Tariff table and tariffs
+         * @see [17575-3:2016], Context data - Annex B.5.4.7. Tariff table and tariffs
          */
         group PICS_Tariff_table_and_tariffs {
             /**
@@ -268,7 +268,7 @@
 
         /**
          * @desc
-         * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.5.4.8 Tariff class definitions and tariff classes
+         * @see [17575-3:2016], Context data - Annex B.5.4.8 Tariff class definitions and tariff classes
          */
         group PICS_Tariff_class_definitions_and_tariff_classes {
             modulepar boolean PIC_localVehicleClasses := true;
@@ -279,7 +279,7 @@
         } // End of PICS_Tariff_class_definitions_and_tariff_classes
         /**
          * @desc
-         * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.5.4.9 Local vehicle class definitions and local vehicle classes
+         * @see [17575-3:2016], Context data - Annex B.5.4.9 Local vehicle class definitions and local vehicle classes
          */
         group PICS_Local_vehicle_class_definitions_and_local_vehicle_classes {
             modulepar boolean PIC__0ordinalElements := true;
@@ -287,7 +287,7 @@
         } // End of PICS_Local_vehicle_class_definitions_and_local_vehicle_classes
         /**
          * @desc
-         * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.5.4.10. Nominal vehicle parameters
+         * @see [17575-3:2016], Context data - Annex B.5.4.10. Nominal vehicle parameters
          */
         group PICS_Nominal_vehicle_parameters {
             modulepar boolean PIC_vehicleClasses := true;
@@ -296,7 +296,7 @@
         } // End of PICS_Nominal_vehicle_parameters
         /**
          * @desc
-         * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.5.4.11. Ordinal vehicle parameters
+         * @see [17575-3:2016], Context data - Annex B.5.4.11. Ordinal vehicle parameters
          */
         group PICS_Ordinal_vehicle_parameters {
             modulepar boolean PIC_vehicleLengthOverall := true;
@@ -314,7 +314,7 @@
         } // End of PICS_Ordinal_vehicle_parameters
         /**
          * @desc
-         * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.5.4.12 Time class definitions and time classes
+         * @see [17575-3:2016], Context data - Annex B.5.4.12 Time class definitions and time classes
          */
         group PICS_Time_class_definitions_and_time_classes {
             modulepar boolean PIC_priorityValue := true;
@@ -324,7 +324,7 @@
         } // End of PICS_Time_class_definitions_and_time_classes
         /**
          * @desc
-         * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.5.4.13. Nominal time class parameters
+         * @see [17575-3:2016], Context data - Annex B.5.4.13. Nominal time class parameters
          */
         group PICS_Nominal_time_class_parameters {
             modulepar boolean PIC__0weekdays := true;
@@ -333,7 +333,7 @@
         } // End of PICS_Nominal_time_class_parameters
         /**
          * @desc
-         * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.5.4.14. Ordinal time class parameters
+         * @see [17575-3:2016], Context data - Annex B.5.4.14. Ordinal time class parameters
          */
         group PICS_Ordinal_time_class_parameters {
             modulepar boolean PIC__1weekdays := true;
@@ -343,7 +343,7 @@
         } // End of PICS_Ordinal_time_class_parameters
         /**
          * @desc
-         * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.5.4.15. User class definitions and user classes
+         * @see [17575-3:2016], Context data - Annex B.5.4.15. User class definitions and user classes
          */
         group PICS_User_class_definitions_and_user_classes {
             modulepar boolean PIC_contractTypes := true;
@@ -352,7 +352,7 @@
         } // End of PICS_User_class_definitions_and_user_classes
         /**
          * @desc
-         * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.5.4.16. Toll context layout
+         * @see [17575-3:2016], Context data - Annex B.5.4.16. Toll context layout
          */
         group PICS_Toll_context_layout {
             modulepar boolean PIC_geoRefPoint := true;
@@ -360,7 +360,7 @@
         } // End of PICS_Toll_context_layout
         /**
          * @desc
-         * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.5.4.17. Supported layout description types
+         * @see [17575-3:2016], Context data - Annex B.5.4.17. Supported layout description types
          */
         group PICS_Supported_layout_description_types {
             modulepar boolean PIC_sectionPricingLayout := true;
@@ -369,7 +369,7 @@
         } // End of PICS_Supported_layout_description_types
         /**
          * @desc
-         * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.5.4.18. Section pricing layout description
+         * @see [17575-3:2016], Context data - Annex B.5.4.18. Section pricing layout description
          */
         group PICS_Section_pricing_layout_description {
             modulepar boolean PIC__0chargeObjectName := true;
@@ -383,14 +383,14 @@
         } // End of PICS_Section_pricing_layout_description
         /**
          * @desc
-         * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.5.4.19. Area pricing layout description
+         * @see [17575-3:2016], Context data - Annex B.5.4.19. Area pricing layout description
          */
         group PICS_Area_pricing_layout_description {
             modulepar boolean PIC_roadNetwork := true;
         } // End of PICS_Area_pricing_layout_description
         /**
          * @desc
-         * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.5.4.20. Road network objects in area pricing layout descriptions
+         * @see [17575-3:2016], Context data - Annex B.5.4.20. Road network objects in area pricing layout descriptions
          */
         group PICS_Road_network_objects_in_area_pricing_layout_descriptions {
             modulepar boolean PIC__1chargeObjectName := true;
@@ -401,7 +401,7 @@
         } // End of PICS_Road_network_objects_in_area_pricing_layout_descriptions
         /**
          * @desc
-         * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.5.4.21. Cordon pricing layout description
+         * @see [17575-3:2016], Context data - Annex B.5.4.21. Cordon pricing layout description
          */
         group PICS_Cordon_pricing_layout_description {
             modulepar boolean PIC_cordonEntryLocations := true;
@@ -409,14 +409,14 @@
         } // End of PICS_Cordon_pricing_layout_description
         /**
          * @desc
-         * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.5.4.22. Cordon entry location description
+         * @see [17575-3:2016], Context data - Annex B.5.4.22. Cordon entry location description
          */
         group PICS_Cordon_entry_location_description {
             modulepar boolean PIC__2applicableTimeClasses := true;
         } // End of PICS_Cordon_entry_location_description
         /**
          * @desc
-         * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.5.4.23. Cordon exit location description
+         * @see [17575-3:2016], Context data - Annex B.5.4.23. Cordon exit location description
          */
         group PICS_Cordon_exit_location_description {
             modulepar boolean PIC_entryLocation := true;
@@ -424,7 +424,7 @@
         } // End of PICS_Cordon_exit_location_description
         /**
          * @desc
-         * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.5.4.24. Charge reporting events
+         * @see [17575-3:2016], Context data - Annex B.5.4.24. Charge reporting events
          */
         group PICS_Charge_reporting_events {
             modulepar boolean PIC_absoluteTimeEvents := true;
@@ -436,7 +436,7 @@
         } // End of PICS_Charge_reporting_events
         /**
          * @desc
-         * @see Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data - Annex B.5.4.25. Charge report configuration
+         * @see [17575-3:2016], Context data - Annex B.5.4.25. Charge report configuration
          */
         group PICS_Charge_report_configuration {
             modulepar boolean PIC_cccAttributesContent := true;

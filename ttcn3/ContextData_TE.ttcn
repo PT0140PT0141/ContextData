@@ -7,8 +7,12 @@
  * @version $id$
  */
 module ContextData_TE {
-    import from ContextData_TCs all;
+     
+     // LibEfc_Common
     import from Common_Pixits all;
+    
+    // ContextData
+    import from ContextData_TCs all;
     import from ContextData_PICS_FE all;
     import from ContextData_PICS_BE all;
 
@@ -118,12 +122,12 @@ module ContextData_TE {
          */
         execute(TC_CR_FE_BV_16(), PX_GUARD);
         /**
-         * @desc    TC_CR_FE_BV_17: Verify the presence of listOfCCCAttributes data element in Charge Report
+         * @desc    TC_CR_FE_BV_17: Verify the presence of listOfCccAttributes data element in Charge Report
          * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
          */
         execute(TC_CR_FE_BV_17(), PX_GUARD);
         /**
-         * @desc    TC_CR_FE_BV_18: Verify the absence of listOfCCCAttributes data element in Charge Report
+         * @desc    TC_CR_FE_BV_18: Verify the absence of listOfCccAttributes data element in Charge Report
          * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
          */
         execute(TC_CR_FE_BV_18(), PX_GUARD);
