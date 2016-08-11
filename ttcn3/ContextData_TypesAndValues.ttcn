@@ -2,7 +2,7 @@
  * @author  PT28/PT0141 
  * @desc    This module describes common types and values for Context Data tests
  * @version $id$
- * @see     Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data
+ * @see     [17575-1:2016]: Context data
  *           - Annex A.1 for hierarchical Data structure illustration 
  *           - Annex A.2  Data specifications
  * @see     Electronic fee collection (EFC) — Evaluation of equipment for conformity to CEN ISO/TS 17575-3 — Part 1: Test suite structure and test purpose
@@ -10,12 +10,12 @@
 module ContextData_TypesAndValues {
     // EFC
     /**
-     * @desc    Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data
+     * @desc    [17575-1:2016]: Context data
      * @see     A.2 Data specifications
      */
     import from EfcAutonomousCharging language "ASN.1:1997" all;
     /**
-     * @desc    Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data
+     * @desc    [17575-1:2016]: Context data
      * @see     A.2 Data specifications
      */
     import from EfcAutonomousContextData language "ASN.1:1997" all;

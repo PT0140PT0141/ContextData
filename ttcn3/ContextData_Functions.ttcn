@@ -1,19 +1,17 @@
 /**
  * @author  PT28/PT0141 
  * @desc    This module provides functions used by Context Data TCs
- * @see     Electronic fee collection (EFC) — Conformity evaluation of Front End and Back End equipment to ISO 17575-3 — Part 1: Test suite structure and test purpose
- * @see     Electronic fee collection (EFC) — Evaluation of equipment for conformity to CEN ISO/TS 17575-3 — Part 1: Test suite structure and test purpose
  * @version $id$
  */
 module ContextData_Functions {
     // EFC
     /**
-     * @desc    Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 1: Charging
+     * @desc    [17575-1:2016]: Charging
      * @see     Annex A (normative) EFC data type specifications
      */
     import from EfcAutonomousCharging language "ASN.1:1997" all;
     /**
-     * @desc    Electronic fee collection (EFC) — Application interface definition for autonomous systems — Part 3: Context data
+     * @desc    [17575-1:2016]: Context data
      * @see     A.2 Data specifications
      */
     import from EfcAutonomousContextData language "ASN.1:1997" all;
@@ -2423,11 +2421,11 @@ module ContextData_Functions {
                                           in template (value) Iso17575_3Adu p_Iso17575_3Adu
         ) runs on EutComp {
             if (not (PICS_SECURED_MODE)) {
-                pco.send(m_Iso17575_3InformationContent_unsecured(p_Iso17575_3Adu));
+                pco.send(m_iso17575_3InformationContent_unsecured(p_Iso17575_3Adu));
             } else {
                 var template (value) AuthenticatedIso17575_3Adu v_secured_packet;
                 f_secured_packet(p_Iso17575_3Adu, v_secured_packet);
-                pco.send(m_Iso17575_3InformationContent_secured(v_secured_packet));
+                pco.send(m_iso17575_3InformationContent_secured(v_secured_packet));
             }
         } // End of function f_pco_send_iso17575_3Adu
         
@@ -2460,7 +2458,7 @@ module ContextData_Functions {
         ) runs on EutComp {
             var Iso17575_3InformationContent v_iso17575_3InformationContent;
             
-            [PICS_SECURED_MODE == false] pco.receive(mw_Iso17575_3InformationContent_unsecured(p_iso17575_3AduValueExpected)) -> value v_iso17575_3InformationContent {
+            [PICS_SECURED_MODE == false] pco.receive(mw_iso17575_3InformationContent_unsecured(p_iso17575_3AduValueExpected)) -> value v_iso17575_3InformationContent {
                 p_iso17575_3AduValue := v_iso17575_3InformationContent.notAuthenticatedIso17575_3Adu;
                 p_result := true;
             }

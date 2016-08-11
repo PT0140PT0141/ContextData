@@ -1,9 +1,8 @@
 /**
  * @author  PT28/PT0141 
  * @desc    This module provides control par for automatic test execution
- * @see     Electronic fee collection (EFC) — Conformity evaluation of Front End and Back End equipment to ISO 17575-3 — Part 1: Test suite structure and test purpose
- * @see     Electronic fee collection (EFC) — Evaluation of equipment for conformity to CEN ISO/TS 17575-3 — Part 1: Test suite structure and test purpose
- * @remark  See clause 5.3 for TC namimg conventions
+ * @see     [16410-1:2016]: Test suite structure and test purpose
+ * @see     [16410-1:2016], Clause 5.3.2 for TC namimg conventions
  * @version $id$
  */
 module ContextData_TE {
@@ -18,524 +17,557 @@ module ContextData_TE {
 
     control {
         /**
-         * @desc    Group of the TCs based on TPs described in clause A.2.1 BV test purposes: Verify the usage of communication services
-         * Test subgroup objective:
-         * - to test the behaviour of the DUT in relation to the context activation;
-         * - to test the behaviour of the DUT in relation to handling of multiple contexts;
-         * - to test usage of communication services by DUT,
-         * by means of the syntactically and contextual correct ADUs:
-         * - single ADU consisting of all necessary attributes to activate the context, and/or
-         * - several consecutive ADUs consisting of all necessary attributes to activate the context.
+         * @desc    TC_CH_FE_BV_01: Verify that DUT updates its Context Data
+         * @remark  [17575-3:2016], Clause 8.3 Attributes and data sets
          */
-            /**
-             * @desc    TC_CH_FE_BV_01: Verify that DUT updates its Context Data
-             * @remark  [TS 17575-3], Clause 8.1 Rules with respect to support of context data
-             */
-            execute(TC_CH_FE_BV_01(), PX_GUARD);
+        execute(TC_CH_FE_BV_01(), PX_GUARD);
         /**
-         * @desc    These Test Purposes apply to  ChargeReportConfiguration as claimed in [TS 17575-3] clause B.5.4.3/9
-         * Test subgroup objective:
-         * - to test the presence of particular data elements in Charge Report sent by DUT in relation to Charge Report Configuration;
-         * - to test the absence of particular data elements in Charge Report sent by DUT in relation to Charge Report Configuration;
-         * by means of the syntactically and contextual correct ADUs:
-         * - single ADU consisting of all necessary attributes;
-         * - several consecutive ADUs consisting of all necessary attributes to activate the context
-         */
-        /**
-         * @desc    TC_CR_FE_BV_01: Verify the presence of obeID data element in Charge Report
-         * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
+         * @desc    TC_CR_FE_BV_01: Verify the presence of obeId data element in Charge Report
+         * @remark  [17575-3:2016], Clause 8.5.5.3.2 Data type ChargeReportContent
          */
         execute(TC_CR_FE_BV_01(), PX_GUARD);
         /**
-         * @desc    TC_CR_FE_BV_02: Verify the absence of obeID data element in Charge Report
-         * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
+         * @desc    TC_CR_FE_BV_02: Verify the absence of obeId data element in Charge Report
+         * @remark  [17575-3:2016], Clause 8.5.5.3.2 Data type ChargeReportContent
          */
         execute(TC_CR_FE_BV_02(), PX_GUARD);
         /**
-         * @desc    TC_CR_FE_BV_03: Verify the presence of paymentMeans data element in Charge Report
-         * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
+         * @desc    TC_CR_FE_BV_03: Verify the presence of vehicleLPNr data element in Charge Report
+         * @remark  [17575-3:2016], Clause 8.5.5.3.2 Data type ChargeReportContent 
          */
         execute(TC_CR_FE_BV_03(), PX_GUARD);
         /**
-         * @desc    TC_CR_FE_BV_04: Verify the absence of paymentMeans data element in Charge Report
-         * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
+         * @desc    TC_CR_FE_BV_04: Verify the absence of vehicleLPNr data element in Charge Report
+         * @remark  [17575-3:2016], Clause 8.5.5.3.2 Data type ChargeReportContent 
          */
         execute(TC_CR_FE_BV_04(), PX_GUARD);
         /**
-         * @desc    TC_CR_FE_BV_05: Verify the presence of tollCharger data element in Charge Report
-         * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
+         * @desc    TC_CR_FE_BV_05: Verify the presence of paymentMeans data element in Charge Report
+         * @remark  [17575-3:2016], Clause 8.5.5.3.2 Data type ChargeReportContent
          */
         execute(TC_CR_FE_BV_05(), PX_GUARD);
         /**
-         * @desc    TC_CR_FE_BV_06: Verify the absence of tollCharger data element in Charge Report
-         * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
+         * @desc    TC_CR_FE_BV_06: Verify the absence of paymentMeans data element in Charge Report
+         * @remark  [17575-3:2016], Clause 8.5.5.3.2 Data type ChargeReportContent
          */
         execute(TC_CR_FE_BV_06(), PX_GUARD);
         /**
-         * @desc    TC_CR_FE_BV_07: Verify the presence of versionInfo data element in Charge Report
-         * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
+         * @desc    TC_CR_FE_BV_07: Verify the presence of tollContext data element in Charge Report
+         * @remark  [17575-3:2016], Clause 8.5.5.3.2 Data type ChargeReportContent
          */
         execute(TC_CR_FE_BV_07(), PX_GUARD);
         /**
-         * @desc    TC_CR_FE_BV_08: Verify the absence of versionInfo data element in Charge Report
-         * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
+         * @desc    TC_CR_FE_BV_08: Verify the absence of tollContext data element in Charge Report
+         * @remark  [17575-3:2016], Clause 8.5.5.3.2 Data type ChargeReportContent
          */
         execute(TC_CR_FE_BV_08(), PX_GUARD);
         /**
-         * @desc    TC_CR_FE_BV_09: Verify the presence of vatForThisSession data element in Charge Report
-         * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
+         * @desc    TC_CR_FE_BV_09: Verify the presence of chargeReportFinalRecipient data element in Charge Report
+         * @remark  [17575-3:2016], Clause 8.5.5.3.2 Data type ChargeReportContent
          */
         execute(TC_CR_FE_BV_09(), PX_GUARD);
         /**
-         * @desc    TC_CR_FE_BV_10: Verify the absence of vatForThisSession data element in Charge Report
-         * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
+         * @desc    TC_CR_FE_BV_10: Verify the absence of chargeReportFinalRecipient data element in Charge Report
+         * @remark  [17575-3:2016], Clause 8.5.5.3.2 Data type ChargeReportContent
          */
         execute(TC_CR_FE_BV_10(), PX_GUARD);
         /**
-         * @desc    TC_CR_FE_BV_11: Verify the presence of accountStatus data element in Charge Report
-         * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
+         * @desc    TC_CR_FE_BV_11: Verify the presence of timeOfReport data element in Charge Report
+         * @remark  [17575-3:2016], Clause 8.5.5.3.2 Data type ChargeReportContent
          */
         execute(TC_CR_FE_BV_11(), PX_GUARD);
         /**
-         * @desc    TC_CR_FE_BV_12: Verify the absence of accountStatus data element in Charge Report
-         * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
+         * @desc    TC_CR_FE_BV_12: Verify the absence of timeOfReport data element in Charge Report
+         * @remark  [17575-3:2016], Clause 8.5.5.3.2 Data type ChargeReportContent
          */
         execute(TC_CR_FE_BV_12(), PX_GUARD);
         /**
-         * @desc    TC_CR_FE_BV_13: Verify the presence of transactionCounter data element in Charge Report
-         * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
+         * @desc    TC_CR_FE_BV_13: Verify the presence of reportPeriod data element in Charge Report
+         * @remark  [17575-3:2016], Clause 8.5.5.3.2 Data type ChargeReportContent
          */
         execute(TC_CR_FE_BV_13(), PX_GUARD);
         /**
-         * @desc    TC_CR_FE_BV_14: Verify the absence of transactionCounter data element in Charge Report
-         * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
+         * @desc    TC_CR_FE_BV_14: Verify the absence of reportPeriod data element in Charge Report
+         * @remark  [17575-3:2016], Clause 8.5.5.3.2 Data type ChargeReportContent
          */
         execute(TC_CR_FE_BV_14(), PX_GUARD);
         /**
-         * @desc    TC_CR_FE_BV_15: Verify the presence of mileage data element in Charge Report
-         * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
+         * @desc    TC_CR_FE_BV_15: Verify the presence of versionInfo data element in Charge Report
+         * @remark  [17575-3:2016], Clause 8.5.5.3.2 Data type ChargeReportContent
          */
         execute(TC_CR_FE_BV_15(), PX_GUARD);
         /**
-         * @desc    TC_CR_FE_BV_16: Verify the absence of mileage data element in Charge Report
-         * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
+         * @desc    TC_CR_FE_BV_16: Verify the absence of versionInfo data element in Charge Report
+         * @remark  [17575-3:2016], Clause 8.5.5.3.2 Data type ChargeReportContent
          */
         execute(TC_CR_FE_BV_16(), PX_GUARD);
         /**
-         * @desc    TC_CR_FE_BV_17: Verify the presence of listOfCccAttributes data element in Charge Report
-         * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
+         * @desc    TC_CR_FE_BV_17: Verify the presence of sumVatForThisSession data element in Charge Report
+         * @remark  [17575-3:2016], Clause 8.3.5.2.1 Data type ChargeReport
          */
         execute(TC_CR_FE_BV_17(), PX_GUARD);
         /**
-         * @desc    TC_CR_FE_BV_18: Verify the absence of listOfCccAttributes data element in Charge Report
-         * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
+         * @desc    TC_CR_FE_BV_18: Verify the absence of sumVatForThisSession data element in Charge Report
+         * @remark  [17575-3:2016], Clause 8.3.5.2.1 Data type ChargeReport
          */
         execute(TC_CR_FE_BV_18(), PX_GUARD);
         /**
-         * @desc    TC_CR_FE_BV_19: Verify the presence of authenticator data element in Charge Report
-         * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
+         * @desc    TC_CR_FE_BV_19: Verify the presence of accountStatus data element in Charge Report
+         * @remark  [17575-3:2016], Clause 8.3.5.2.1 Data type ChargeReport
          */
         execute(TC_CR_FE_BV_19(), PX_GUARD);
         /**
-         * @desc    TC_CR_FE_BV_20: Verify the absence of authenticator data element in Charge Report
-         * @remark  [TS 17575-3], Clause 8.3.5.2.1 Data type ChargeReport
+         * @desc    TC_CR_FE_BV_20: Verify the absence of accountStatus data element in Charge Report
+         * @remark  [17575-3:2016], Clause 8.3.5.2.1 Data type ChargeReport
          */
         execute(TC_CR_FE_BV_20(), PX_GUARD);
         /**
-         * @desc    TC_CR_FE_BV_21: Verify the presence of usageStatementID data element in Charge Report
-         * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
+         * @desc    TC_CR_FE_BV_21: Verify the presence of chargeReportCounter data element in Charge Report
+         * @remark  [17575-3:2016], Clause 8.5.5.3.2 Data type ChargeReportContent
          */
         execute(TC_CR_FE_BV_21(), PX_GUARD);
         /**
-         * @desc    TC_CR_FE_BV_22: Verify the absence of usageStatementID data element in Charge Report
-         * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
+         * @desc    TC_CR_FE_BV_22: Verify the absence of chargeReportCounter data element in Charge Report
+         * @remark  [17575-3:2016], Clause 8.5.5.3.2 Data type ChargeReportContent
          */
         execute(TC_CR_FE_BV_22(), PX_GUARD);
         /**
-         * @desc    TC_CR_FE_BV_23: Verify the presence of regimeID data element in Charge Report
-         * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
+         * @desc    TC_CR_FE_BV_23: Verify the presence of mileage data element in Charge Report
+         * @remark  [17575-3:2016], Clause 8.5.5.3.2 Data type ChargeReportContent
          */
         execute(TC_CR_FE_BV_23(), PX_GUARD);
         /**
-         * @desc    TC_CR_FE_BV_24: Verify the absence of regimeID data element in Charge Report
-         * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
+         * @desc    TC_CR_FE_BV_24: Verify the absence of mileage data element in Charge Report
+         * @remark  [17575-3:2016], Clause 8.5.5.3.2 Data type ChargeReportContent
          */
         execute(TC_CR_FE_BV_24(), PX_GUARD);
         /**
-         * @desc    TC_CR_FE_BV_25: Verify the presence of aggregatedFee data element in Charge Report
-         * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
+         * @desc    TC_CR_FE_BV_25: Verify the presence of listOfCccAttributes data element in Charge Report
+         * @remark  [17575-3:2016], Clause 8.5.5.3.2 Data type ChargeReportContent
          */
         execute(TC_CR_FE_BV_25(), PX_GUARD);
         /**
-         * @desc    TC_CR_FE_BV_26: Verify the absence of aggregatedFee data element in Charge Report
-         * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
+         * @desc    TC_CR_FE_BV_26: Verify the absence of listOfCccAttributes data element in Charge Report
+         * @remark  [17575-3:2016], Clause 8.5.5.3.2 Data type ChargeReportContent
          */
         execute(TC_CR_FE_BV_26(), PX_GUARD);
         /**
-         * @desc    TC_CR_FE_BV_27: Verify the presence of aggregatedSingleTariffClassSession data element in Charge Report
-         * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
+         * @desc    TC_CR_FE_BV_27: Verify the usage of authenticated Usage Statement
+         * @remark  [17575-3:2016], Clause 8.5.5.3.3 Data type UsageStatementContent
          */
         execute(TC_CR_FE_BV_27(), PX_GUARD);
         /**
-         * @desc    TC_CR_FE_BV_28: Verify the absence of aggregatedSingleTariffClassSession data element in Charge Report
-         * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
+         * @desc    TC_CR_FE_BV_28: Verify the usage of non-authenticated Usage Statement
+         * @remark  [17575-3:2016], Clause 8.5.5.3.3 Data type UsageStatementContent
          */
         execute(TC_CR_FE_BV_28(), PX_GUARD);
         /**
-         * @desc    TC_CR_FE_BV_29: Verify the presence of listOfChargeObjects data element in Charge Report
-         * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
+         * @desc    TC_CR_FE_BV_29: Verify the presence of usageStatementId data element in Charge Report
+         * @remark  [17575-3:2016], Clause 8.5.5.3.3 Data type UsageStatementContent
          */
         execute(TC_CR_FE_BV_29(), PX_GUARD);
         /**
-         * @desc    TC_CR_FE_BV_30: Verify the absence of listOfChargeObjects data element in Charge Report
-         * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
+         * @desc    TC_CR_FE_BV_30: Verify the absence of usageStatementId data element in Usage Statement
+         * @remark  [17575-3:2016], Clause 8.5.5.3.3 Data type UsageStatementContent
          */
         execute(TC_CR_FE_BV_30(), PX_GUARD);
         /**
-         * @desc    TC_CR_FE_BV_31: Verify the presence of listOfDSRCUsageData data element in Charge Report
-         * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
+         * @desc    TC_CR_FE_BV_31: Verify the presence of tollContext data element in Charge Report
+         * @see     A.2.1 BV test purposes
+         * @remark  [17575-3:2016], Clause 8.5.5.3.3 Data type UsageStatementContent
          */
         execute(TC_CR_FE_BV_31(), PX_GUARD);
         /**
-         * @desc    TC_CR_FE_BV_32: Verify the absence of listOfDSRCUsageData data element in Charge Report
-         * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
+         * @desc    TC_CR_FE_BV_32: Verify the absence of tollContext data element in Charge Report
+         * @remark  [17575-3:2016], Clause 8.5.5.3.3 Data type UsageStatementContent
          */
         execute(TC_CR_FE_BV_32(), PX_GUARD);
         /**
-         * @desc    TC_CR_FE_BV_33: Verify the presence of listOfRawUsageData data element in Charge Report
-         * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
+         * @desc    TC_CR_FE_BV_33: Verify the presence of chargeReportFinalRecipient data element in Charge Report
+         * @remark  [17575-3:2016], Clause 8.5.5.3.3 Data type UsageStatementContent
          */
         execute(TC_CR_FE_BV_33(), PX_GUARD);
         /**
-         * @desc    TC_CR_FE_BV_34: Verify the absence of listOfRawUsageData data element in Charge Report
-         * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
+         * @desc    TC_CR_FE_BV_34: Verify the absence of chargeReportFinalRecipient data element in Charge Report
+         * @remark  [17575-3:2016], Clause 8.5.5.3.3 Data type UsageStatementContent
          */
         execute(TC_CR_FE_BV_34(), PX_GUARD);
         /**
-         * @desc    TC_CR_FE_BV_35: Verify the presence of noUsage data element in Charge Report
-         * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
+         * @desc    TC_CR_FE_BV_35: Verify the presence of aggregatedFee data element in Charge Report
+         * @remark  [17575-3:2016], Clause 8.5.5.3.3 Data type UsageStatementContent
          */
         execute(TC_CR_FE_BV_35(), PX_GUARD);
         /**
-         * @desc    TC_CR_FE_BV_36: Verify the absence of noUsage data element in Charge Report
-         * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
+         * @desc    TC_CR_FE_BV_36: Verify the absence of aggregatedFee data element in Charge Report
+         * @remark  [17575-3:2016], Clause 8.5.5.3.3 Data type UsageStatementContent
          */
         execute(TC_CR_FE_BV_36(), PX_GUARD);
         /**
-         * @desc    TC_CR_FE_BV_37: Verify the presence of usageAuthenticator data element in Charge Report
-         * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
+         * @desc    TC_CR_FE_BV_37: Verify the presence of sumVat data element in Charge Report
+         * @remark  [17575-3:2016], Clause 8.5.5.3.3 Data type UsageStatementContent
          */
         execute(TC_CR_FE_BV_37(), PX_GUARD);
         /**
-         * @desc    TC_CR_FE_BV_36: Verify the absence of noUsage data element in Charge Report
-         * @remark  [TS 17575-3], Clause 8.3.5.2.2 Data type UsageStatementContent
+         * @desc    TC_CR_FE_BV_38: Verify the absence of sumVat data element in Charge Report
+         * @remark  [17575-3:2016], Clause 8.5.5.3.3 Data type UsageStatementContent
          */
         execute(TC_CR_FE_BV_38(), PX_GUARD);
         /**
-         * @desc    TC_CH_FE_BV_39: Verify that DUT reports data elements requested by Context Data (sent in many ADUs)
-         * @remark  [TS 17575-3], Clause 8.1 Rules with respect to support of context data
+         * @desc    TC_CR_FE_BV_39: Verify the presence of aggregatedSingleTariffClassSession data element in Charge Report
+         * @remark  [17575-3:2016], Clause 8.5.5.3.3 Data type UsageStatementContent
          */
         execute(TC_CR_FE_BV_39(), PX_GUARD);
-        // TODO Add missing TCs
-        
+        /**
+         * @desc    TC_CR_FE_BV_40: Verify the absence of aggregatedSingleTariffClassSession data element in Charge Report
+         * @remark  [17575-3:2016], Clause 8.3.5.2.2 Data type UsageStatementContent
+         */
+        execute(TC_CR_FE_BV_40(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_41: Verify the presence of listOfChargeObjects data element in Charge Report
+         * @remark  [17575-3:2016], Clause 8.5.5.3.3 Data type UsageStatementContent
+         */
+        execute(TC_CR_FE_BV_41(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_42: Verify the absence of listOfChargeObjects data element in Charge Report
+         * @remark  [17575-3:2016], Clause 8.5.5.3.3 Data type UsageStatementContent
+         */
+        execute(TC_CR_FE_BV_42(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_43: Verify the presence of listOfDSRCUsageData data element in Charge Report
+         * @remark  [17575-3:2016], Clause 8.3.5.2.2 Data type UsageStatementContent
+         */
+        execute(TC_CR_FE_BV_43(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_44: Verify the absence of listOfDSRCUsageData data element in Charge Report
+         * @remark  [17575-3:2016], Clause 8.3.5.2.2 Data type UsageStatementContent
+         */
+        execute(TC_CR_FE_BV_44(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_45: Verify the presence of listOfRawUsageData data element in Charge Report
+         * @remark  [17575-3:2016], Clause 8.5.5.3.3 Data type UsageStatementContent
+         */
+        execute(TC_CR_FE_BV_45(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_46: Verify the absence of listOfRawUsageData data element in Charge Report
+         * @remark  [17575-3:2016], Clause 8.5.5.3.3 Data type UsageStatementContent
+         */
+        execute(TC_CR_FE_BV_46(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_47: Verify the presence of noUsage data element in Charge Report
+         * @remark  [17575-3:2016], Clause 8.5.5.3.3 Data type UsageStatementContent
+         */
+        execute(TC_CR_FE_BV_47(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_48: Verify the absence of noUsage data element in Charge Report
+         * @remark  [17575-3:2016], Clause 8.5.5.3.3 Data type UsageStatementContent
+         */
+        execute(TC_CR_FE_BV_48(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_49: Verify the presence of additionalUsageInformation data element in Charge Report
+         * @remark  [17575-3:2016], Clause 8.5.5.3.3 Data type UsageStatementContent
+         */
+        execute(TC_CR_FE_BV_49(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_50: Verify the absence of additionalUsageInformation data element in Charge Report
+         * @remark  [17575-3:2016], Clause 8.5.5.3.3 Data type UsageStatementContent
+         */
+        execute(TC_CR_FE_BV_50(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_51: Charge Report is sent separately upon the same precedenceLevel for overlapping Partitions
+         * @remark  [17575-3:2016], Clause 8.5.2.3 Toll context partition overview
+         */
+        execute(TC_CR_FE_BV_51(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_52: Charge Report is sent once upon the different precedenceLevel for overlapping Partitions
+         * @remark  [17575-3:2016], Clause 8.5.2.3 Toll context partition overview
+         */
+        execute(TC_CR_FE_BV_52(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_53: Front End sends a charge report entering the toll context partition
+         * @remark  [17575-3:2016], Clause 8.5.2.3 Toll context partition overview
+         */
+        execute(TC_CR_FE_BV_53(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_54: Verify fee calculation algorithm - no rounding rules
+         * @remark  [17575-3:2016], Clause 8.5.3.7 The fee calculation algorithm
+         */
+        execute(TC_CR_FE_BV_54(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_55: Verify fee calculation algorithm with rounding up rule for charge units
+         * @remark  [17575-3:2016], Clause 8.5.3.7 The fee calculation algorithm
+         */
+        execute(TC_CR_FE_BV_55(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_56: Verify fee calculation algorithm with rounding down rule for charge units
+         * @remark  [17575-3:2016], Clause 8.5.3.7 The fee calculation algorithm
+         */
+        execute(TC_CR_FE_BV_56(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_57: Verify fee calculation algorithm in alternative currency
+         * @remark  [17575-3:2016], Clause 8.5.3.2.3 EFC attribute CurrencyConversionTable
+         * @remark  [17575-3:2016], Clause 8.5.3.7 The fee calculation algorithm
+         */
+        execute(TC_CR_FE_BV_57(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_58: Verify the usage of authenticated Charge Report
+         * @remark  [17575-3:2016], Clause Clause 8.5.5.3.2 Data type ChargeReportContent
+         */
+        execute(TC_CR_FE_BV_58(), PX_GUARD);
+        /**
+         * @desc    TC_CR_FE_BV_59: Verify the usage of non-authenticated Charge Report
+         * @remark  [17575-3:2016], Clause Clause 8.5.5.3.2 Data type ChargeReportContent
+         */
+        execute(TC_CR_FE_BV_59(), PX_GUARD);
         if (ContextData_PICS_BE.PIC_iso17575_3Adu == true) {
             /**
-             * @desc    TC_PRO_BE_BV_01: Verify version and validity handling
-             * @remark  [TS 17575-3], Clause 6.3.1 Protocol versioning
+             * @desc    TC_PRO_BE_BV_01: Protocol version handling
+             * @remark  [17575-3:2016], Clause 6.3.1 Protocol versioning
              */
             execute(TC_PRO_BE_BV_01(), PX_GUARD);
             /**
              * @desc    TC_PRO_BE_BV_02: Verify that Back End sends authenticated ISO17575-3Adu
-             * @remark  [TS 17575-3], Clause 7.2 Message authentication (data type Iso17575-3-InformationContent)
+             * @remark  [17575-3:2016], 7.2 Message authentication (data type Iso17575-3-InformationContent)
              */
             execute(TC_PRO_BE_BV_02(), PX_GUARD);
         }
-        /**
-         * @desc    These Test Purposes apply to  Iso17575-3Adu as claimed in [TS 17575-3] clause B.6.4.1/1
-         * Test subgroup objective:
-         * - to test the uniqueness of Context ID within the Toll Charger;
-         * - to test the behaviour of the DUT in relation to ADU Sequence Number
-         * @remark  2 TCs
-         * @see     Electronic fee collection (EFC) — Conformity evaluation of Front End and Back End equipment to ISO 17575-3 — Part 1: Test suite structure and test purpose - Clause B.3 ADU Header test purposes
-         */
         if (ContextData_PICS_BE.PIC_iso17575_3Adu == true) {
             /**
-             * @desc    TC_ADUH_BE_BV_01: Uniqueness of Context ID within the Toll Charger
-             * @remark  [TS 17575-3], Clause 7.5 Application data unit body (data type ISO 17575-3AduBody)
-             * @remark  [TS 17575-3], Clause 8.2 Rules with respect to support of context data
-             * @remark  [TS 17575-3], Clause 8.5.2.2 Toll context overview
+             * @desc    TC_ADUH_BE_BV_01: Use of single tollContext per ADU
+             * @remark  [17575-3:2016], Clause 7.5 Application data unit body (data type ISO 17575-3AduBody)
+             * @remark  [17575-3:2016], Clause 8.2 Rules with respect to support of context data
+             * @remark  [17575-3:2016], Clause 8.5.2.2 Toll context overview
              */
             execute(TC_ADUH_BE_BV_01(), PX_GUARD);
             /**
              * @desc    TC_ADUH_BE_BV_02: Verify handling of aduSequenceNumber
-             * @remark  [TS 17575-3], Clause 7.4 Application data unit header (data type ISO 17575-3AduHeader)
+             * @remark  [17575-3:2016], Clause 7.4 Application data unit header (data type ISO 17575-3AduHeader)
              */
             execute(TC_ADUH_BE_BV_02(), PX_GUARD);
         }
-        /**
-         * @desc    These Test Purposes apply to  AttributeList as claimed in [TS 17575-3] clause B.6.4.1/3, SectionList as claimed in [TS 17575-3] clause B.6.4.1/4, EFCAttributes as claimed in [TS 17575-3] clause B.6.4.3/1-9
-         * Test subgroup objective:
-         * - to test the correctness of attribute identifiers;
-         * - to test the availability of all mandatory attributes;
-         * - to test behaviour of DUT with respect to absence of Section List data element for non section pricing scheme
-         * @see     Electronic fee collection (EFC) — Conformity evaluation of Front End and Back End equipment to ISO 17575-3 — Part 1: Test suite structure and test purpose - Clause B.4 Attribute general test purposes
-         * @remark  12 TCs
-         */
         if (ContextData_PICS_BE.PIC_attributeList == true) {
             /**
-             * @desc    TC_ADUB_BE_BV_11: Verify the availability of Context Data attributes to allow the Front End to operate in a toll regime
-             * @remark  [TS 17575-3], Clause 8.2 Attributes and data groups
+             * @desc    TC_ADUH_BE_BV_02: Verify handling of aduSequenceNumber
+             * @remark  [17575-3:2016], Clause 7.4 Application data unit header (data type ISO 17575-3AduHeader)
+             */
+            execute(TC_ADUH_BE_BV_02(), PX_GUARD);
+            /**
+             * @desc    TC_ADUB_BE_BV_01: Verify that each toll context shall be described using one or more EFC attributes
+             * @remark  [17575-3:2016], Clause 8.3 Attributes and data sets
              */
             execute(TC_ADUB_BE_BV_01(), PX_GUARD);
         }
-        /**
-         * @desc    These Test Purposes apply to TollContextOverview as claimed in [TS 17575-3] clause B.6.4.3/1 and OperationalStatus as claimed in [TS 17575-3] clause B.6.4.6
-         * Test subgroup objective:
-         * - to test the behaviour of the DUT in relation to Toll Regime Overview attribute
-         * @see     Electronic fee collection (EFC) — Conformity evaluation of Front End and Back End equipment to ISO 17575-3 — Part 1: Test suite structure and test purpose - Clause B.4 Attribute general test purposes
-         * @remark  3 TCs
-         */
         if (ContextData_PICS_BE.PIC_tollContextOverview == true) {
             /**
-             * @desc    TC_ATTR_11_BE_BV_02: Uniqueness of Toll Context within the Toll Charger
-             * @remark  [TS 17575-3], Clause 8.3.2 Data group "Regime Overview"
-             * @see     Table 3 – EFC attribute TollContextOverview
+             * @desc    TC_TC_BE_BV_01: Uniqueness of partition IDs within the Context Data
+             * @remark  [17575-3:2016], Clause 8.5.2.2 Toll context overview
+             * @see     [17575-3:2016], Table 3 — EFC attribute TollContextOverview (informative)
+             */
+            execute(TC_TC_BE_BV_01(), PX_GUARD);
+            /**
+             * @desc    TC_TC_BE_BV_02: Verify the presence of at least one partition within the Context Data (presence of partitionID)
+             * @remark  [17575-3:2016], Clause 8.5.2.2 Toll context overview
+             * @see     [17575-3:2016], Table 3 — EFC attribute TollContextOverview (informative)
              */
             execute(TC_TC_BE_BV_02(), PX_GUARD);
             /**
-             * @desc    TC_TC_BE_BV_02: Verify whether Stops Operation At is not earlier than Starts Operation At in Operational Status
-             * @remark  [TS 17575-3], Clause 8.3.2 Data group "Regime Overview"
-             * @see     Table 3 – EFC attribute TollContextOverview
+             * @desc    TC_TC_BE_BV_03: Verify that polygon points are defined in a way that the connections between the points do not intersect.
+             * @remark  [17575-3:2016], Clause 8.5.2.2 Toll context overview
+             * @see     [17575-3:2016], Table 3 — EFC attribute TollContextOverview (informative)
              */
             execute(TC_TC_BE_BV_03(), PX_GUARD);
         }
-        /**
-         * @desc    These Test Purposes apply to TariffTable as claimed in [TS 17575-3] clause B.6.4.3/2, Toll Scheme Types as claimed in [TS 17575-3] clause B.6.4.5.
-         * Test subgroup objective:
-         * - to test the behaviour of the DUT in relation to Tariff Table attribute
-         * @see     Electronic fee collection (EFC) — Conformity evaluation of Front End and Back End equipment to ISO 17575-3 — Part 1: Test suite structure and test purpose - Clause B.4 Attribute general test purposes
-         * @remark  3 TCs
-         */
         if (ContextData_PICS_BE.PIC_tariffTable == true) {
             /**
-             * @desc    TC_TT_BE_BV_02
-             * @see     B.6.1 BV test purposes: Verify that type of Charge Unit is compliant to Toll Scheme Type
-             * @remark  [TS 17575-3], Clause 8.3.3.2.2. EFC attribute TariffTable
-             * @see     Table 4 – EFC attribute TariffTable
+             * @desc    TC_TT_BE_BV_02: Verify that type of Charge Unit is compliant to Toll Context Partition Type
+             * @remark  [17575-3:2016], Clause 8.5.3.2.2. EFC attribute TariffTable
+             * @see     [17575-3:2016], Table 6 — Data type Tariff (informative)
              */
             execute(TC_TT_BE_BV_02(), PX_GUARD);
             /**
-             * @desc    TC_TT_BE_BV_03: Verify that Tariff Class ID is unique within one toll context
-             * @remark  [TS 17575-3], Clause 8.3.3.2.2. Data type Tariff
-             * @see     Table 4 – EFC attribute TariffTable
+             * @desc    TC_TT_BE_BV_03: Verify that Tariff Class is unique within one toll context
+             * @remark  [17575-3:2016], Clause 8.5.3.2.2 Data type Tariff
+             * @see     [17575-3:2016], Table 6 — Data type Tariff (informative)
              */
             execute(TC_TT_BE_BV_03(), PX_GUARD);
+            /**
+             * @desc    TC_TT_BE_BV_04: Verify presence of Currency Conversion Table when alternative currency is valid for a tariff class
+             * @remark  [17575-3:2016], Clause Clause 8.5.3.2.3 EFC attribute CurrencyConversionTable
+             * @see     [17575-3:2016], Table 7 — EFC attribute CurrencyConversionTable (informative)
+             */
+            execute(TC_TT_BE_BV_04(), PX_GUARD);
         }
-        /**
-         * @desc    These Test Purposes apply to TariffClassDefinition as claimed in [TS 17575-3] clause B.6.4.3/3 and B.6.4.8.
-         * @see     Electronic fee collection (EFC) — Conformity evaluation of Front End and Back End equipment to ISO 17575-3 — Part 1: Test suite structure and test purpose - Clause B.4 Attribute general test purposes
-         * @remark  2 TCs
-         */
         if(ContextData_PICS_BE.PIC_tariffClassDefinition) {
             /**
              * @desc    TC_TACD_BE_BV_01: Verify that each combination of vehicle, time, location and user class leads to one and only one Tariff Class
-             * @remark  [TS 17575-3], Clause 8.3.3.3. Tariff class definition
-             * @see     Table 7 – Data type TariffClass, Figure 9 — Principle of creation of tariff classes
+             * @remark  [17575-3:2016], Clause 8.5.3.3.1 General principle
+             * @see     [17575-3:2016], Table 9 — Data type TariffClass (informative), Figure 6 — Principle of creation of tariff classes
              */
             execute(TC_TACD_BE_BV_01(), PX_GUARD);
             /**
              * @desc    TC_TACD_BE_BV_02: Verify that Tariff Class ID is unique within one toll context within TariffClassDefinition attribute
-             * @remark  [TS 17575-3], Clause 8.3.3.3.2. Data type TariffClass
-             * @see     Table 7 – Data type TariffClass, Figure 9 — Principle of creation of tariff classes
+             * @remark  [17575-3:2016], Clause 8.5.3.3.1 General principle
+             * @see     [17575-3:2016], Table 9 — Data type TariffClass (informative), Figure 6 — Principle of creation of tariff classes
              */
             execute(TC_TACD_BE_BV_02(), PX_GUARD);
         }
-        /**
-         * @desc    These Test Purposes apply to  LocalVehicleClassDefinition as claimed in [TS 17575-3] clause B.6.4.3/4.
-         * @see     Electronic fee collection (EFC) — Conformity evaluation of Front End and Back End equipment to ISO 17575-3 — Part 1: Test suite structure and test purpose - Clause B.4 Attribute general test purposes
-         * @remark  2 TCs
-         */
         if (ContextData_PICS_BE.PIC_localVehicleClassDefinition == true) {
             /**
-             * @desc    TP_LVCD_BE_BV_01: Verify that Local Vehicle Class ID is unique
-             * @remark  [TS 17575-3], Clause 8.3.3.4.1. Data type LocalVehicleClass
-             * @see     Table 9 – Data type LocalVehicleClass
+             * @desc    TC_LVCD_BE_BV_01: Verify that Local Vehicle Class Id is unique
+             * @remark  [17575-3:2016], Clause 8.5.3.4.2 Data type LocalVehicleClass
+             * @see     [17575-3:2016], Table 11 — Data type LocalVehicleClass (informative)
              */
-            execute(TP_LVCD_BE_BV_01(), PX_GUARD);
+            execute(TC_LVCD_BE_BV_01(), PX_GUARD);
             /**
-             * @desc    TP_LVCD_BE_BV_02: Verify that Priority Level is different for overlapping Vehicle Classes
-             * @remark  [TS 17575-3], Clause 8.3.3.4.1. Data type LocalVehicleClass
-             * @see     Table 9 – Data type LocalVehicleClass
+             * @desc    TC_LVCD_BE_BV_02: Verify that Priority Value is different for overlapping Vehicle Classes
+             * @remark  [17575-3:2016], Clause 8.5.3.4.2 Data type LocalVehicleClass
+             * @see     [17575-3:2016], Table 11 — Data type LocalVehicleClass (informative)
+             * EXAMPLE 4    Vehicle class 45 is defined as all trucks having an overall length of 6,50 m to 12,50 m. Priority level for this class is set to 8. Vehicle class 46 is defined as all trucks having an overall length of 8,00 m to 15,00 m. Priority level for this class is set to 5. In case a vehicle would fall into both classes as it has a length of 10,65 m it has to be grouped into vehicle class 45 as the priority level of class 45 is higher
              */
-            execute(TP_LVCD_BE_BV_02(), PX_GUARD);
+            execute(TC_LVCD_BE_BV_02(), PX_GUARD);
         }
-        /**
-         * @desc    Test subgroup objective:
-         * - to test the behaviour of the DUT in relation to Time Class Definition attribute.
-         */
         if (ContextData_PICS_BE.PIC_timeClassDefinition == true) {
             /**
-             * @desc    TC_TICD_BE_BV_01: Verify that Time Class ID is unique
-             * @remark  [TS 17575-3], Clause 8.3.3.5.1. Date type TimeClass
-             * @see     Table 11 – Data type TimeClass
+             * @desc    TC_TICD_BE_BV_01: Verify that Time Class Id is unique
+             * @remark  [17575-3:2016], 8.5.3.5.2 Date type TimeClass
+             * @see     [17575-3:2016], Table 13 — Data type TimeClass (informative)
              */
             execute(TC_TICD_BE_BV_01(), PX_GUARD);
             /**
-             * @desc    TC_TICD_BE_BV_02: Verify that Priority Level is different for overlapping Time Classes
-             * @remark  [TS 17575-3], 8.3.3.5.1. Date type TimeClass
-             * @see     Table 9 – Data type LocalVehicleClass
+             * @desc    TC_TICD_BE_BV_02: Verify that Priority Value is different for overlapping Time Classes
+             * @remark  [17575-3:2016], 8.5.3.5.2 Date type TimeClass
+             * @see     [17575-3:2016], Table 13 — Data type TimeClass (informative)
              */
             execute(TC_TICD_BE_BV_02(), PX_GUARD);
         }
-        /**
-         * @desc    These Test Purposes apply to  UserClassDefinition as claimed in [TS 17575-3] clause B.6.4.3/6.
-         * @see     Electronic fee collection (EFC) — Conformity evaluation of Front End and Back End equipment to ISO 17575-3 — Part 1: Test suite structure and test purpose - Clause B.4 Attribute general test purposes
-         * @remark  2 TCs
-         */
         if (ContextData_PICS_BE.PIC_userClassDefinition == true) {
             /**
-             * @desc    TC_USCD_BE_BV_01: Verify that User Class ID is unique
-             * @remark  [TS 17575-3], Clause 8.3.3.6.1. Data type UserClass
-             * @see     Table 13 – Data type UserClass
+             * @desc    TC_USCD_BE_BV_01: Verify that User Class Id is unique
+             * @remark  [17575-3:2016], Clause 8.5.3.6.2 Data type UserClass
+             * @see     [17575-3:2016], Table 15 — Data type UserClass (informative)
              */
             execute(TC_USCD_BE_BV_01(), PX_GUARD);
             /**
-             * @desc    TC_ATTR_25_BE_BV_0: Verify that User Classes do not overlap2
-             * @remark  [TS 17575-3], Clause 8.3.3.6.1. Data type UserClass
-             * @see     Table 13 – Data type UserClass
+             * @desc    TC_USCD_BE_BV_02: Verify that Priority Value is different for overlapping User Classes
+             * @remark  [17575-3:2016], Clause 8.5.3.6.2 Data type UserClass
+             * @see     [17575-3:2016], Table 15 — Data type UserClass (informative)
              */
             execute(TC_USCD_BE_BV_02(), PX_GUARD);
         }
-        /**
-         * @desc    These Test Purposes apply to:
-         * - TollContextLayout as claimed in [TS 17575-3] clause B.6.4.3/7;
-         * - Layout Description Type as claimed in [TS 17575-3] B.6.4.17;
-         * - Section Pricing Layout Description as claimed in [TS 17575-3] B.6.4.18 (ATTR-31S);
-         * - Area Pricing Layout Description as claimed in [TS 17575-3] B.6.4.19 (ATTR-31A);
-         * - Road Network object as claimed in [TS 17575-3] B.6.4.22 (ATTR-31A, PX_GUARD);
-         * - Cordon Pricing Layout Description  as claimed in [TS 17575-3] B.6.4.23 (ATTR-31A);
-         * - Cordon Entry Location Description  as claimed in [TS 17575-3] B.6.4.24 (ATTR-31A);
-         * - Cordon Exit Location Description  as claimed in [TS 17575-3] B.6.4.25 (ATTR-31A).
-         * @see     Electronic fee collection (EFC) — Conformity evaluation of Front End and Back End equipment to ISO 17575-3 — Part 1: Test suite structure and test purpose - Clause B.4 Attribute general test purposes
-         * @remark  32 TCs
-         */
         if ((ContextData_PICS_BE.PIC_tollContextLayout == true)  and (ContextData_PICS_BE.PIC_sectionPricingLayout)) {
             if (ContextData_PICS_BE.PIC_roadSectionPricing == true) {
                 /**
-                 * @desc    TC_TCL_BE_BV_01: Verify that Layout Description is compliant to Toll Scheme Type
-                 * @remark  [TS 17575-3], Clause 8.3.4. Data group 'Context Layout'
-                 * @see     Table 14 – EFC attribute TollContextLayout
+                 * @desc    TC_TCL_BE_BV_01: Verify that Layout Description is compliant to Toll Context Partition Type
+                 * @remark  [17575-3:2016], Clause 8.5.4 Requirements with regards to context layout
+                 * @see     [17575-3:2016], Table 16 — Data type TollContextPartitionLayout (informative)
                  */
                 execute(TC_TCL_BE_BV_01(), PX_GUARD);
                 /**
-                 * @desc    TC_TCL_BE_BV_01: Verify that one toll context shall have one or more toll context partition layout descriptions, one per defined toll context partition
-                 * @remark  [TS 17575-3], Clause 8.3.4. Data group 'Context Layout'
-                 * @see     Table 14 – EFC attribute TollContextLayout
+                 * @desc    TC_TCL_BE_BV_02: Verify that one toll context shall have one or more toll context partition layout descriptions, one per defined toll context partition
+                 * @remark  [17575-3:2016], Clause 8.5.4.1 General rules
+                 * @see     [17575-3:2016], Table 16 — Data type TollContextPartitionLayout (informative)
                  */
                 execute(TC_TCL_BE_BV_02(), PX_GUARD);
                 /**
-                 * @desc    TP_TCL_S_BE_BV_01: Toll Context Layout test purposes for Section pricing scheme
-                 * @remark  [TS 17575-3], Clause 8.3.4.1. Data element sectionLayout / Data type SectionLayout
-                 * @see     Table 15 – Data type SectionLayout
+                 * @desc    TP_TCL_S_BE_BV_01: Verify that Charge Object Id is unique
+                 * @remark  [17575-3:2016], Clause 8.5.4.2 Requirements for section based layout
+                 * @see     [17575-3:2016], Table 17 — Data type SectionLayout (informative)
                  */
                 execute(TP_TCL_S_BE_BV_01(), PX_GUARD);
                 /**
-                 * @desc    TP_TCL_S_BE_BV_02: Verify that Point ID is unique
-                 * @remark  [TS 17575-3], Clause 8.3.4.1. Data element sectionLayout / Data type SectionLayout
-                 * @see     Table 15 – Data type SectionLayout
+                 * @desc    TP_TCL_S_BE_BV_02: Verify that Point Identifier is unique
+                 * @remark  [17575-3:2016], Clause 8.5.4.2 Requirements for section based layout
+                 * @see     [17575-3:2016], Table 17 — Data type SectionLayout (informative)
                  */
                 execute(TP_TCL_S_BE_BV_02(), PX_GUARD);
                 /**
-                 * @desc    TP_TCL_S_BE_BV_03: Verify that Link ID is unique
-                 * @remark  [TS 17575-3], Clause 8.3.4.1.1. Data type Link
-                 * @see     Table 15 – Data type SectionLayout
+                 * @desc    TP_TCL_S_BE_BV_03: Verify the Link Id is unique
+                 * @remark  [17575-3:2016], Clause 8.5.4.2.3 Data type Link
                  */
                 execute(TP_TCL_S_BE_BV_03(), PX_GUARD);
                 /**
-                 * @desc    TP_TCL_S_BE_BV_06
-                 * @see     B.11.1.1 BV test purposes: Verify that Point identified by Point ID in Link has been defined in Network Points
-                 * @remark  [TS 17575-3], Clause 8.3.4.1.1. Data type Link
-                 * @see     Table 15 – Data type SectionLayout
+                 * @desc    TP_TCL_S_BE_BV_06: Verify that Point identified by Point Identifier in Link has been defined in Network Points
+                 * @remark  [17575-3:2016], Clause 8.5.4.2.3 Data type Link
                  */
                 execute(TP_TCL_S_BE_BV_06(), PX_GUARD);
                 /**
-                 * @desc    TP_TCL_S_BE_BV_08: Verify that Point identified by Point ID in Liability Rules has been defined in Network Points
-                 * @remark  [TS 17575-3], Clause 8.3.4.1.2. Data type LiabilityRules
-                 * @see     Table 16 – Use of the data elements in data type LiabilityRules
+                 * @desc    TP_TCL_S_BE_BV_08: Verify that Point identified by Point Identifier in Liability Rules has been defined in Network Points
+                 * @remark  [17575-3:2016], Clause 8.5.4.2.4 Data type LiabilityRules
+                 * @see     [17575-3:2016], Table 18 — Use of the data elements in data type LiabilityRules
                  */
                 execute(TP_TCL_S_BE_BV_08(), PX_GUARD);
                 /**
-                 * @desc    TP_TCL_S_BE_BV_10: Verify that Point identified by Point ID in Supporting Information has been defined in Network Points
-                 * @remark  [TS 17575-3], Clause 8.3.4.1.3. Data type SupportingPoints
+                 * @desc    TP_TCL_S_BE_BV_10: Verify that Point identified by Point Identifier in Supporting Information has been defined in Network Points
+                 * @remark  [17575-3:2016], Clause 8.5.4.2.5 Data type SupportingPoints
                  */
                 execute(TP_TCL_S_BE_BV_10(), PX_GUARD);
                 /**
                  * @desc    TP_TCL_S_BE_BV_11: Verify that Applicable Time Classes for Section Layout are present in Time Class Definition
-                 * @remark  [TS 17575-3], Clause 8.3.4.1. Data element sectionLayout / Data type SectionLayout
-                 * @see     Table 15 – Data type SectionLayout
+                 * @remark  [17575-3:2016], Clause 8.5.4.2.2 Data element sectionLayout/Data type SectionLayout
+                 * @see     [17575-3:2016], Table 17 — Data type SectionLayout (informative)
                  */
                 execute(TP_TCL_S_BE_BV_11(), PX_GUARD);
             }
             if (((ContextData_PICS_BE.PIC_areaPricingDistance == true) or (ContextData_PICS_BE.PIC_areaPricingTime == true)) and (ContextData_PICS_BE.PIC_areaPricingLayout)) {
                 /**
-                 * @desc    TP_TCL_A_BE_BV_01: Verify that Area ID is unique
-                 * @remark  [TS 17575-3], Clause 8.3.4.2. Data element areaLayout
-                 * @see     Table 17 – Data type AreaLayout
+                 * @desc    TC_TCL_A_BE_BV_01: Verify that Area Id is unique
+                 * @remark  [17575-3:2016], Clause 8.5.4.3 Requirements for area based layouts
+                 * @see     [17575-3:2016], Table 19 — Data type AreaLayout (informative)
                  */
-                execute(TP_TCL_A_BE_BV_01(), PX_GUARD);
+                execute(TC_TCL_A_BE_BV_01(), PX_GUARD);
                 /**
-                 * @desc    TP_TCL_A_BE_BV_02: Verify that Charge Object ID is unique
-                 * @remark  [TS 17575-3], Clause 8.3.4.2. Data element areaLayout
-                 * @see     Table 17 – Data type AreaLayout
+                 * @desc    TC_TCL_A_BE_BV_02: Verify that Charge Object Id is unique
+                 * @remark  [17575-3:2016], Clause 8.5.4.3 Requirements for area based layouts
+                 * @see     [17575-3:2016], Table 19 — Data type AreaLayout (informative)
                  */
-                execute(TP_TCL_A_BE_BV_02(), PX_GUARD);
+                execute(TC_TCL_A_BE_BV_02(), PX_GUARD);
                 /**
-                 * @desc    TP_TCL_A_BE_BV_03: Verify that Point ID is unique
-                 * @remark  [TS 17575-3], Clause 8.3.4.2. Data element areaLayout
-                 * @see     Table 17 – Data type AreaLayout
+                 * @desc    TC_TCL_A_BE_BV_03: Verify that Point Identifier is unique
+                 * @remark  [17575-3:2016], Clause 8.5.4.3 Requirements for area based layouts
+                 * @see     [17575-3:2016], Table 19 — Data type AreaLayout (informative)
                  */
-                execute(TP_TCL_A_BE_BV_03(), PX_GUARD);
+                execute(TC_TCL_A_BE_BV_03(), PX_GUARD);
                 /**
-                 * @desc    TP_TCL_A_BE_BV_04: Verify that Link ID is unique
-                 * @remark  [TS 17575-3], Clause 8.3.4.2. Data element areaLayout
-                 * @see     Table 17 – Data type AreaLayout
+                 * @desc    TC_TCL_A_BE_BV_04: Verify that Link Id is unique
+                 * @remark  [17575-3:2016], Clause 8.5.4.3 Requirements for area based layouts
+                 * @see     [17575-3:2016], Table 19 — Data type AreaLayout (informative)
                  */
-                execute(TP_TCL_A_BE_BV_04(), PX_GUARD);
+                execute(TC_TCL_A_BE_BV_04(), PX_GUARD);
                 /**
-                 * @desc    TP_TCL_A_BE_BV_06: Verify that Point identified by Point ID in Link has been defined in Network Points
-                 * @remark  [TS 17575-3], Clause 8.3.4.2. Data element areaLayout
-                 * @see     Table 17 – Data type AreaLayout
+                 * @desc    TC_TCL_A_BE_BV_06: Verify that Point is identified by Point Identifier within Link
+                 * @remark  [17575-3:2016], Clause 8.5.4.3 Requirements for area based layouts
+                 * @see     [17575-3:2016], Table 19 — Data type AreaLayout (informative)
                  */
-                execute(TP_TCL_A_BE_BV_06(), PX_GUARD);
+                execute(TC_TCL_A_BE_BV_06(), PX_GUARD);
                 /**
-                 * @desc    TP_TCL_A_BE_BV_08: Verify that Point identified by Point ID in Supporting Information has been defined in Network Points
-                 * @remark  [TS 17575-3], Clause 8.3.4.1.3. Data type SupportingPoints
+                 * @desc    TC_TCL_A_BE_BV_08: Verify that Point identified by Point Identifier in Supporting Information has been defined in Network Points
+                 * @remark  [17575-3:2016], Clause 8.5.4.3 Requirements for area based layouts
+                 * @see     [17575-3:2016], Table 19 — Data type AreaLayout (informative)
                  */
-                execute(TP_TCL_A_BE_BV_08(), PX_GUARD);
+                execute(TC_TCL_A_BE_BV_08(), PX_GUARD);
             }
             if ((ContextData_PICS_BE.PIC_cordonPricing == true) and (ContextData_PICS_BE.PIC_cordonPricingLayout)) {
                 /**
-                 * @desc    TP_TCL_C_BE_BV_01: Verify that Cordon ID is unique
-                 * @remark  [TS 17575-3], Clause 8.3.4.3. Data element cordonLayout
-                 * @see     Table 18 – Data type CordonLayout
+                 * @desc    TC_TCL_C_BE_BV_01: Verify that Cordon Id is unique
+                 * @remark  [17575-3:2016], Clause 8.5.4.4.1 Data element cordonLayout
+                 * @see     [17575-3:2016], Table 20 — Data type CordonLayout (informative)
                  */
-                execute(TP_TCL_C_BE_BV_01(), PX_GUARD);
+                execute(TC_TCL_C_BE_BV_01(), PX_GUARD);
                 /**
-                 * @desc    TP_TCL_C_BE_BV_02: Verify that Applicable Time Classes for Cordon Layout are present in Time Class Definition (Cordon Entry Locations)
-                 * @remark  [TS 17575-3], Clause 8.3.4.3.1. Data type CordonEntryLocation
+                 * @desc    TC_TCL_C_BE_BV_02: Verify that Applicable Time Classes for Cordon Layout are present in Time Class Definition (Cordon Entry Locations)
+                 * @remark  [17575-3:2016], Clause 8.5.4.4.2 Data type CordonBorderPolygon
                  */
-                execute(TP_TCL_C_BE_BV_02(), PX_GUARD);
+                execute(TC_TCL_C_BE_BV_02(), PX_GUARD);
                 /**
-                 * @desc    TP_TCL_C_BE_BV_03: Verify that Applicable Time Classes for Cordon Layout are present in Time Class Definition (Cordon Exit Locations)
-                 * @remark  [TS 17575-3], Clause 8.3.4.3.1. Data type CordonEntryLocation
+                 * @desc    TC_TCL_C_BE_BV_03: Verify that Applicable Time Classes for Cordon Layout are present in Time Class Definition (Cordon Exit Locations)
+                 * @remark  [17575-3:2016], Clause 8.5.4.4.2 Data type CordonBorderPolygon
                  */
-                execute(TP_TCL_C_BE_BV_03(), PX_GUARD);
+                execute(TC_TCL_C_BE_BV_03(), PX_GUARD);
                 /**
-                 * @desc    TP_TCL_C_BE_BV_04: Verify that Cordon Segment ID is unique
-                 * @remark  [TS 17575-3], Clause 8.3.4.3.1. Data type CordonEntryLocation
+                 * @desc    TC_TCL_C_BE_BV_04: Verify the Cordon Segment Id is unique
+                 * @remark  [17575-3:2016], Clause 8.5.4.4.2 Data type CordonBorderPolygon
                  */
-                execute(TP_TCL_C_BE_BV_04(), PX_GUARD);
+                execute(TC_TCL_C_BE_BV_04(), PX_GUARD);
             }
         }
-    } // End of control
+    } // End of 'control' statement
 } // End of module ContextData_TE
