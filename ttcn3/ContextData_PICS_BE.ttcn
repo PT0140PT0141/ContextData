@@ -1,346 +1,994 @@
 /**
  * @author  PT28/PT0141 
  * @desc    This module describes the PICS proforma for the attributes
+ * @see     [17575-3:2016], Clause B.5 PICS proforma for the Back End
  * @version $id$
  */
  module ContextData_PICS_BE {
-     /**
-     * @desc
-     * @see [17575-3:2016], Context data - Annex B.6 PICS proforma for the Back End
+    /**
+     * @desc PICS proforma for the Front End
+     * @see [17575-3:2016], B.5 PICS proforma for the Back End
+     * @remark   Only non mandatory PICS and informational PICS are declared
      */
      group PICS_Back_End {
          /**
-          * @desc
-          * @see [17575-3:2016], Context data - Annex B.6.4.1. ADU Header and body
+          * @desc   Identification of the implementation
+          * @see    [17575-3:2016], Clause B.5.1 Identification of the implementation
+          * @see    [17575-3:2016], Table B.83 — Identification of PICS
+          */
+         group PICS_Implementation_Id_FrontEnd {
+              modulepar charstring PIC_dateOfStatement := "";
+              modulepar charstring PIC__0serialNumber := "";
+              modulepar charstring PIC_systemConformanceStatementCrossReference := "";
+         } // End of PICS_Implementation_Id_FrontEnd
+         /**
+          * @desc Identification of the implementation and/or system
+          * @see [17575-3:2016], Table B.84 — Identification of the implementation and/or system
+          */
+         group PICS_Identification_of_implementation_system {
+             modulepar charstring PIC_serviceProviderOrEFCContextName := "";
+             modulepar charstring PIC_serviceProviderAndEFCContextIdentifier := "";
+             modulepar charstring PIC_versionNumber := "";
+             modulepar charstring PIC__0otherInformation := "";
+         } // End of PICS_Identification_of_implementation_system
+         /**
+          * @desc Identification of the Back End supplier
+          * @see [17575-3:2016], Table B.85 — Identification of the Back End supplier
+          */
+         group PICS_Identification_of_BE_supplier {
+             modulepar charstring PIC_organisationName := "";
+             modulepar charstring PIC_contactName := "";
+             modulepar charstring PIC_address := "";
+             modulepar charstring PIC_phoneNumber := "";
+             modulepar charstring PIC_emailAddress := "";
+             modulepar charstring PIC__1otherInformation := "";
+         } // End of PICS_Identification_of_BE_supplier
+         /**
+          * @desc Identification of the Back End
+          * @see [17575-3:2016], Table B.86 — Identification of the Back End
+          */
+         group PICS_Identification_of_BE {
+             modulepar charstring PIC_brandName := "";
+             modulepar charstring PIC_typeAndVersion := "";
+             modulepar charstring PIC_manufacturerID := "";
+             modulepar charstring PIC_equipmentClass := "";
+             modulepar charstring PIC__1serialNumber := "";
+             modulepar charstring PIC__2otherInformation := "";
+         } // End of PICS_Identification_of_BE
+         /**
+          * @desc Identification of ISO 17575
+          * @see [17575-3:2016], Table B.87 — Identification of ISO 17575
           */
          group PICS_ADU_Header_and_body {
-             /**
-              * @desc    Does the EUT support Iso17575-3Adu?
-              */
-             modulepar boolean PIC_iso17575_3Adu := true;
-             /**
-              * @desc    Does the EUT support AduAuthenticator?
-              */
-             modulepar boolean PIC_aduAuthenticator := true;
-             /**
-              * @desc    Does the EUT support AttributeList?
-              */
-             modulepar boolean PIC_attributeList := true;
-             /**
-              * @desc    Does the EUT support SectionList?
-              */
-             modulepar boolean PIC_sectionList := true;
+            modulepar charstring PIC_iso17575Title := "";
+            modulepar charstring PIC_ISO17575Version := "";
+            modulepar charstring PIC_ImplementedAddenda := "";
+            modulepar charstring PIC_ImplementerGuide := "";
+            modulepar charstring PIC_ImplementationDefectReports := "";
+            modulepar charstring PIC__3otherInformation := "";
          } // End of PICS_Identification_of_standard
          /**
-          * @desc
-          * @see [17575-3:2016], Context data - Annex B.6.4.3. EFC Attributes
+          * @desc Message authentication and ADU Header
+          * @see [17575-3:2016], Table B.88 — Message authentication and ADU Headers
           */
          group PICS_EFC_Attributes {
-             /**
-              * @desc    Does the EUT support TollContextOverview?
-              */
-             modulepar boolean PIC_tollContextOverview := true;
-             /**
-              * @desc    Does the EUT support TariffTable?
-              */
-             modulepar boolean PIC_tariffTable := true;
-             /**
-              * @desc    Does the EUT support TariffClassDefinition?
-              */
-             modulepar boolean PIC_tariffClassDefinition := true;
-             /**
-              * @desc    Does the EUT support LocalVehicleClassDefinition?
-              */
-             modulepar boolean PIC_localVehicleClassDefinition := true;
-             /**
-              * @desc    Does the EUT support TimeClassDefinition?
-              */
-             modulepar boolean PIC_timeClassDefinition := true;
-             /**
-              * @desc    Does the EUT support TollContextOverview?
-              */
-             modulepar boolean PIC_userClassDefinition := true;
-             /**
-              * @desc    Does the EUT support TollContextLayout?
-              */
-             modulepar boolean PIC_tollContextLayout := true;
-             /**
-              * @desc    Does the EUT support ChargeReportingEvents?
-              */
-             modulepar boolean PIC_chargeReportingEvents := true;
-             /**
-              * @desc    Does the EUT support ChargeReportConfiguration?
-              */
-             modulepar boolean PIC_chargeReportConfiguration := true;
+            /**
+             * @desc    Does the EUT support AuthenticatedISO-3ADU?
+             */
+            modulepar boolean PIC_authenticatedISO_3ADU := true;
+            /**
+             * @desc    Does the EUT support messageAuthenticator?
+             */
+            modulepar boolean PIC_messageAuthenticator := true;
          } // End of PICS_EFC_Attributes
-         /**
-          * @desc
-          * @see [17575-3:2016], Context data - Annex B.6.4.4. Regime overview
-          */
-         group PICS_Regime_Overview {
-             /**
-              * @desc    Does the EUT support tollSchemeName?
-              */
-             modulepar boolean PIC_tollSchemeName := true;
-             /**
-              * @desc    Does the EUT support tollContextBoundingBoxes?
-              */
-             modulepar boolean PIC_tollContextBoundingBoxes := true;
-             /**
-              * @desc    Does the EUT support tollContextOverviewAuthenticator?
-              */
-             modulepar boolean PIC_tollContextOverviewAuthenticator := true;
-         } // End of PICS_Regime_Overview
-         /**
-          * @desc
-          * @see [17575-3:2016], Context data - Annex B.6.4.5. Toll Scheme types
-          */
-         group PICS_Toll_Scheme_types {
-             /**
-              * @desc    Does the EUT support roadSectionPricing?
-              */
-             modulepar boolean PIC_roadSectionPricing := true;
-             /**
-              * @desc    Does the EUT support areaPricingDistance?
-              */
-             modulepar boolean PIC_areaPricingDistance := true;
-             /**
-              * @desc    Does the EUT support areaPricingTime?
-              */
-             modulepar boolean PIC_areaPricingTime := true;
-             /**
-              * @desc    Does the EUT support cordonPricing?
-              */
-             modulepar boolean PIC_cordonPricing := true;
-         } // End of PICS_Toll_Scheme_types
-         /**
-          * @desc
-          * @see [17575-3:2016], Context data - Annex B.6.4.6. Operational status
-          */
-         group PICS_Operational_status {
-             /**
-              * @desc    Does the EUT support stopsOperationAt?
-              */
-             modulepar boolean PIC_stopsOperationAt := true;
-         } // End of PICS_Operational_status
-         /**
-          * @desc
-          * @see [17575-3:2016], Context data - Annex B.6.4.7. Tariff table and tariffs
-          */
-         group PICS_Tariff_table_and_tariffs {
-             /**
-              * @desc    Does the EUT support vat?
-              */
-             modulepar boolean PIC_vat := true;
-             /**
-              * @desc    Does the EUT support intervalScaleParameters?
-              */
-             modulepar boolean PIC_intervalScaleParameters := true;
-             /**
-              * @desc    Does the EUT support feeOffset?
-              */
-             modulepar boolean PIC_feeOffset := true;
-             /**
-              * @desc    Does the EUT support minFee?
-              */
-             modulepar boolean PIC_minFee := true;
-             /**
-              * @desc    Does the EUT support thresholdFee?
-              */
-             modulepar boolean PIC_thresholdFee := true;
-             /**
-              * @desc    Does the EUT support maxFee?
-              */
-             modulepar boolean PIC_maxFee := true;
-             /**
-              * @desc    Does the EUT support roundingRule?
-              */
-             modulepar boolean PIC_roundingRule := true;
-             /**
-              * @desc    Does the EUT support tariffTableAuthenticator?
-              */
-             modulepar boolean PIC_tariffTableAuthenticator := true;
-         } // End of PICS_Tariff_table_and_tariffs
-
-         /**
-          * @desc
-          * @see [17575-3:2016], Context data - Annex B.6.4.8 Tariff class definitions and tariff classes
-          */
-         group PICS_Tariff_class_definitions_and_tariff_classes {
-             modulepar boolean PIC_localVehicleClasses := true;
-             modulepar boolean PIC_timeClasses := true;
-             modulepar boolean PIC_locationClasses := true;
-             modulepar boolean PIC_userClasses := true;
-             modulepar boolean PIC_tariffClassDefinitionAuthenticator := true;
-         } // End of PICS_Tariff_class_definitions_and_tariff_classes
-         /**
-          * @desc
-          * @see [17575-3:2016], Context data - Annex B.6.4.9 Local vehicle class definitions and local vehicle classes
-          */
-         group PICS_Local_vehicle_class_definitions_and_local_vehicle_classes {
-             modulepar boolean PIC__0ordinalElements := true;
-             modulepar boolean PIC_localVehicleClassDefinitionAuthenticator := true;
-         } // End of PICS_Local_vehicle_class_definitions_and_local_vehicle_classes
-         /**
-          * @desc
-          * @see [17575-3:2016], Context data - Annex B.6.4.10. Nominal vehicle parameters
-          */
-         group PICS_Nominal_vehicle_parameters {
-             modulepar boolean PIC_vehicleClasses := true;
-             modulepar boolean PIC__0vehicleAxlesNumber := true;
-             modulepar boolean PIC__0euroValue := true;
-         } // End of PICS_Nominal_vehicle_parameters
-         /**
-          * @desc
-          * @see [17575-3:2016], Context data - Annex B.6.4.11. Ordinal vehicle parameters
-          */
-         group PICS_Ordinal_vehicle_parameters {
-             modulepar boolean PIC_vehicleLengthOverall := true;
-             modulepar boolean PIC_vehicleHeightOverall := true;
-             modulepar boolean PIC_vehicleWidthOverall := true;
-             modulepar boolean PIC_vehicleFirstAxlesHeight := true;
-             modulepar boolean PIC__1vehicleAxlesNumber := true;
-             modulepar boolean PIC_vehicleMaxLadenWeight := true;
-             modulepar boolean PIC_vehicleTrainMaximumWeight := true;
-             modulepar boolean PIC_vehicleWeightUnladen := true;
-             modulepar boolean PIC_vehicleWeightLaden := true;
-             modulepar boolean PIC__1euroValue := true;
-             modulepar boolean PIC_copValue := true;
-             modulepar boolean PIC_vehicleClass := true;
-         } // End of PICS_Ordinal_vehicle_parameters
-         /**
-          * @desc
-          * @see [17575-3:2016], Context data - Annex B.6.4.12 Time class definitions and time classes
-          */
-         group PICS_Time_class_definitions_and_time_classes {
-             modulepar boolean PIC_priorityValue := true;
-             modulepar boolean PIC_nominalElements := true;
-             modulepar boolean PIC__1ordinalElements := true;
-             modulepar boolean PIC_timeClassDefinitionAuthenticator := true;
-         } // End of PICS_Time_class_definitions_and_time_classes
-         /**
-          * @desc
-          * @see [17575-3:2016], Context data - Annex B.6.4.13. Nominal time class parameters
-          */
-         group PICS_Nominal_time_class_parameters {
-             modulepar boolean PIC__0weekdays := true;
-             modulepar boolean PIC_dates := true;
-             modulepar boolean PIC_listOfExternalSetClasses := true;
-         } // End of PICS_Nominal_time_class_parameters
-         /**
-          * @desc
-          * @see [17575-3:2016], Context data - Annex B.6.4.14. Ordinal time class parameters
-          */
-         group PICS_Ordinal_time_class_parameters {
-             modulepar boolean PIC__1weekdays := true;
-             modulepar boolean PIC_absoluteTimeOfDay := true;
-             modulepar boolean PIC_relativeTimeOfDay := true;
-             modulepar boolean PIC_periodsInYear := true;
-         } // End of PICS_Ordinal_time_class_parameters
-         /**
-          * @desc
-          * @see [17575-3:2016], Context data - Annex B.6.4.15. User class definitions and user classes
-          */
-         group PICS_User_class_definitions_and_user_classes {
-             modulepar boolean PIC_contractTypes := true;
-             modulepar boolean PIC_actualNumberOfPassengers := true;
-             modulepar boolean PIC_userClassDefinitionAuthenticator := true;
-         } // End of PICS_User_class_definitions_and_user_classes
-         /**
-          * @desc
-          * @see [17575-3:2016], Context data - Annex B.6.4.16. Toll context layout
-          */
-         group PICS_Toll_context_layout {
-             modulepar boolean PIC_geoRefPoint := true;
-             modulepar boolean PIC_tollContextAuthenticator := true;
-         } // End of PICS_Toll_context_layout
-         /**
-          * @desc
-          * @see [17575-3:2016], Context data - Annex B.6.4.17. Supported layout description types
-          */
-         group PICS_Supported_layout_description_types {
-             modulepar boolean PIC_sectionPricingLayout := true;
-             modulepar boolean PIC_areaPricingLayout := true;
-             modulepar boolean PIC_cordonPricingLayout := true;
-         } // End of PICS_Supported_layout_description_types
-         /**
-          * @desc
-          * @see [17575-3:2016], Context data - Annex B.6.4.18. Section pricing layout description
-          */
-         group PICS_Section_pricing_layout_description {
-             modulepar boolean PIC__0chargeObjectName := true;
-             modulepar boolean PIC__0chargeObjectRefPoint := true;
-             modulepar boolean PIC__0networkPoints := true;
-             modulepar boolean PIC_pathStructureTowards := true;
-             modulepar boolean PIC_pathStructureOnwards := true;
-             modulepar boolean PIC__0supportingInformation := true;
-             modulepar boolean PIC_realDistance := true;
-             modulepar boolean PIC__0applicableTimeClasses := true;
-         } // End of PICS_Section_pricing_layout_description
-         /**
-          * @desc
-          * @see [17575-3:2016], Context data - Annex B.6.4.19. Area pricing layout description
-          */
-         group PICS_Area_pricing_layout_description {
-             modulepar boolean PIC_roadNetwork := true;
-         } // End of PICS_Area_pricing_layout_description
-         /**
-          * @desc
-          * @see [17575-3:2016], Context data - Annex B.6.4.20. Road network objects in area pricing layout descriptions
-          */
-         group PICS_Road_network_objects_in_area_pricing_layout_descriptions {
-             modulepar boolean PIC__1chargeObjectName := true;
-             modulepar boolean PIC__1chargeObjectRefPoint := true;
-             modulepar boolean PIC__1networkPoints := true;
-             modulepar boolean PIC__1supportingInformation := true;
-             modulepar boolean PIC__1applicableTimeClasses := true;
-         } // End of PICS_Road_network_objects_in_area_pricing_layout_descriptions
-         /**
-          * @desc
-          * @see [17575-3:2016], Context data - Annex B.6.4.21. Cordon pricing layout description
-          */
-         group PICS_Cordon_pricing_layout_description {
-             modulepar boolean PIC_cordonEntryLocations := true;
-             modulepar boolean PIC_cordonExitLocations := true;
-         } // End of PICS_Cordon_pricing_layout_description
-         /**
-          * @desc
-          * @see [17575-3:2016], Context data - Annex B.6.4.22. Cordon entry location description
-          */
-         group PICS_Cordon_entry_location_description {
-             modulepar boolean PIC__2applicableTimeClasses := true;
-         } // End of PICS_Cordon_entry_location_description
-         /**
-          * @desc
-          * @see [17575-3:2016], Context data - Annex B.6.4.23. Cordon exit location description
-          */
-         group PICS_Cordon_exit_location_description {
-             modulepar boolean PIC_entryLocation := true;
-             modulepar boolean PIC__3applicableTimeClasses := true;
-         } // End of PICS_Cordon_exit_location_description
-         /**
-          * @desc
-          * @see [17575-3:2016], Context data - Annex B.6.4.24. Charge reporting events
-          */
-         group PICS_Charge_reporting_events {
-             modulepar boolean PIC_absoluteTimeEvents := true;
-             modulepar boolean PIC_relativeTimeEvents := true;
-             modulepar boolean PIC_traveledDistanceEvents := true;
-             modulepar boolean PIC_locationEvents := true;
-             modulepar boolean PIC_feeLimitEvents := true;
-             modulepar boolean PIC_chargeReportingEventsAuthenticator  := true;
-         } // End of PICS_Charge_reporting_events
-         /**
-          * @desc
-          * @see [17575-3:2016], Context data - Annex B.6.4.25. Charge report configuration
-          */
-         group PICS_Charge_report_configuration {
-             modulepar boolean PIC_cccAttributesContent := true;
-             modulepar boolean PIC_aggregatedSingleTariffClassSessionContent := true;
-             modulepar boolean PIC_detectedChargeObjectContent := true;
-             modulepar boolean PIC_listOfRawUsageDataContent := true;
-             modulepar boolean PIC_vehicleDescriptionContent := true;
-             modulepar boolean PIC_chargeReportConfigurationAuthenticator := true;
-         } // End of PICS_Charge_report_configuration
+        /**
+         * @desc Communication services support
+         * @see [17575-3:2016], Table B.89 — Communication services support
+         */
+        group PICS_Communication_services_support {
+            /**
+             * @desc    Does the EUT support Iso17575-2 Communication services?
+             */
+            modulepar boolean PIC_iso17575_2CommunicationServices := true;
+        } // End of PICS_Communication_services_support
+        /**
+         * @desc EFC Attributes
+         * @see [17575-3:2016], Table B.90 — EFC Attributes
+         */
+        group PICS_EFC_Attributes {
+            /**
+             * @desc    Does the EUT support TariffTable?
+             */
+            modulepar boolean PIC_tariffTable := true;
+            /**
+             * @desc    Does the EUT support CurrencyConversionTable?
+             */
+            modulepar boolean PIC_currencyConversionTable := true;
+            /**
+             * @desc    Does the EUT support TariffClassDefinition?
+             */
+            modulepar boolean PIC_tariffClassDefinition := true;
+            /**
+             * @desc    Does the EUT support LocalVehicleClassDefinition?
+             */
+            modulepar boolean PIC_localVehicleClassDefinition := true;
+            /**
+             * @desc    Does the EUT support TimeClassDefinition?
+             */
+            modulepar boolean PIC_timeClassDefinition := true;
+            /**
+             * @desc    Does the EUT support TollContextOverview?
+             */
+            modulepar boolean PIC_userClassDefinition := true;
+            /**
+             * @desc    Does the EUT support TollContextLayout?
+             */
+            modulepar boolean PIC__0tollContextLayout := true;
+            /**
+             * @desc    Does the EUT support ChargeReportingEvents?
+             */
+            modulepar boolean PIC_chargeReportingEvents := true;
+            /**
+             * @desc    Does the EUT support ChargeReportConfiguration?
+             */
+            modulepar boolean PIC_chargeReportConfiguration := true;
+            /**
+             * @desc    Does the EUT support TollContextVersion?
+             */
+            modulepar boolean PIC_tollContextVersion := true;
+        } // End of PICS_EFC_Attributes
+        /**
+         * @desc Support of EFC Attribute authentication
+         * @see [17575-3:2016], Table B.91 — Support of EFC Attribute authentication
+         */
+        group PICS_Supported_efc_attribute_authentication {
+            /**
+             * @desc    Does the EUT support EFC Attribute TollContextOverview authentication ?
+             */
+            modulepar boolean PIC_EFC_Attribute_authentication_TollContextOverview := true;
+            /**
+             * @desc    Does the EUT support EFC Attribute TollContextPartitionOverview authentication ?
+             */
+            modulepar boolean PIC_EFC_Attribute_authentication_TollContextPartitionOverview := true;
+            /**
+             * @desc    Does the EUT support EFC Attribute TariffTable authentication ?
+             */
+            modulepar boolean PIC_EFC_Attribute_authentication_TariffTable := true;
+            /**
+             * @desc    Does the EUT support EFC Attribute CurrencyConversionTable authentication ?
+             */
+            modulepar boolean PIC_EFC_Attribute_authentication_CurrencyConversionTable := true;
+            /**
+             * @desc    Does the EUT support EFC Attribute TollConTariffClassDefinitionextOverview authentication ?
+             */
+            modulepar boolean PIC_EFC_Attribute_authentication_TariffClassDefinition := true;
+            /**
+             * @desc    Does the EUT support EFC Attribute LocalVehicleClassDefinition authentication ?
+             */
+            modulepar boolean PIC_EFC_Attribute_authentication_LocalVehicleClassDefinition := true;
+            /**
+             * @desc    Does the EUT support EFC Attribute TimeClassDefinition authentication ?
+             */
+            modulepar boolean PIC_EFC_Attribute_authentication_TimeClassDefinition := true;
+            /**
+             * @desc    Does the EUT support EFC Attribute UserClassDefinition authentication ?
+             */
+            modulepar boolean PIC_EFC_Attribute_authentication_UserClassDefinition := true;
+            /**
+             * @desc    Does the EUT support EFC Attribute TollContextLayout  authentication ?
+             */
+            modulepar boolean PIC_EFC_Attribute_authentication_TollContextLayout := true;
+            /**
+             * @desc    Does the EUT support EFC Attribute ChargeReportingEvents authentication ?
+             */
+            modulepar boolean PIC_EFC_Attribute_authentication_ChargeReportingEvents := true;
+            /**
+             * @desc    Does the EUT support EFC Attribute ChargeReportConfiguration authentication ?
+             */
+            modulepar boolean PIC_EFC_Attribute_authentication_ChargeReportConfiguration := true;
+        } // End of PICS_Supported_efc_attribute_authentication
+        /**
+         * @desc Global statement of conformance
+         * @see [17575-3:2016], Table B.92 — Toll context overview
+         */
+        group PICS_TollContext_Overview {
+            /**
+             * @desc    Does the EUT support tollSchemeName?
+             */
+            modulepar boolean PIC_tollSchemeName := true;
+            /**
+             * @desc    Does the EUT support tollContextBoundingBoxes?
+             */
+            modulepar boolean PIC_tollContextBoundingBoxes := true;
+        } // End of PICS_TollContext_Overview
+        /**
+         * @desc Global statement of conformance
+         * @see [17575-3:2016], Table B.93 — Toll context partition overview
+         */
+        group PICS_TollContextPartition_Overview {
+            /**
+             * @desc    Does the EUT support tollContextPartitionName?
+             */
+            modulepar boolean PIC_tollContextPartitionName := true;
+            /**
+             * @desc    Does the EUT support dstOffset?
+             */
+            modulepar boolean PIC_dstOffset := true;
+            /**
+             * @desc    Does the EUT support tollContextPartitionBoundingPolygon?
+             */
+            modulepar boolean PIC_tollContextPartitionBoundingPolygon := true;
+            /**
+             * @desc    Does the EUT support sending ChargeReport if entering in area?
+             */
+            modulepar boolean PIC_sendChargeReportIfEntering := true;
+            /**
+             * @desc    Does the EUT support precedenceLevel?
+             */
+            modulepar boolean PIC_precedenceLevel := true;
+            /**
+             * @desc    Does the EUT support chargeReportFinalRecipient?
+             */
+            modulepar boolean PIC__0chargeReportFinalRecipient := true;
+        } // End of PICS_TollContextPartition_Overview
+        /**
+         * @desc Global statement of conformance
+         * @see [17575-3:2016], Table B.94 — Toll scheme types
+         */
+        group PICS_Toll_Scheme_types {
+            /**
+             * @desc    Does the EUT support roadSectionPricing?
+             */
+            modulepar boolean PIC_roadSectionPricing := true;
+            /**
+             * @desc    Does the EUT support areaPricingDistance?
+             */
+            modulepar boolean PIC_areaPricingDistance := true;
+            /**
+             * @desc    Does the EUT support areaPricingTime?
+             */
+            modulepar boolean PIC_areaPricingTime := true;
+            /**
+             * @desc    Does the EUT support cordonPricing?
+             */
+            modulepar boolean PIC_cordonPricing := true;
+        } // End of PICS_Toll_Scheme_types
+        /**
+         * @desc Global statement of conformance
+         * @see [17575-3:2016], Table B.95 — Operational status
+         */
+        group PICS_Operational_status {
+            /**
+             * @desc    Does the EUT support stopsOperationAt?
+             */
+            modulepar boolean PIC_stopsOperationAt := true;
+        } // End of PICS_Operational_status
+        /**
+         * @desc Global statement of conformance
+         * @see [17575-3:2016], Table B.96 — Tariff table
+         */
+        group PICS_Tariff_table {
+            /**
+             * @desc    Does the EUT support typeOfFee?
+             */
+            modulepar boolean PIC_typeOfFee := true;
+        } // End of PICS_Tariff_table
+        /**
+         * @desc Global statement of conformance
+         * @see [17575-3:2016], Table B.97 — Supported type of fee
+         */
+        group PICS_Supported_type_of_fee {
+            /**
+             * @desc    Does the EUT support typeOfFee?
+             */
+            modulepar boolean PIC_fee := true;
+            /**
+             * @desc    Does the EUT support tax?
+             */
+            modulepar boolean PIC_tax := true;
+            /**
+             * @desc    Does the EUT support custom?
+             */
+            modulepar boolean PIC_custum := true;
+            /**
+             * @desc    Does the EUT support any other?
+             */
+            modulepar boolean PIC__0any := true;
+        } // End of PICS_Supported_type_of_fee
+        
+        /**
+         * @desc Global statement of conformance
+         * @see [17575-3:2016], Table B.98 — Tariffs
+         */
+        group PICS_tariffs {
+            /**
+             * @desc    Does the EUT support vat?
+             */
+            modulepar boolean PIC_vat := true;
+            /**
+             * @desc    Does the EUT support roundingRuleForVat?
+             */
+            modulepar boolean PIC_roundingRuleForVat := true;
+            /**
+             * @desc    Does the EUT support intervalScaleParameters?
+             */
+            modulepar boolean PIC_intervalScaleParameters := true;
+            /**
+             * @desc    Does the EUT support offsetFee?
+             */
+            modulepar boolean PIC_offsetFee := true;
+            /**
+             * @desc    Does the EUT support minFee?
+             */
+            modulepar boolean PIC_minFee := true;
+            /**
+             * @desc    Does the EUT support thresholdFee?
+             */
+            modulepar boolean PIC_thresholdFee := true;
+            /**
+             * @desc    Does the EUT support maxFee?
+             */
+            modulepar boolean PIC_maxFee := true;
+            /**
+             * @desc    Does the EUT support alternativeCurrency?
+             */
+            modulepar boolean PIC_alternativeCurrency := true;
+        } // End of PICS_tariffs
+        /**
+         * @desc Supported charge units
+         * @see [17575-3:2016], Table B.99 — Supported charge units
+         */
+        group PICS_Supported_charge_units {
+            modulepar boolean PIC_distance := true;
+            modulepar boolean PIC__0time := true;
+            modulepar boolean PIC_event := true;
+        } // End of PICS_Supported_charge_units
+        /**
+         * @desc Supported rounding rules for charge
+         * @see [17575-3:2016], Table B.100 — Supported rounding rules for charge units used
+         */
+        group PICS_Supported_rounding_rules_for_units {
+            modulepar boolean PIC_units_no_rounding := true;
+            modulepar boolean PIC_units_up := true;
+            modulepar boolean PIC_units_down := true;
+            modulepar boolean PIC_units_accounting := true;
+            modulepar boolean PIC_units_any := true;
+        } // End of PICS_Supported_rounding_rules_for_units
+        /**
+         * @desc Supported rounding rules for fee
+         * @see [17575-3:2016], Table B.101 — Supported rounding rules for fee
+         */
+        group PICS_Supported_rounding_rules_for_fee {
+            modulepar boolean PIC_fee_no_rounding := true;
+            modulepar boolean PIC_fee_up := true;
+            modulepar boolean PIC_fee_down := true;
+            modulepar boolean PIC_fee_accounting := true;
+            modulepar boolean PIC_fee_any := true;
+        } // End of PICS_Supported_rounding_rules_for_fee
+        /**
+         * @desc Supported rounding rules for vat
+         * @see [17575-3:2016], Table B.102 — Supported rounding rules for vat
+         */
+        group PICS_Supported_rounding_rules_for_vat {
+            modulepar boolean PIC_vat_no_rounding := true;
+            modulepar boolean PIC_vat_up := true;
+            modulepar boolean PIC_vat_down := true;
+            modulepar boolean PIC_vat_accounting := true;
+            modulepar boolean PIC_vat_any := true;
+        } // End of PICS_Supported_rounding_rules_for_vat
+        /**
+         * @desc Supported interval scale parameters
+         * @see [17575-3:2016], Table B.103 — Supported interval scale parameters
+         */
+        group PICS_Supported_interval_scale_parameters {
+            modulepar boolean PIC_vehicleMaxLadenWeightIntervals := true;
+            modulepar boolean PIC_vehicleLengthOverallIntervals := true;
+        } // End of PICS_Supported_interval_scale_parameters
+        /**
+         * @desc Supported max fee types
+         * @see [17575-3:2016], Table B.104 — Supported max fee types
+         */
+        group PICS_Supported_max_fee_types {
+            modulepar boolean PIC_perDay := true;
+            modulepar boolean PIC_perWeek := true;
+            modulepar boolean PIC_perMonth := true;
+            modulepar boolean PIC_perYear := true;
+        } // End of PICS_Supported_max_fee_types
+        /**
+         * @desc Tariff classes
+         * @see [17575-3:2016], Table B.107 — Tariff classes
+         */
+        group PICS_Tariff_class_definitions_and_tariff_classes {
+            modulepar boolean PIC_timeClasses := true;
+            modulepar boolean PIC_locationClasses := true;
+            modulepar boolean PIC_userClasses := true;
+        } // End of PICS_Tariff_class_definitions_and_tariff_classes
+        /**
+         * @desc Local vehicle class definitions
+         * @see [17575-3:2016], Table B.108 — Local vehicle class definitions
+         */
+        group PICS_Local_vehicle_class_definitions_and_local_vehicle_classes {
+            modulepar boolean PIC_localVehicleClassDefinitionVersion := true;
+        } // End of PICS_Local_vehicle_class_definitions_and_local_vehicle_classes
+        /**
+         * @desc Local vehicle classes
+         * @see [17575-3:2016], Table B.109 — Local vehicle classes
+         */
+        group PICS_Local_vehicle_class {
+            modulepar boolean PIC_ordinalElements := true;
+            modulepar boolean PIC__0priorityValue := true;
+        } // End of PICS_Local_vehicle_class
+        /**
+         * @desc Nominal vehicle parameters
+         * @see [17575-3:2016], Table B.110 — Nominal vehicle parameters
+         */
+        group PICS_Nominal_vehicle_parameters {
+            modulepar boolean PIC__0vehicleAxlesNumber := true;
+            modulepar boolean PIC__0euroValue := true;
+            modulepar boolean PIC__0copValue := true;
+        } // End of PICS_Nominal_vehicle_parameters
+        /**
+         * @desc Ordinal vehicle parameters
+         * @see [17575-3:2016], Table B.111 — Ordinal vehicle parameters
+         */
+        group PICS_Ordinal_vehicle_parameters {
+            modulepar boolean PIC_vehicleLengthOverall := true;
+            modulepar boolean PIC_vehicleHeightOverall := true;
+            modulepar boolean PIC_vehicleWidthOverall := true;
+            modulepar boolean PIC_vehicleFirstAxlesHeight := true;
+            modulepar boolean PIC_vehicleTractorAxlesHeight := true;
+            modulepar boolean PIC_vehicleTrailerAxlesHeight := true;
+            modulepar boolean PIC_vehicleMaxLadenWeight := true;
+            modulepar boolean PIC_vehicleTrainMaximumWeight := true;
+            modulepar boolean PIC_vehicleWeightUnladen := true;
+            modulepar boolean PIC_vehicleWeightLaden := true;
+            modulepar boolean PIC__1euroValue := true;
+            modulepar boolean PIC__1copValue := true;
+            modulepar boolean PIC_vehicleClass := true;
+            modulepar boolean PIC_co2EmissionValue := true;
+            modulepar boolean PIC_dieselEmissionValue := true;
+            modulepar boolean PIC_exhaustEmissionValue := true;
+        } // End of PICS_Ordinal_vehicle_parameters
+        /**
+         * @desc Diesel Emission Value Range
+         * @see [17575-3:2016], Table B.112 — Diesel Emission Value Range
+         */
+        group PICS_Diesel_emission_value_range {
+            modulepar boolean PIC_valueRange := true;
+        } // End of PICS_Diesel_emission_value_range
+        /**
+         * @desc Exhaust Emission Value Range
+         * @see [17575-3:2016], Table B.113 — Exhaust Emission Value Range
+         */
+        group PICS_Exhaust_emission_value_range {
+            modulepar boolean emissionCORange := true;
+            modulepar boolean emissionHCRange := true;
+            modulepar boolean emissionNOXRange := true;
+            modulepar boolean emissionHCNOXORange := true;
+        } // End of PICS_Exhaust_emission_value_range
+        /**
+         * @desc Time class definitions
+         * @see [17575-3:2016], Table B.114 — Time class definitions
+         */
+        group PICS_Time_class_definitions {
+            modulepar boolean PIC_timeClassDefinitionVersion := true;
+        } // End of PICS_Time_class_definitions
+        
+        /**
+         * @desc Global statement of conformance
+         * @see [17575-3:2016], Table B.115 — Time classes
+         */
+        group PICS_Time_classes {
+            modulepar boolean PIC_nominalElements := true;
+            modulepar boolean PIC__1ordinalElements := true;
+            modulepar boolean PIC__1priorityValue := true;
+        } // End of PICS_Time_classes
+        /**
+         * @desc Nominal time parameters
+         * @see [17575-3:2016], Table B.116 — Nominal time parameters
+         */
+        group PICS_Nominal_time_class_parameters {
+            modulepar boolean PIC__0weekdays := true;
+            modulepar boolean PIC_dates := true;
+            modulepar boolean PIC_classesSetExternally := true;
+        } // End of PICS_Nominal_time_class_parameters
+        /**
+         * @desc Supported classes set externally
+         * @see [17575-3:2016], Table B.117 — Supported classes set externally
+         */
+        group PICS_Supported_classes_set_externally {
+            modulepar boolean PIC_congestionChargeLevel1 := true;
+            modulepar boolean PIC_congestionChargeLevel2 := true;
+            modulepar boolean PIC__1any := true;
+        } // End of PICS_Supported_classes_set_externally
+        /**
+         * @desc Ordinal time parameters
+         * @see [17575-3:2016], Table B.118 — Ordinal time parameters
+         */
+        group PICS_Ordinal_time_class_parameters {
+            modulepar boolean PIC__1weekdays := true;
+            modulepar boolean PIC_absoluteTimeOfDay := true;
+            modulepar boolean PIC_relativeTimeOfDay := true;
+            modulepar boolean PIC_periodsInYear := true;
+        } // End of PICS_Ordinal_time_class_parameters
+        /**
+         * @desc Supported relative time period parameters
+         * @see [17575-3:2016], Table B.119 — Supported relative time period parameters
+         */
+        group PICS_Supported_relative_time_period_parameters {
+            modulepar boolean PIC_minPeriod := true;
+            modulepar boolean PIC_maxPeriod := true;
+        } // End of PICS_Supported_relative_time_period_parameters
+        /**
+         * @desc User class definitions
+         * @see [17575-3:2016], Table B.120 — User class definitions
+         */
+        group PICS_User_class_definitions {
+            modulepar boolean PIC_userClassDefinitionVersion := true;
+        } // End of PICS_User_class_definitions
+        /**
+         * @desc User classes
+         * @see [17575-3:2016], Table B.121 — User classes
+         */
+        group PICS_User_classes {
+            modulepar boolean PIC_contractTypes := true;
+            modulepar boolean PIC_actualNumberOfPassengers := true;
+            modulepar boolean PIC__2priorityValue := true;
+        } // End of PICS_User_classes
+        /**
+         * @desc Toll context partition layout
+         * @see [17575-3:2016], Table B.122 — Toll context partition layout
+         */
+        group PICS_Toll_context_layout {
+            modulepar boolean PIC_geoRefPoint := true;
+            modulepar boolean PIC_tollContextPartitionVersion := true;
+        } // End of PICS_Toll_context_layout
+        /**
+         * @desc Supported layout types
+         * @see [17575-3:2016], Table B.123 — Supported layout types
+         */
+        group PICS_Supported_layout_types {
+            modulepar boolean PIC_sectionLayoutDescription := true;
+            modulepar boolean PIC_sectionLayoutDescriptionGdf := true;
+            modulepar boolean PIC_areaPricingLayout := true;
+            modulepar boolean PIC_cordonPricingLayout := true;
+        } // End of PICS_Supported_layout_types
+        /**
+         * @desc Section layout description
+         * @see [17575-3:2016], Table B.124 — Section layout description
+         */
+        group PICS_Section_layout_description {
+            modulepar boolean PIC__0chargeObjectName := true;
+            modulepar boolean PIC__0chargeObjectRefPoint := true;
+            modulepar boolean PIC__0networkPoints := true;
+            modulepar boolean PIC_pathStructureTowards := true;
+            modulepar boolean PIC_pathStructureOnwards := true;
+            modulepar boolean PIC__0supportingInformation := true;
+            modulepar boolean PIC_realDistance := true;
+            modulepar boolean PIC__0applicableTimeClasses := true;
+            modulepar boolean PIC_storageRequired := true;
+            modulepar boolean PIC_invoicingRelatedData := true;
+        } // End of PICS_Section_layout_description
+        /**
+         * @desc Supported point parameter types in section layout
+         * @see [17575-3:2016], Table B.125 — Supported point parameter types in section layout
+         */
+        group PICS_Supported_point_parameter_types_section_layout {
+            modulepar boolean PIC__0pointIdentifier := true;
+            modulepar boolean PIC__0absolutePointCoordinates := true;
+            modulepar boolean PIC__0relativePointCoordinate := true;
+        } // End of PICS_Supported_point_parameter_types_section_layout
+        /**
+         * @desc Link
+         * @see [17575-3:2016], Table B.126 — Link
+         */
+        group PICS_Link {
+            modulepar boolean PIC_intermediatePoints := true;
+        } // End of PICS_Link
+        /**
+         * @desc Supported point parameter types in link definitions
+         * @see [17575-3:2016], Table B.127 — Supported point parameter types in link definitions
+         */
+        group PICS_Supported_point_parameter_types_link {
+            modulepar boolean PIC__1pointIdentifier := true;
+            modulepar boolean PIC__1absolutePointCoordinates := true;
+            modulepar boolean PIC__1relativePointCoordinate := true;
+        } // End of PICS_Supported_point_parameter_types_link
+        /**
+         * @desc Supported liability rules
+         * @see [17575-3:2016], Table B.128 — Supported liability rules
+         */
+        group PICS_Supported_liability_rules {
+            modulepar boolean PIC__0tollPoints := true;
+            modulepar boolean PIC__0minTollPath := true;
+            modulepar boolean PIC__0minimumUsage := true;
+        } // End of PICS_Supported_liability_rules
+        /**
+         * @desc Supporting point parameters in section layout
+         * @see [17575-3:2016], Table B.129 — Supporting point parameters in section layout
+         */
+        group PICS_Supported_point_parameters_section_layout {
+            modulepar boolean PIC__0distanceToNextRoad := true;
+        } // End of PICS_Supported_point_parameters_section_layout
+        /**
+         * @desc Supported point parameter types in supporting point definitions
+         * @see [17575-3:2016], Table B.130 — Supported point parameter types in supporting point definitions
+         */
+        group PICS_Supported_point_parameter_types_point_definitions {
+            modulepar boolean PIC__2pointIdentifier := true;
+            modulepar boolean PIC__2absolutePointCoordinates := true;
+            modulepar boolean PIC__2relativePointCoordinate := true;
+        } // End of PICS_Supported_point_parameter_types_point_definitions
+        /**
+         * @desc Charge distance
+         * @see [17575-3:2016], Table B.131 — Charge distance
+         */
+        group PICS_Charge_distance {
+            modulepar boolean PIC_predefinedDistance := true;
+            modulepar boolean PIC_entryDependingDistance := true;
+        } // End of PICS_Charge_distance
+        /**
+         * @desc Supplementary invoicing data
+         * @see [17575-3:2016], Table B.132 — Supplementary invoicing data
+         */
+        group PICS_Supplementary_invoicing_data {
+            modulepar boolean PIC_countryCode := true;
+            modulepar boolean PIC_description := true;
+            modulepar boolean PIC_networkName := true;
+            modulepar boolean PIC_roadNumber := true;
+            modulepar boolean PIC_sectionNumber := true;
+            modulepar boolean PIC_directionCode := true;
+            modulepar boolean PIC_directionDescription := true;
+            modulepar boolean PIC_laneNumber := true;
+            modulepar boolean PIC_typeOfSection := true;
+        } // End of PICS_Supplementary_invoicing_data
+        /**
+         * @desc Supported types of sections in supplementary invoicing data
+         * @see [17575-3:2016], Table B.132 — Supported types of sections in supplementary invoicing data
+         */
+        group PICS_Supported_types_sections_supplementary_invoicing_data {
+            modulepar boolean PIC_manual := true;
+            modulepar boolean PIC_closedEntry := true;
+            modulepar boolean PIC_closedExit := true;
+            modulepar boolean PIC_checkpoint := true;
+            modulepar boolean PIC_openRoadTolling := true;
+            modulepar boolean PIC_distanceBasedFreeFlowPhysical := true;
+            modulepar boolean PIC_distanceBasedFreeFlowVirtual := true;
+            modulepar boolean PIC_aggregatedTrx := true;
+            modulepar boolean PIC_any := true;
+        } // End of PICS_Supported_types_sections_supplementary_invoicing_data
+        /**
+         * @desc EFC layer
+         * @see [17575-3:2016], Table B.135 — EFC layer
+         */
+        group PICS_EFC_layer {
+            modulepar boolean PIC_tollContextName := true;
+        } // End of PICS_EFC_layer
+        /**
+         * @desc GDF layer
+         * @see [17575-3:2016], Table B.136 — GDF charge object
+         */
+        group PICS_GDF_charge_object {
+            modulepar boolean PIC_roadOperatorId := true;
+            modulepar boolean PIC_applicableLocationClass := true;
+            modulepar boolean PIC_applicableTimeClasses := true;
+            modulepar boolean PIC_equivalentMeasuredLength := true;
+        } // End of PICS_GDF_charge_object
+        /**
+         * @desc Supported liability rules in GDF charge object designation
+         * @see [17575-3:2016], Table B.137 — Supported liability rules in GDF charge object designation
+         */
+        group PICS_Supported_liability_rules_GDF_charge_object_designation {
+            modulepar boolean PIC__1tollPoints := true;
+            modulepar boolean PIC__1minTollPath := true;
+            modulepar boolean PIC__1minimumUsage := true;
+        } // End of PICS_Supported_liability_rules_GDF_charge_object_designation
+        /**
+         * @desc Area layout description
+         * @see [17575-3:2016], Table B.138 — Area layout description
+         */
+        group PICS_Area_layout_description {
+            modulepar boolean PIC_locationClass := true;
+            modulepar boolean PIC__1applicableTimeClasses := true;
+            modulepar boolean PIC_roadNetwork := true;
+        } // End of PICS_Area_layout_description
+        /**
+         * @desc Road network objects description in area layout
+         * @see [17575-3:2016], Table B.140 — Road network objects description in area layout
+         */
+        group PICS_Road_network_objects_descriptions_area_layout {
+            modulepar boolean PIC_chargeObjectName := true;
+            modulepar boolean PIC_chargeObjectRefPoint := true;
+            modulepar boolean PIC_networkPoints := true;
+            modulepar boolean PIC_supportingInformation := true;
+            modulepar boolean PIC__2applicableTimeClasses := true;
+        } // End of PICS_Road_network_objects_descriptions_area_layout
+        /**
+         * @desc Supporting point parameters in area layout
+         * @see [17575-3:2016], Table B.141 — Supporting point parameters in area layout
+         */
+        group PICS_Supported_point_parameters_area_layout {
+            modulepar boolean PIC__1distanceToNextRoad := true;
+        } // End of PICS_Supported_point_parameters_area_layout
+        /**
+         * @desc Cordon border segment description
+         * @see [17575-3:2016], Table B.143 — Cordon border segment description
+         */
+        group PICS_Cordon_border_segment_description {
+            modulepar boolean PIC_cordonEntryLocation := true;
+            modulepar boolean PIC_cordonExitLocation := true;
+        } // End of PICS_Cordon_border_segment_description
+        /**
+         * @desc Supported point parameter types in supporting point definitions
+         * @see [17575-3:2016], Table B.144 — Supported point parameter types in start point of cordon segment definitions
+         */
+        group PICS_Supported_point_parameter_types_start_point_definitions {
+            modulepar boolean PIC__3pointIdentifier := true;
+            modulepar boolean PIC__3absolutePointCoordinates := true;
+            modulepar boolean PIC__3relativePointCoordinate := true;
+        } // End of PICS_Supported_point_parameter_types_start_point_definitions
+        /**
+         * @desc Cordon entry location description
+         * @see [17575-3:2016], Table B.145 — Cordon entry location description
+         */
+        group PICS_Cordon_entry_location_description {
+            modulepar boolean PIC__3applicableTimeClasses := true;
+        } // End of PICS_Cordon_entry_location_description
+        /**
+         * @desc Cordon exit location description
+         * @see [17575-3:2016], Table B.146 — Cordon exit location description
+         */
+        group PICS_Cordon_exit_location_description {
+            modulepar boolean PIC__4applicableTimeClasses := true;
+        } // End of PICS_Cordon_exit_location_description
+        /**
+         * @desc Cordon exit location class description
+         * @see [17575-3:2016], Table B.147 — Cordon exit location class description
+         */
+        group PICS_Cordon_exit_location_class_description {
+            modulepar boolean PIC_entryLocation := true;
+        } // End of PICS_Cordon_exit_location_class_description
+        /**
+         * @desc Charge reporting events
+         * @see [17575-3:2016], Table B.148 — Charge reporting events
+         */
+        group PICS_Charge_reporting_events {
+            modulepar boolean PIC_absoluteTimeEvents := true;
+            modulepar boolean PIC_relativeTimeEvents := true;
+            modulepar boolean PIC_traveledDistanceEvents := true;
+            modulepar boolean PIC_locationEvents := true;
+            modulepar boolean PIC_feeLimitEvents := true;
+        } // End of PICS_Charge_reporting_events
+        /**
+         * @desc Absolute time event
+         * @see [17575-3:2016], Table B.149 — Absolute time event
+         */
+        group PICS_Absolute_time_event {
+            modulepar boolean PIC__0randomDelay := true;
+        } // End of PICS_Absolute_time_event
+        /**
+         * @desc Relative time event
+         * @see [17575-3:2016], Table B.150 — Relative time event
+         */
+        group PICS_Relative_time_event {
+            modulepar boolean PIC__1randomDelay := true;
+        } // End of PICS_Relative_time_event
+        /**
+         * @desc Location event
+         * @see [17575-3:2016], Table B.151 — Location event
+         */
+        group PICS_Location_event {
+            modulepar boolean PIC_chargeObject := true;
+            modulepar boolean PIC_line := true;
+            modulepar boolean PIC_area := true;
+        } // End of PICS_Location_event
+        /**
+         * @desc Supported parameters of line in location events
+         * @see [17575-3:2016], Table B.152 — Supported parameters of line in location events
+         */
+        group PICS_Supported_parameters_of_line_location_events {
+            modulepar boolean PIC_crossingDirection1 := true;
+            modulepar boolean PIC_crissingDirection2 := true;
+        } // End of PICS_Supported_parameters_of_line_location_events
+        /**
+         * @desc Supported parameters of area in location events
+         * @see [17575-3:2016], Table B.153 — Supported parameters of area in location events
+         */
+        group PICS_Supported_parameters_of_area_location_events {
+            modulepar boolean PIC_atEntry := true;
+            modulepar boolean PIC_atExit := true;
+        } // End of PICS_Supported_parameters_of_area_location_events
+        /**
+         * @desc Charge report configuration
+         * @see [17575-3:2016], Table B.154 — Charge report configuration
+         */
+        group PICS_Charge_report_configuration {
+            modulepar boolean PIC_cccAttributesContent := true;
+            modulepar boolean PIC_aggregatedSingleTariffClassSessionContent := true;
+            modulepar boolean PIC_detectedChargeObjectContent := true;
+            modulepar boolean PIC_listOfRawUsageDataContent := true;
+            modulepar boolean PIC_listOfDsrcUsageDataContent := true;
+            modulepar boolean PIC_aggregatedFeeContent := true;
+            modulepar boolean PIC_measuredRawDataContent := true;
+            modulepar boolean PIC_nmeaDataContent := true;
+            modulepar boolean PIC_chargeReportConfigurationVersion := true;
+        } // End of PICS_Charge_report_configuration
+        /**
+         * @desc Supported parameters in charge report content
+         * @see [17575-3:2016], Table B.155 — Supported parameters in charge report content
+         */
+        group PICS_Supported_parameters_charge_report_content {
+            modulepar boolean PIC_useOfCrAuthentication := true;
+            modulepar boolean PIC_obeId := true;
+            modulepar boolean PIC_vehicleLPNr := true;
+            modulepar boolean PIC_paymentMeans := true;
+            modulepar boolean PIC__1tollContext := true;
+            modulepar boolean PIC__1chargeReportFinalRecipient := true;
+            modulepar boolean PIC_timeOfReport := true;
+            modulepar boolean PIC_reportPeriod := true;
+            modulepar boolean PIC_versionInfo := true;
+            modulepar boolean PIC_sumVatForThisSession := true;
+            modulepar boolean PIC_accountStatus := true;
+            modulepar boolean PIC_chargeReportCounter := true;
+            modulepar boolean PIC_mileage := true;
+            modulepar boolean PIC_listOfCCCAttributes := true;
+        } // End of PICS_Supported_parameters_charge_report_content
+        /**
+         * @desc Supported parameters in usage statement content
+         * @see [17575-3:2016], Table B.156 — Supported parameters in usage statement content
+         */
+        group PICS_Supported_parameters_usage_statement_content {
+            modulepar boolean PIC_useOfUsageStatementAuthentication := true;
+            modulepar boolean PIC_usageStatementId := true;
+            modulepar boolean PIC_tollContext := true;
+            modulepar boolean PIC_chargeReportFinalRecipient := true;
+            modulepar boolean PIC_aggregatedFee := true;
+            modulepar boolean PIC__0sumVat := true;
+            modulepar boolean PIC_agregatedSingleTariffClassSession := true;
+            modulepar boolean PIC_listOfChargeObjects := true;
+            modulepar boolean PIC_listOfDSRCUsageData := true;
+            modulepar boolean PIC_listOfRawUsageData := true;
+            modulepar boolean PIC_noUsage := true;
+            modulepar boolean PIC_additionalUsageInformation := true;
+        } // End of PICS_Supported_parameters_usage_statement_content
+        /**
+         * @desc Supported parameters in CCC attributes content
+         * @see [17575-3:2016], Table B.157 — Supported parameters in CCC attributes content
+         */
+        group PICS_Supported_parameters_ccc_statement_content {
+            modulepar boolean PIC_timeOfCCCRecord := true;
+            modulepar boolean PIC_axlesHistory := true;
+            modulepar boolean PIC_commStatus := true;
+            modulepar boolean PIC_gnssStatus := true;
+            modulepar boolean PIC_distRecStatus := true;
+            modulepar boolean PIC_activeContexts := true;
+            modulepar boolean PIC_obeHistory := true;
+        } // End of PICS_Supported_parameters_ccc_statement_content
+        /**
+         * @desc Supported parameters in aggregated single tariff class session content
+         * @see [17575-3:2016], Table B.158 — Supported parameters in aggregated single tariff class session content
+         */
+        group PICS_Supported_parameters_aggregated_single_tariff_class_session_content {
+            modulepar boolean PIC_timePeriodCovered := true;
+            modulepar boolean PIC__0currentTariffClass := true;
+            modulepar boolean PIC__0tariffClassDescriptionContent := true;
+            modulepar boolean PIC__0vehicleDescription := true;
+            modulepar boolean PIC__0vehicleDescriptionContent := true;
+            modulepar boolean PIC_totalDistanceCovered := true;
+            modulepar boolean PIC_numberOfDetecetedEvents := true;
+            modulepar boolean PIC__0obeStatus := true;
+            modulepar boolean PIC__0feeExclVat := true;
+            modulepar boolean PIC__1sumVat := true;
+        } // End of PICS_Supported_parameters_aggregated_single_tariff_class_session_content
+        /**
+         * @desc Supported parameters in detected charge object content
+         * @see [17575-3:2016], Table B.159 — Supported parameters in detected charge object content
+         */
+        group PICS_Supported_parameters_detected_charge_object_content {
+            modulepar boolean PIC_chargeObjectIdContent := true;
+            modulepar boolean PIC_subObjectNumber := true;
+            modulepar boolean PIC_timeWhenUsed := true;
+            modulepar boolean PIC_mileageWhenUsed := true;
+            modulepar boolean PIC__1currentTariffClass := true;
+            modulepar boolean PIC__1tariffClassDescriptionContent := true;
+            modulepar boolean PIC__1vehicleDescription := true;
+            modulepar boolean PIC__1vehicleDescriptionContent := true;
+            modulepar boolean PIC__1obeStatus := true;
+            modulepar boolean PIC__1feeExclVat := true;
+            modulepar boolean PIC__2sumVat := true;
+            modulepar boolean PIC_chargeObjectDetectionMode := true;
+        } // End of PICS_Supported_parameters_detected_charge_object_content
+        /**
+         * @desc Supported parameters in list of raw usage data content
+         * @see [17575-3:2016], Table B.160 — Supported parameters in list of raw usage data content
+         */
+        group PICS_Supported_parameters_list_raw_usage_data_content {
+            modulepar boolean PIC_currentTariffClass := true;
+            modulepar boolean PIC_tariffClassDescriptionContent := true;
+            modulepar boolean PIC_vehicleDescription := true;
+            modulepar boolean PIC_vehicleDescriptionContent := true;
+        } // End of PICS_Supported_parameters_list_raw_usage_data_content
+        /**
+         * @desc Supported parameters in list of raw usage data content
+         * @see [17575-3:2016], Table B.161 — Supported parameters in list of DSRC usage data content
+         */
+        group PICS_Supported_parameters_list_dsrc_usage_data_content {
+            modulepar boolean PIC_data14906 := true;
+            modulepar boolean PIC_data12813 := true;
+            modulepar boolean PIC_data13141 := true;
+        } // End of PICS_Supported_parameters_list_dsrc_usage_data_content
+        /**
+         * @desc Supported parameters in list of raw usage data content
+         * @see [17575-3:2016], Table B.162 — Supported parameters in list of aggregated fee content
+         */
+        group PICS_Supported_parameters_list_aggregated_fee_content {
+            modulepar boolean PIC__3sumVat := true;
+        } // End of PICS_Supported_parameters_list_aggregated_fee_content
+        /**
+         * @desc Supported parameters in measured raw data content
+         * @see [17575-3:2016], Table B.163 — Supported parameters in measured raw data content
+         */
+        group PICS_Supported_parameters_measured_raw_data_content {
+            modulepar boolean PIC_measuredPosition := true;
+            modulepar boolean PIC_timeWhenMeasured := true;
+            modulepar boolean PIC_nMEAData := true;
+            modulepar boolean PIC_additionalGNSSData := true;
+        } // End of PICS_Supported_parameters_measured_raw_data_content
+        /**
+         * @desc Supported parameters in NMEA data content
+         * @see [17575-3:2016], Table B.164 — Supported parameters in NMEA data content
+         */
+        group PICS_Supported_parameters_nmea_data_content {
+            modulepar boolean PIC__1time := true;
+            modulepar boolean PIC_status := true;
+            modulepar boolean PIC_latitude := true;
+            modulepar boolean PIC_latNS := true;
+            modulepar boolean PIC_longitude := true;
+            modulepar boolean PIC_longEW := true;
+            modulepar boolean PIC_speed := true;
+            modulepar boolean PIC_heading := true;
+            modulepar boolean PIC_date := true;
+            modulepar boolean PIC_signalIntegrity := true;
+            modulepar boolean PIC_altitude := true;
+            modulepar boolean PIC_usedSatellites := true;
+            modulepar boolean PIC_hdop := true;
+        } // End of PICS_Supported_parameters_nmea_data_content
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
      } // End of group PICS_Back_End
+     
 } // End of module ContextData_PICS_BE

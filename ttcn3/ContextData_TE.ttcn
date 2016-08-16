@@ -318,7 +318,7 @@ module ContextData_TE {
          * @remark  [17575-3:2016], Clause Clause 8.5.5.3.2 Data type ChargeReportContent
          */
         execute(TC_CR_FE_BV_59(), PX_GUARD);
-        if (ContextData_PICS_BE.PIC_iso17575_3Adu == true) {
+        if (ContextData_PICS_BE.PIC_authenticatedISO_3ADU == false) {
             /**
              * @desc    TC_PRO_BE_BV_01: Protocol version handling
              * @remark  [17575-3:2016], Clause 6.3.1 Protocol versioning
@@ -330,7 +330,7 @@ module ContextData_TE {
              */
             execute(TC_PRO_BE_BV_02(), PX_GUARD);
         }
-        if (ContextData_PICS_BE.PIC_iso17575_3Adu == true) {
+        if (ContextData_PICS_BE.PIC_authenticatedISO_3ADU == true) {
             /**
              * @desc    TC_ADUH_BE_BV_01: Use of single tollContext per ADU
              * @remark  [17575-3:2016], Clause 7.5 Application data unit body (data type ISO 17575-3AduBody)
@@ -344,38 +344,34 @@ module ContextData_TE {
              */
             execute(TC_ADUH_BE_BV_02(), PX_GUARD);
         }
-        if (ContextData_PICS_BE.PIC_attributeList == true) {
-            /**
-             * @desc    TC_ADUH_BE_BV_02: Verify handling of aduSequenceNumber
-             * @remark  [17575-3:2016], Clause 7.4 Application data unit header (data type ISO 17575-3AduHeader)
-             */
-            execute(TC_ADUH_BE_BV_02(), PX_GUARD);
-            /**
-             * @desc    TC_ADUB_BE_BV_01: Verify that each toll context shall be described using one or more EFC attributes
-             * @remark  [17575-3:2016], Clause 8.3 Attributes and data sets
-             */
-            execute(TC_ADUB_BE_BV_01(), PX_GUARD);
-        }
-        if (ContextData_PICS_BE.PIC_tollContextOverview == true) {
-            /**
-             * @desc    TC_TC_BE_BV_01: Uniqueness of partition IDs within the Context Data
-             * @remark  [17575-3:2016], Clause 8.5.2.2 Toll context overview
-             * @see     [17575-3:2016], Table 3 — EFC attribute TollContextOverview (informative)
-             */
-            execute(TC_TC_BE_BV_01(), PX_GUARD);
-            /**
-             * @desc    TC_TC_BE_BV_02: Verify the presence of at least one partition within the Context Data (presence of partitionID)
-             * @remark  [17575-3:2016], Clause 8.5.2.2 Toll context overview
-             * @see     [17575-3:2016], Table 3 — EFC attribute TollContextOverview (informative)
-             */
-            execute(TC_TC_BE_BV_02(), PX_GUARD);
-            /**
-             * @desc    TC_TC_BE_BV_03: Verify that polygon points are defined in a way that the connections between the points do not intersect.
-             * @remark  [17575-3:2016], Clause 8.5.2.2 Toll context overview
-             * @see     [17575-3:2016], Table 3 — EFC attribute TollContextOverview (informative)
-             */
-            execute(TC_TC_BE_BV_03(), PX_GUARD);
-        }
+        /**
+         * @desc    TC_ADUH_BE_BV_02: Verify handling of aduSequenceNumber
+         * @remark  [17575-3:2016], Clause 7.4 Application data unit header (data type ISO 17575-3AduHeader)
+         */
+        execute(TC_ADUH_BE_BV_02(), PX_GUARD);
+        /**
+         * @desc    TC_ADUB_BE_BV_01: Verify that each toll context shall be described using one or more EFC attributes
+         * @remark  [17575-3:2016], Clause 8.3 Attributes and data sets
+         */
+        execute(TC_ADUB_BE_BV_01(), PX_GUARD);
+        /**
+         * @desc    TC_TC_BE_BV_01: Uniqueness of partition IDs within the Context Data
+         * @remark  [17575-3:2016], Clause 8.5.2.2 Toll context overview
+         * @see     [17575-3:2016], Table 3 — EFC attribute TollContextOverview (informative)
+         */
+        execute(TC_TC_BE_BV_01(), PX_GUARD);
+        /**
+         * @desc    TC_TC_BE_BV_02: Verify the presence of at least one partition within the Context Data (presence of partitionID)
+         * @remark  [17575-3:2016], Clause 8.5.2.2 Toll context overview
+         * @see     [17575-3:2016], Table 3 — EFC attribute TollContextOverview (informative)
+         */
+        execute(TC_TC_BE_BV_02(), PX_GUARD);
+        /**
+         * @desc    TC_TC_BE_BV_03: Verify that polygon points are defined in a way that the connections between the points do not intersect.
+         * @remark  [17575-3:2016], Clause 8.5.2.2 Toll context overview
+         * @see     [17575-3:2016], Table 3 — EFC attribute TollContextOverview (informative)
+         */
+        execute(TC_TC_BE_BV_03(), PX_GUARD);
         if (ContextData_PICS_BE.PIC_tariffTable == true) {
             /**
              * @desc    TC_TT_BE_BV_02: Verify that type of Charge Unit is compliant to Toll Context Partition Type
@@ -453,7 +449,7 @@ module ContextData_TE {
              */
             execute(TC_USCD_BE_BV_02(), PX_GUARD);
         }
-        if ((ContextData_PICS_BE.PIC_tollContextLayout == true)  and (ContextData_PICS_BE.PIC_sectionPricingLayout)) {
+        if (ContextData_PICS_BE.PIC__0tollContextLayout == true) {
             if (ContextData_PICS_BE.PIC_roadSectionPricing == true) {
                 /**
                  * @desc    TC_TCL_BE_BV_01: Verify that Layout Description is compliant to Toll Context Partition Type
